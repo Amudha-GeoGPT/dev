@@ -163,7 +163,10 @@ const Overall: React.FC = () => {
               displayEmpty
               input={<OutlinedInput sx={{ height: 55,fontFamily:'roboto' }} />}
               renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Index</em> : selected}
-              
+              sx={{
+                fontFamily: 'Roboto, sans-serif', // Set font family to Roboto
+                fontStyle:'none'
+              }}
            >
               {options.first.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
