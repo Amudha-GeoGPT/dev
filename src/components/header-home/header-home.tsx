@@ -43,7 +43,8 @@ import avatariconimg from '../../assets/images/svg/Avatarimg.svg';
 import vectorheaderimg from '../../assets/images/svg/Vectorimg.svg';
 import outletwithoutclr from '../../assets/images/svg/outletimg.svg';
 import outletwithclr from '../../assets/images/svg/Vectorwithclr.svg';
-import userguide from '../../assets/images/svg/userguideimg.svg'
+import userguide from '../../assets/images/svg/userguideimg.svg';
+import wpfsurvey from '../../assets/images/svg/wpfsurvey.svg';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -302,7 +303,7 @@ const Headerhome: React.FC = () => {
 
           >
             <ListItemIcon>
-              <HomeIcon sx={{ color: selectedItem === "Static MAS" ? 'black' : 'white' }} />
+              <HomeIcon sx={{ color: selectedItem === "Static MAS" ? 'black' : 'white',marginLeft:1 }} />
             </ListItemIcon>
             <ListItemText primary="Static MAS" />
           </ListItem>
@@ -500,7 +501,7 @@ const Headerhome: React.FC = () => {
             }}
 
           >
-            <ListItemIcon>
+            <ListItemIcon sx={{marginLeft:1}}>
           {selectedItem === "Outlet Planning" ?
                   <img 
           src={outletwithclr} 
@@ -509,10 +510,10 @@ const Headerhome: React.FC = () => {
         />:  <img 
         src={outletwithoutclr} 
         alt="rural" 
-        style={{ width: 24, height: 24 }}
+        style={{ width: 24, height: 24  }}
       />}
             </ListItemIcon>
-            <ListItemText primary="Outlet Planning" />
+            <ListItemText primary="Outlet Planning" sx={{marginRight:2}}/>
           </ListItem>
 
           <ListItem
@@ -528,19 +529,19 @@ const Headerhome: React.FC = () => {
             }}
 
           >
-            <ListItemIcon>
+            <ListItemIcon sx={{marginLeft:1}}>
           {selectedItem === "User Guide" ?
                   <img 
-          src={userguide} 
+          src={wpfsurvey} 
           alt="userguide" 
           style={{ width: 24, height: 24}}
         />:  <img 
-        src={userguide} 
+        src={wpfsurvey} 
         alt="userguide" 
         style={{ width: 24, height: 24 }}
       />}
             </ListItemIcon>
-            <ListItemText primary="User Guide" />
+            <ListItemText primary="User Guide"  sx={{marginRight:2}}/>
           </ListItem>
          
         </List>
