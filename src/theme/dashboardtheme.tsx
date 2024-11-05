@@ -1,9 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
-const Budgietheme = createTheme({
+const Dashboardtheme = createTheme({
   typography: {
-    fontFamily:'Roboto',
+    fontFamily:'inter',
   },
 });
 
-export default Budgietheme;
+export default Dashboardtheme;
