@@ -43,8 +43,7 @@ import avatariconimg from '../../assets/images/svg/Avatarimg.svg';
 import vectorheaderimg from '../../assets/images/svg/Vectorimg.svg';
 import outletwithoutclr from '../../assets/images/svg/outletimg.svg';
 import outletwithclr from '../../assets/images/svg/Vectorwithclr.svg';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-
+import userguide from '../../assets/images/svg/userguideimg.svg'
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -88,8 +87,6 @@ const Headerhome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
   const [districtOpen, setDistrictOpen] = useState(false);
-  const [statickmacdefaultOpen, setStatickmacDefaultOpen] = useState(false);
-  const [outletdefaultOpen,setOutletdefaultOpen]= useState(false);
   const [headerTitle, setHeaderTitle] = useState("Village Outlet Planning");
   const [selectedItem, setSelectedItem] = useState("Village Outlet Planning"); // New state to track selected item
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -164,17 +161,6 @@ const Headerhome: React.FC = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const openMenu = () => {
-    setStatickmacDefaultOpen(!statickmacdefaultOpen);
-    setOutletdefaultOpen(false)
-  };
-
-  const outletPlan = () => {
-    setOutletdefaultOpen(!outletdefaultOpen);
-    setStatickmacDefaultOpen(false)
-   
   };
   
   const isMenuOpen = Boolean(anchorEl);
@@ -304,11 +290,11 @@ const Headerhome: React.FC = () => {
           {/* static mac  */}
           <ListItem
             
-            onClick={() => openMenu()}
+            onClick={() => handleMenuClick("Static MAS")}
             sx={{
-              color: statickmacdefaultOpen  ? 'black' : 'white',
-              backgroundColor: statickmacdefaultOpen  ? 'white' : 'transparent',
-              border: statickmacdefaultOpen ? '1px solid black' : 'none',
+              color: selectedItem === "Static MAS" ? 'black' : 'white',
+              backgroundColor: selectedItem === "Static MAS" ? 'white' : 'transparent',
+              border: selectedItem === "Static MAS" ? '1px solid black' : 'none',
               borderRadius: '4px',
               padding:'2px',
               mt:1
@@ -316,14 +302,13 @@ const Headerhome: React.FC = () => {
 
           >
             <ListItemIcon>
-              <HomeIcon sx={{ color: statickmacdefaultOpen ? 'black' : 'white',marginLeft:1 }} />
+              <HomeIcon sx={{ color: selectedItem === "Static MAS" ? 'black' : 'white' }} />
             </ListItemIcon>
             <ListItemText primary="Static MAS" />
-            { statickmacdefaultOpen? <ExpandLess /> : <ExpandMore />}
           </ListItem>
 {/* inside the list */}
-        {statickmacdefaultOpen ?
-        <>
+        
+        
          {/* state */}
           <ListItem  onClick={toggleStateMenu}>
             <ListItemIcon> <img 
@@ -501,24 +486,22 @@ const Headerhome: React.FC = () => {
             <ListItemText primary="Sub District Rural"  sx={{color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }}/>
             
           </ListItem>
-</>:null}
-
         
           <ListItem
             
-            onClick={() => outletPlan()}
+            onClick={() => handleMenuClick("Outlet Planning")}
             sx={{
-              color: outletdefaultOpen  ? 'black' : 'white',
-              backgroundColor: outletdefaultOpen ? 'white' : 'transparent',
-              border:  outletdefaultOpen? '1px solid black' : 'none',
+              color: selectedItem === "Outlet Planning" ? 'black' : 'white',
+              backgroundColor: selectedItem === "Outlet Planning" ? 'white' : 'transparent',
+              border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
               borderRadius: '4px',
               padding:'2px',
               mt:1
             }}
 
           >
-            <ListItemIcon sx={{marginLeft:1}}>
-          {outletdefaultOpen ?
+            <ListItemIcon>
+          {selectedItem === "Outlet Planning" ?
                   <img 
           src={outletwithclr} 
           alt="rural" 
@@ -526,11 +509,10 @@ const Headerhome: React.FC = () => {
         />:  <img 
         src={outletwithoutclr} 
         alt="rural" 
-        style={{ width: 24, height: 24  }}
+        style={{ width: 24, height: 24 }}
       />}
             </ListItemIcon>
-            <ListItemText primary="Outlet Planning" sx={{marginRight:2}}/>
-            { outletdefaultOpen? <ExpandLess /> : <ExpandMore />}
+            <ListItemText primary="Outlet Planning" />
           </ListItem>
 
           <ListItem
@@ -546,11 +528,19 @@ const Headerhome: React.FC = () => {
             }}
 
           >
-            <ListItemIcon sx={{marginLeft:1}}>
-           
-              <AssignmentIcon sx={{ color:selectedItem === "User Guide" ? 'black' : 'white',marginLeft:1 }} />
+            <ListItemIcon>
+          {selectedItem === "User Guide" ?
+                  <img 
+          src={userguide} 
+          alt="userguide" 
+          style={{ width: 24, height: 24}}
+        />:  <img 
+        src={userguide} 
+        alt="userguide" 
+        style={{ width: 24, height: 24 }}
+      />}
             </ListItemIcon>
-            <ListItemText primary="User Guide"  sx={{marginRight:2}}/>
+            <ListItemText primary="User Guide" />
           </ListItem>
          
         </List>
