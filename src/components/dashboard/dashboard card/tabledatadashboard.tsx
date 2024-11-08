@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardTabledata from './dashboardtabledata';
+import DashboardTabledata from './outletdashboardtabledata';
 import { Box, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Drawer,
@@ -43,7 +44,7 @@ import avatariconimg from '../../assets/images/svg/Avatarimg.svg';
 import vectorheaderimg from '../../assets/images/svg/Vectorimg.svg';
 import outletwithoutclr from '../../assets/images/svg/outletimg.svg';
 import outletwithclr from '../../assets/images/svg/Vectorwithclr.svg';
-import userguide from '../../assets/images/svg/userguideimg.svg'
+import AssignmentIcon from '@mui/icons-material/Assignment';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -86,6 +87,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Headerhome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
+  const [staticMasOpen, setStaticMasOpen] = useState(false);
+  const [staticMasVisible, setStaticMasVisible] = useState(true);
   const [districtOpen, setDistrictOpen] = useState(false);
   const [headerTitle, setHeaderTitle] = useState("Village Outlet Planning");
   const [selectedItem, setSelectedItem] = useState("Village Outlet Planning"); // New state to track selected item
@@ -105,10 +108,25 @@ const Headerhome: React.FC = () => {
     setStateOpen(!stateOpen);
     setDistrictOpen(false);
   }
+  const toggleStaticmasMenu = () => {
+    setStaticMasOpen(true);
+    setStaticMasVisible(true); // Add this line to show Static MAS section
+  }
+  const toggleOutletPlanningMenu = () => {
+    setStaticMasOpen(false);
+    setStateOpen(false);
+    setDistrictOpen(false);
+    setStaticMasVisible(false); // Hide Static MAS section
+  }
   const toggleDistrictMenu = () => {
    setDistrictOpen(!districtOpen);
    setStateOpen(false);
   }
+
+  const toggleTownMenu = () => {
+    // setDistrictOpen(!districtOpen);
+    setDistrictOpen(false);
+   }
 
 
   const handleMenuClick = (title: string) => {
@@ -289,25 +307,24 @@ const Headerhome: React.FC = () => {
         <List>
           {/* static mac  */}
           <ListItem
-            
-            onClick={() => handleMenuClick("Static MAS")}
-            sx={{
-              color: selectedItem === "Static MAS" ? 'black' : 'white',
-              backgroundColor: selectedItem === "Static MAS" ? 'white' : 'transparent',
-              border: selectedItem === "Static MAS" ? '1px solid black' : 'none',
-              borderRadius: '4px',
-              padding:'2px',
-              mt:1
-            }}
-
-          >
+    onClick={() => {handleMenuClick("Static MAS"); toggleStaticmasMenu();}}
+    sx={{
+      color: selectedItem === "Static MAS" ? 'black' : 'white',
+      backgroundColor: selectedItem === "Static MAS" ? 'white' : 'transparent',
+      border: selectedItem === "Static MAS" ? '1px solid black' : 'none',
+      borderRadius: '4px',
+      padding:'2px',
+      mt:1
+    }}
+  >
             <ListItemIcon>
               <HomeIcon sx={{ color: selectedItem === "Static MAS" ? 'black' : 'white' }} />
             </ListItemIcon>
             <ListItemText primary="Static MAS" />
           </ListItem>
 {/* inside the list */}
-        
+{staticMasVisible && (   
+    <>  
         
          {/* state */}
           <ListItem  onClick={toggleStateMenu}>
@@ -456,7 +473,10 @@ const Headerhome: React.FC = () => {
             </List>
           </Collapse>
           {/* Town */}
-          <ListItem  onClick={() => handleMenuClick("Static MAS-Town")}>
+          <ListItem onClick={() => {
+  handleMenuClick("Static MAS-Town");
+  toggleTownMenu();
+}}>
             <ListItemIcon>{selectedItem === "Static MAS-Town" ?
                   <img 
           src={Townwithcolor} 
@@ -486,20 +506,22 @@ const Headerhome: React.FC = () => {
             <ListItemText primary="Sub District Rural"  sx={{color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }}/>
             
           </ListItem>
-        
+          </>
+  )} 
           <ListItem
-            
-            onClick={() => handleMenuClick("Outlet Planning")}
-            sx={{
-              color: selectedItem === "Outlet Planning" ? 'black' : 'white',
-              backgroundColor: selectedItem === "Outlet Planning" ? 'white' : 'transparent',
-              border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
-              borderRadius: '4px',
-              padding:'2px',
-              mt:1
-            }}
-
-          >
+  onClick={() => {
+    handleMenuClick("Outlet Planning"); 
+    toggleOutletPlanningMenu();
+  }}
+  sx={{
+    color: selectedItem === "Outlet Planning" ? 'black' : 'white',
+    backgroundColor: selectedItem === "Outlet Planning" ? 'white' : 'transparent',
+    border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
+    borderRadius: '4px',
+    padding: '2px',
+    mt: 1
+  }}
+>
             <ListItemIcon>
           {selectedItem === "Outlet Planning" ?
                   <img 
@@ -529,16 +551,7 @@ const Headerhome: React.FC = () => {
 
           >
             <ListItemIcon>
-          {selectedItem === "User Guide" ?
-                  <img 
-          src={userguide} 
-          alt="userguide" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={userguide} 
-        alt="userguide" 
-        style={{ width: 24, height: 24 }}
-      />}
+           <AssignmentIcon sx={{ color:selectedItem === "User Guide" ? 'black' : 'white',marginLeft:1 }} />
             </ListItemIcon>
             <ListItemText primary="User Guide" />
           </ListItem>
