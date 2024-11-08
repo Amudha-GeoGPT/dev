@@ -75,9 +75,10 @@ const Graphcontroller: React.FC = () => {
             formatter={renderLegend}
              iconSize={0}
           />
-          <Bar dataKey="p1" stackId="a" fill="#001B04"  name="P-1" barSize={30} radius={3}/>
-          <Bar dataKey="p2" stackId="a" fill="#A3E635" name="P-2" barSize={30} radius={3}/>
-          <Bar dataKey="p3" stackId="a" fill="#E3FFC4"  name="P-3" barSize={30} radius={3}/>
+         <Bar dataKey="p1" stackId="a" fill="#001B04" name="P-1" barSize={30} radius={[3, 3, 0, 0]} />
+         <Bar dataKey="p2" stackId="a" fill="#A3E635" name="P-2" barSize={30} radius={[3, 3, 0, 0]} />
+         <Bar dataKey="p3" stackId="a" fill="#E3FFC4" name="P-3" barSize={30} radius={[3, 3, 0, 0]} />
+
         </BarChart>
       </ResponsiveContainer>
      
