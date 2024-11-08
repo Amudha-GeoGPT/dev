@@ -147,12 +147,7 @@ const Overall: React.FC = () => {
                 </Box>
               ))}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states"  sx={{
-                  '& .MuiInputBase-input': {
-                    height: 5, // Set the height of the input field to 40px
-                  },
-                  
-                }}/>
+                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states" />
               )}
               popupIcon={null}
               openOnFocus
@@ -161,8 +156,8 @@ const Overall: React.FC = () => {
         </Grid>
  
         {/* Rank and Index Selection */}
-        <Grid item xs={12} sm={6} md={4}>
-          <FormControl fullWidth>
+        <Grid item xs={12} sm={6} md={4} >
+          <FormControl fullWidth >
             <Typography variant="caption" sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}>
               Select Index
             </Typography>
@@ -170,9 +165,13 @@ const Overall: React.FC = () => {
               value={values.first}
               onChange={handleIndexChange('first')}
               displayEmpty
-              input={<OutlinedInput sx={{ height: 30 }} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray' }}>Select Index</em> : selected}
-            >
+              input={<OutlinedInput sx={{ height: 55,fontFamily:'roboto' }} />}
+              renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Index</em> : selected}
+              sx={{
+                fontFamily: 'Roboto, sans-serif', // Set font family to Roboto
+                fontStyle:'none'
+              }}
+           >
               {options.first.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -184,15 +183,20 @@ const Overall: React.FC = () => {
  
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
-            <Typography variant="caption" sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}>
+            <Typography variant="caption" sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem', }}>
               Select Rank
             </Typography>
             <Select
               value={values.second}
               onChange={handleIndexChange('second')}
               displayEmpty
-              input={<OutlinedInput sx={{ height: 30 }} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray' }}>Select Rank</em> : selected}
+              input={<OutlinedInput sx={{ height: 55 ,fontFamily:'roboto'}} />}
+              renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Rank</em> : selected}
+              sx={{
+                fontFamily: 'Roboto, sans-serif', // Set font family to Roboto
+                fontStyle:'none'
+              }}
+
             >
               {options.second.map((option) => (
                 <MenuItem key={option.value} value={option.value}>

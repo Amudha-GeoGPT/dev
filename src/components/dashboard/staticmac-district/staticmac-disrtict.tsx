@@ -172,12 +172,7 @@ const handledistrictSelectAll = () => {
                 </Box>
               ))}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states"  sx={{
-                  '& .MuiInputBase-input': {
-                    height: 5, // Set the height of the input field to 40px
-                  },
-                  
-                }}/>
+                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states"/>
               )}
               popupIcon={null}
               openOnFocus
@@ -251,12 +246,7 @@ const handledistrictSelectAll = () => {
                 </Box>
               ))}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Select one or more district(s)"  placeholder="Select one or more states"  sx={{
-                  '& .MuiInputBase-input': {
-                    height: 5, // Set the height of the input field to 40px
-                  },
-                  
-                }}/>
+                <TextField {...params} variant="outlined" label="Select one or more district(s)"  placeholder="Select one or more states"/>
               )}
               popupIcon={null}
               openOnFocus
@@ -273,8 +263,8 @@ const handledistrictSelectAll = () => {
               value={values.first}
               onChange={handleIndexChange('first')}
               displayEmpty
-              input={<OutlinedInput sx={{ height: 30 }} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray' }}>Select Index</em> : selected}
+              input={<OutlinedInput sx={{ height: 55,fontFamily:'roboto' }} />}
+              renderValue={(selected) => !selected ? <em style={{ color: 'gray' ,fontStyle:'normal'}}>Select Index</em> : selected}
             >
               {options.first.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -295,8 +285,8 @@ const handledistrictSelectAll = () => {
               value={values.second}
               onChange={handleIndexChange('second')}
               displayEmpty
-              input={<OutlinedInput sx={{ height: 30 }} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray' }}>Select Rank</em> : selected}
+              input={<OutlinedInput sx={{ height: 55,fontFamily:'roboto'  }} />}
+              renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Rank</em> : selected}
             >
               {options.second.map((option) => (
                 <MenuItem key={option.value} value={option.value}>

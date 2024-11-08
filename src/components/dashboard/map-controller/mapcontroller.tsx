@@ -1,8 +1,7 @@
-import { Box ,useTheme, useMediaQuery,} from "@mui/material";
-import {useEffect, useState, useMemo } from "react";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { useEffect, useState, useMemo } from "react";
 import DatamapsIndia from "react-datamaps-india";
-
-// Define types for the regions and values
+// Define types for the regions
 type RegionName =
     | "Andaman & Nicobar Island"
     | "Andhra Pradesh"
@@ -38,21 +37,22 @@ type RegionName =
     | "Uttar Pradesh"
     | "Uttarakhand"
     | "West Bengal";
-
+ 
 type HoverComponentValue = { name: string; value: number };
-
-const Mapcontroller = () => {
+ 
+const MapController = () => {
     const [hoveredRegion, setHoveredRegion] = useState<RegionName | null>(null);
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const drawerWidth = isMobile ? 200 : 190;
+ 
     useEffect(() => {
         const elementToHide = document.querySelector("#root-svg-group > g:nth-child(4)");
         if (elementToHide instanceof HTMLElement) {
-            elementToHide.style.display = "none";
+            elementToHide.style.display = "none"; // Hide unwanted elements
         }
     }, []);
-
+ 
     const regionColors = useMemo<Record<RegionName, string>>(() => ({
       "Andaman & Nicobar Island": "#FF5733",
       "Andhra Pradesh": "#33FF57",
@@ -89,7 +89,7 @@ const Mapcontroller = () => {
       "Uttarakhand": "#D2FF33",
       "West Bengal": "#FF3380",
   }), []);
-  
+ 
   const regionData = useMemo<Record<RegionName, { value: number }>>(() => ({
       "Andaman & Nicobar Island": { value: 150 },
       "Andhra Pradesh": { value: 470 },
@@ -126,22 +126,21 @@ const Mapcontroller = () => {
       "Uttarakhand": { value: 1439 },
       "West Bengal": { value: 1321 },
   }), []);
-  
-
+ 
+ 
     const handleHover = (region: RegionName | null) => {
         setHoveredRegion(region);
     };
-
+ 
     const handleLeave = () => {
         setHoveredRegion(null);
     };
-
+ 
     return (
         <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, overflow: 'auto', ml: { sm: `${drawerWidth}px` }, marginTop: '60px' }}>
    
            <div style={{position: "relative",width: "100%",height: "600px" }}>
                 <DatamapsIndia
-                    style={{ width: "100%", height: "100%" }}
                     regionData={regionData}
                     fillColor={(geo: { properties: { name: string } }) => {
                         const regionName = geo.properties.name as RegionName;
@@ -150,22 +149,24 @@ const Mapcontroller = () => {
                     hoverComponent={({ value }: { value: HoverComponentValue }) => (
                         <div style={{ background: "white", border: "1px solid black", padding: "5px" }}>
                             <div>
-                                {value.name} {value.value} OCs
+                                {value.name}: {value.value} OCs
                             </div>
                         </div>
                     )}
                     onHover={handleHover}
                     onLeave={handleLeave}
                     mapLayout={{
+                        startColor: "#00FF00",
+                        endColor: "#FF0000",
                         noDataColor: "#f5f5f5",
-                        borderColor: "#8D8D8D",
+                        borderColor: "black",
                         hoverColor: "blue",
-                        hoverBorderColor: "green",
+                        hoverBorderColor: "black",
                     }}
                 />
-           </div>
+            </div>
         </Box>
     );
 };
-
-export default Mapcontroller;
+ 
+export default MapController;
