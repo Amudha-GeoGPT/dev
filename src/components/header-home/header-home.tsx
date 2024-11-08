@@ -145,7 +145,7 @@ const Headerhome: React.FC = () => {
                 navigate('/Staticmacdistrict');
                 break;
          case "Outlet Planning":
-          navigate('/Staticmacdistrict');
+          navigate('/Staticmacoutletplanning');
           break;
           case "User Guide":
             navigate('/stateoverall');
