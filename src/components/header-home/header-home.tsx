@@ -307,19 +307,21 @@ const Headerhome: React.FC = () => {
         <List>
           {/* static mac  */}
           <ListItem
-    onClick={() => {handleMenuClick("Static MAS"); toggleStaticmasMenu();}}
-    sx={{
-      color: selectedItem === "Static MAS" ? 'black' : 'white',
-      backgroundColor: selectedItem === "Static MAS" ? 'white' : 'transparent',
-      border: selectedItem === "Static MAS" ? '1px solid black' : 'none',
-      borderRadius: '4px',
-      padding:'2px',
-      mt:1
-    }}
-  >
-            <ListItemIcon>
-              <HomeIcon sx={{ color: selectedItem === "Static MAS" ? 'black' : 'white' }} />
-            </ListItemIcon>
+  onClick={() => {handleMenuClick("Static MAS"); toggleStaticmasMenu();}}
+  sx={{
+    color: selectedItem.includes("Static MAS") ? 'black' : 'white',
+    backgroundColor: selectedItem.includes("Static MAS") ? 'white' : 'transparent',
+    border: selectedItem.includes("Static MAS") ? '1px solid black' : 'none',
+    borderRadius: '4px',
+    padding:'2px',
+    mt:1
+  }}
+>
+<ListItemIcon>
+  <HomeIcon sx={{ 
+    color: selectedItem.includes("Static MAS") ? 'black' : 'white' 
+  }} />
+</ListItemIcon>
             <ListItemText primary="Static MAS" />
           </ListItem>
 {/* inside the list */}
