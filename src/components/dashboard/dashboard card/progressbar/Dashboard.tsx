@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   const cardData = [
     { title: 'City Count', value: 20, text: '1' },
-    { title: 'Covered Villages', value: 50, text: '5' },
+    { title: 'Covered Village', value: 50, text: '5' },
     { title: 'Outlet Count', value: 90, text: '45' },
     { title: 'SSFA Billing %', value: 75, text: '55' },
   ];
@@ -112,11 +112,11 @@ const Dashboard = () => {
                   color="white"
                   sx={{
                     fontSize: {
-                      xs: '14px',
-                      sm: '15px',
-                      md: '16px'
-                    },
-                    fontWeight: 600,
+                      xs: '16px',
+                      sm: '18px',
+                      md: '11.33px'
+                    },// font size
+                    fontWeight: 700,
                     lineHeight: 1.5,
                     letterSpacing: '-0.02em',
                     marginTop: 1,
