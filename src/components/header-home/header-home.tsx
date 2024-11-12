@@ -88,7 +88,7 @@ const Headerhome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
   const [staticMasOpen, setStaticMasOpen] = useState(false);
-  const [staticMasVisible, setStaticMasVisible] = useState(true);
+  const [staticMasVisible, setStaticMasVisible] = useState(false);
   const [districtOpen, setDistrictOpen] = useState(false);
   const [headerTitle, setHeaderTitle] = useState("Village Outlet Planning");
   const [selectedItem, setSelectedItem] = useState("Village Outlet Planning"); // New state to track selected item
@@ -323,6 +323,7 @@ const Headerhome: React.FC = () => {
   }} />
 </ListItemIcon>
             <ListItemText primary="Static MAS" />
+            {staticMasOpen ? null : <ExpandMore />}
           </ListItem>
 {/* inside the list */}
 {staticMasVisible && (   
