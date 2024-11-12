@@ -314,7 +314,8 @@ const Headerhome: React.FC = () => {
     border: selectedItem.includes("Static MAS") ? '1px solid black' : 'none',
     borderRadius: '4px',
     padding:'2px',
-    mt:1
+    mt:1,
+    cursor: 'pointer',
   }}
 >
 <ListItemIcon>
@@ -330,7 +331,7 @@ const Headerhome: React.FC = () => {
     <>  
         
          {/* state */}
-          <ListItem  onClick={toggleStateMenu}>
+          <ListItem  onClick={toggleStateMenu}  sx={{cursor: 'pointer'}} >
             <ListItemIcon> <img 
           src={commonstateimg} 
           alt="commonstate" 
@@ -347,6 +348,7 @@ const Headerhome: React.FC = () => {
                 sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-State-overall" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }}
               >
 
@@ -370,6 +372,7 @@ const Headerhome: React.FC = () => {
                 sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-State-Urban" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }}
               >
                 <ListItemIcon>
@@ -393,6 +396,7 @@ const Headerhome: React.FC = () => {
                 sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-State-Rural" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }}
               >
                 <ListItemIcon>
@@ -414,7 +418,7 @@ const Headerhome: React.FC = () => {
             </List>
           </Collapse>
           {/* District Menu */}
-          <ListItem  onClick={toggleDistrictMenu}>
+          <ListItem  onClick={toggleDistrictMenu} sx={{cursor: 'pointer'}} >
             <ListItemIcon> <img 
           src={commondistrictimg} 
           alt="commondistrictimg" 
@@ -428,6 +432,7 @@ const Headerhome: React.FC = () => {
               <ListItem  sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-district-overall" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }} onClick={() => handleMenuClick("Static MAS-district-overall")}>
                 <ListItemIcon> {selectedItem === "Static MAS-district-overall" ?
                   <img 
@@ -444,6 +449,7 @@ const Headerhome: React.FC = () => {
               <ListItem   onClick={() => handleMenuClick("Static MAS-district-Urban")}    sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-district-Urban" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }}>
                 <ListItemIcon> {selectedItem === "Static MAS-district-Urban" ?
                   <img 
@@ -460,6 +466,7 @@ const Headerhome: React.FC = () => {
               <ListItem  sx={{
                   pl: 4,
                   color: selectedItem === "Static MAS-district-Rural" ? '#BAEC36' : 'white',
+                  cursor: 'pointer',
                 }} onClick={() => handleMenuClick("Static MAS-district-Rural")}>
                 <ListItemIcon> {selectedItem === "Static MAS-district-Rural" ?
                   <img 
@@ -490,7 +497,7 @@ const Headerhome: React.FC = () => {
         alt="Townwithcolor" 
         style={{ width: 24, height: 24 }}
       />}</ListItemIcon>
-            <ListItemText primary="Town" sx={{color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white' }}/>
+            <ListItemText primary="Town" sx={{color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white', cursor: 'pointer' }}/>
             
           </ListItem>
 
@@ -506,7 +513,7 @@ const Headerhome: React.FC = () => {
         alt="subdistrictwithoutcolor" 
         style={{ width: 24, height: 24 }}
       />}</ListItemIcon>
-            <ListItemText primary="Sub District Rural"  sx={{color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }}/>
+            <ListItemText primary="Sub District Rural"  sx={{color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' , cursor: 'pointer',}}/>
             
           </ListItem>
           </>
@@ -522,7 +529,8 @@ const Headerhome: React.FC = () => {
     border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
     borderRadius: '4px',
     padding: '2px',
-    mt: 1
+    mt: 1,
+    cursor: 'pointer',
   }}
 >
             <ListItemIcon>
@@ -549,7 +557,8 @@ const Headerhome: React.FC = () => {
               border: selectedItem === "User Guide" ? '1px solid black' : 'none',
               borderRadius: '4px',
               padding:'2px',
-              mt:1
+              mt:1,
+              cursor: 'pointer',
             }}
 
           >
