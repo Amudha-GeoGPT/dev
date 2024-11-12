@@ -9,7 +9,8 @@ import {
   TableContainer,
   styled,
   Box,
-  Checkbox
+  Checkbox,
+  Button
 } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
 
@@ -56,8 +57,34 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 const Tabledata: React.FC = () => {
+
+   // Function to handle CSV download
+   const downloadCSV = () => {
+    const headers = ['State Name', 'District Name', 'Total Population', 'No Of Household', 'MIS'];
+    const rows = reasonList.map(reason => [
+      reason.stateName,
+      reason.districtName,
+      reason.totalPopulation,
+      reason.noOfHousehold,
+      reason.mis
+    ]);
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+      + [headers, ...rows].map(e => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "table_data.csv");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <Box>
+        {/* <Button variant="contained" color="primary" onClick={downloadCSV} sx={{ mb: 2 }}>
+        Download CSV
+      </Button> */}
       <TableContainer
         sx={{
           width: '100%',

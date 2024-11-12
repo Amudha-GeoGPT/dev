@@ -8,12 +8,16 @@ import { Box, Button, TextField, Autocomplete, useTheme, useMediaQuery, Grid,  M
   Stack,
   ListSubheader,
   InputAdornment } from '@mui/material';
-import Overalltabbar from '../../navbar-component/navbarcomponent';
+// import Overalltabbar from '../../navbar-component/navbarcomponent';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CheckIcon from '@mui/icons-material/Check';
 import SearchIcon from '@mui/icons-material/Search';
 // import Tabdata from './Components/Tabdata';
 import { SelectChangeEvent } from '@mui/material/Select';
+
+import Dashboard from '../dashboard card/progressbar/Dashboard';
+import Overalltabbar from '../../navbar-component/navbarcomponent';
+import Tabledata from '../data-grid/tabledata';
 
 const states = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -215,7 +219,7 @@ const Overall: React.FC = () => {
         </Button>
       </Stack>
  
-      {/* {showTabData && <Tabdata />} */}
+      {/* {showTabData &&<Dashboard />} */}
       
        
       {showTabData && <Overalltabbar />}

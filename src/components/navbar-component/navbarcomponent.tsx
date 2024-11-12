@@ -7,6 +7,8 @@ import Graphcontroller from '../dashboard/graph-controller/graphcontroller';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import Mapcontroller from '../dashboard/map-controller/mapcontroller';
 import { useTheme } from '@mui/material/styles';
+import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
+
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -100,7 +102,7 @@ const Overalltabbar = () => {
 
             <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
                 <CustomTabPanel value={value} index={0}>
-                    <Tabledata />
+                <Tabledata />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                 <Graphcontroller/>

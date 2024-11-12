@@ -13,9 +13,9 @@ const data: DataProps[] = [
   { city: 'Karnataka', p1: 200, p2: 300, p3: 100 },
   { city: 'Maharashtra', p1: 400, p2: 400, p3: 200 },
   { city: 'Gujarat', p1: 300, p2: 200, p3: 150 },
-  { city: 'West Bengal', p1: 200, p2: 250, p3: 100 },
-  { city: 'Tamil Nadu', p1: 150, p2: 250, p3: 100 },
-  { city: 'Andhra Pradesh', p1: 300, p2: 300, p3: 200 },
+  { city: 'WestBengal', p1: 200, p2: 250, p3: 100 },
+  { city: 'TamilNadu', p1: 150, p2: 250, p3: 100 },
+  { city: 'AndhraPradesh', p1: 300, p2: 300, p3: 200 },
   { city: 'Rajasthan', p1: 250, p2: 200, p3: 150 },
   { city: 'Mizoram', p1: 200, p2: 250, p3: 150 },
   { city: 'Puducherry', p1: 300, p2: 200, p3: 100 },
@@ -27,61 +27,62 @@ const data: DataProps[] = [
 
 const Graphcontroller: React.FC = () => {
 
-    // Custom formatter for legend to render round color indicators
-    const renderLegend = (value: string, entry: any) => {
-      const { color } = entry;
-      return (
-        <span style={{ display: 'flex', alignItems: 'center', marginRight: 15 }}>
-          <div
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              backgroundColor: color,
-              marginRight: 5,
-            }}
-          />
-          {value}
-        </span>
-      );
-    };
-
+  const renderLegend = (value: string, entry: any) => {
+    const { color } = entry;
+    return (
+      <span style={{ display: 'flex', alignItems: 'center', marginRight: 15 }}>
+        <div
+          style={{
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            backgroundColor: color,
+            marginRight: 5,
+          }}
+        />
+        {value}
+      </span>
+    );
+  };
 
   return (
     <Box>
-    <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <BarChart
           data={data}
           margin={{
             top: 20,
             right: 30,
-            left: 40, // Increased left margin for Y-axis labels
+            left: 30,
             bottom: 20,
           }}
+          barGap={8} // Adds space between bars 
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="city" tick={{ fontSize: 9 }}>
-            <Label value="City's" position="bottom" offset={1} />
+          <XAxis 
+            dataKey="city" 
+            tick={{ fontSize: 10 }} 
+            interval={0}
+          >
+            <Label value="City's" position="bottom" />
           </XAxis>
           <YAxis>
             <Label value="MAS" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
           </YAxis>
-          <Tooltip />
+          <Tooltip cursor={false} /> {/* Removes background gray color on hover */}
           <Legend
             layout="horizontal"
             align="right"
-            verticalAlign="top" // Moved legend to the top-right corner
+            verticalAlign="top"
             wrapperStyle={{ fontSize: '12px', marginRight: '10px', marginTop: '0px' }}
             formatter={renderLegend}
-             iconSize={0}
+            iconSize={0}
           />
-          <Bar dataKey="p1" stackId="a" fill="#001B04"  name="P-1" barSize={30} radius={3}/>
-          <Bar dataKey="p2" stackId="a" fill="#A3E635" name="P-2" barSize={30} radius={3}/>
-          <Bar dataKey="p3" stackId="a" fill="#E3FFC4"  name="P-3" barSize={30} radius={3}/>
+          <Bar dataKey="p1" stackId="a" fill="#001B04" name="P-1" barSize={25} radius={[3, 3, 0, 0]} />
+          <Bar dataKey="p2" stackId="a" fill="#A3E635" name="P-2" barSize={25} radius={[3, 3, 0, 0]} />
+          <Bar dataKey="p3" stackId="a" fill="#E3FFC4" name="P-3" barSize={25} radius={[3, 3, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
-     
-    
     </Box>
   );
 };
