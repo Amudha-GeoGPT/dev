@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import CustomBarChart from "../../components/common/CustomGraph";
 
-const GraphData: React.FC = () => {
+const BarGraphData: React.FC = () => {
   const colors = ["#e2f2e5", "#baec36", "#001b04"];
   const yKeys = ["P1", "P2", "P3"];
   const data = [
@@ -251,4 +251,4 @@ const GraphData: React.FC = () => {
   );
 };
 
-export default GraphData;
+export default BarGraphData;

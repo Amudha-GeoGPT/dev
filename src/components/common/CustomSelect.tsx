@@ -1,6 +1,11 @@
 import React from "react";
 import { FormControl, FormLabel, Select, MenuItem } from "@mui/material";
-import { LabelColor } from "../styles/fontcolor.const";
+import {
+  LabelColor,
+  PlaceholderColor,
+  SelectAutoCompleteBorderColor,
+} from "../styles/fontcolor.const";
+import { TertiaryText } from "../styles/fontsize.const";
 
 interface SelectComponentProps {
   label: string;
@@ -24,6 +29,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
       <FormLabel
         sx={{
           color: LabelColor,
+          fontSize: TertiaryText,
           "&.Mui-focused": {
             color: LabelColor,
           },
@@ -37,16 +43,22 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
         displayEmpty
         sx={{
           ...sx,
-          "&.MuiOutlinedInput-root": {
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "black",
-            },
+
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+          },
+          ".MuiOutlinedInput-notchedOutline": {
+            border: `1px solid ${SelectAutoCompleteBorderColor}`,
           },
         }}
         renderValue={(selected) => {
           if (!selected)
-            return <span style={{ color: "#a2a2a2" }}>{placeholder}</span>;
-          // return <span style={{ color: SelectAutoCompletePlaceholderColor }}>{placeholder}</span>;
+            return (
+              <span style={{ color: PlaceholderColor }}>{placeholder}</span>
+            );
 
           return selected;
         }}

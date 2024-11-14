@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import CustomAutocomplete from "../../components/common/CustomAutocomplete";
 import CustomSelect from "../../components/common/CustomSelect";
+import { SelectAutoCompleteBorderColor } from "../styles/fontcolor.const";
 
 export default function StateComponent() {
   const [stateValue, setStateValue] = useState<string[]>([]);
@@ -24,7 +25,8 @@ export default function StateComponent() {
           <Box>
             <CustomAutocomplete
               label="State"
-              placeholder="Select one or more states"
+              placeholder= "Select one or more states" 
+              insideplaceholder="Search State"
               options={[
                 "Andhra Pradesh",
                 "Tamil Nadu",
@@ -50,7 +52,10 @@ export default function StateComponent() {
               options={["Show MIS", "Show MAS"]}
               value={stateIndex}
               onChange={handleSelectIndexChange}
-              sx={{ marginTop: "4px", height: "39px" }}
+              sx={{
+                marginTop: "4px",
+                height: "39px",
+              }}
             />
           </Box>
         </Grid>
@@ -70,7 +75,7 @@ export default function StateComponent() {
               ]}
               value={stateRank}
               onChange={handleSelectRankChange}
-              sx={{ marginTop: "4px", height: "39px" }}
+              sx={{ marginTop: "4px", height: "39px"}}
             />
           </Box>
         </Grid>

@@ -12,7 +12,12 @@ import {
   sharedButtonStyles,
   ListboxComponent,
 } from "../styles/CustomAutoComplete.styles";
-import { LabelColor } from "../styles/fontcolor.const";
+import {
+  LabelColor,
+  PlaceholderColor,
+  SelectAutoCompleteBorderColor,
+} from "../styles/fontcolor.const";
+import { TertiaryText } from "../styles/fontsize.const";
 
 interface CustomAutocompleteProps {
   options: string[];
@@ -24,6 +29,7 @@ interface CustomAutocompleteProps {
   sx?: React.CSSProperties;
   selectAllLabel?: string;
   deselectAllLabel?: string;
+  insideplaceholder?: string;
 }
 
 const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
@@ -36,6 +42,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   sx,
   selectAllLabel,
   deselectAllLabel,
+  insideplaceholder,
 }) => {
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>(value);
   const [showAllTags, setShowAllTags] = useState<boolean>(false);
@@ -73,6 +80,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       <FormLabel
         sx={{
           color: LabelColor,
+          fontSize: TertiaryText,
           "&.Mui-focused": {
             color: LabelColor,
           },
@@ -92,15 +100,16 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           "& .MuiOutlinedInput-root": {
             padding: "0px",
             paddingLeft: "10px",
-
+            borderRadius: "8px",
+            border: `1px solid ${SelectAutoCompleteBorderColor}`,
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "black",
+              border: `1px solid ${SelectAutoCompleteBorderColor}`,
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "black",
+              border: `1px solid ${SelectAutoCompleteBorderColor}`,
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "black",
+              border: `1px solid ${SelectAutoCompleteBorderColor}`,
             },
           },
         }}
@@ -190,9 +199,12 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder={
-              autocompleteValue.length === 0 ? placeholder : "Search State"
-            }
+            placeholder={placeholder || insideplaceholder}
+            sx={{
+              "& input::placeholder": {
+                color: PlaceholderColor,
+              },
+            }}
           />
         )}
       />

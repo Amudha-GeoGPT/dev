@@ -2,9 +2,11 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import DataGridData from "./static-data/DataGridData";
 import GraphData from "./static-data/IndiaMapData";
-import IndiaMapData from "./static-data/IndiaMapData";
+import BarGraphData from "./static-data/GraphData";
+import DataGridData from "./static-data/DataGridData";
+import CustomButton from "./common/CustomButton";
+import ExportIcon from "../assets/icons/ExportIcon.svg";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -12,6 +14,22 @@ interface TabPanelProps {
   value: number;
 }
 
+const buttonStyles = {
+  fontSize: "12px",
+  height: "30px",
+  padding: "14px",
+  backgroundColor: "#001B04",
+  color: "#FFFFFF",
+  textTransform: "none" as "none",
+  borderRadius: "4px",
+  "&:hover": {
+    backgroundColor: "#0A330A",
+  },
+  "& img": {
+    width: "20px",
+    height: "20px",
+  },
+};
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -44,7 +62,15 @@ export default function TabsComponent() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          borderBottom: 1,
+          borderColor: "divider",
+          justifyContent: "space-between",
+        }}
+      >
         <Tabs
           value={value}
           onChange={handleChange}
@@ -52,7 +78,7 @@ export default function TabsComponent() {
           sx={{
             transform: "none",
             "& .MuiTab-root": {
-              minWidth: 340,
+              minWidth: 280,
               // padding: "12px 24px",
               backgroundColor: "transparent",
               textTransform: "none",
@@ -71,15 +97,21 @@ export default function TabsComponent() {
           <Tab label="Graph" {...a11yProps(1)} />
           <Tab label="Map" {...a11yProps(2)} />
         </Tabs>
+
+        <CustomButton
+          buttonText="Export CSV"
+          buttonStyles={buttonStyles}
+          icon={<img src={ExportIcon} alt="Export Icon" />}
+        />
       </Box>
       <CustomTabPanel value={value} index={0}>
-        {/* <DataGridData /> */}
+        <DataGridData />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        {/* <GraphData /> */}
+        <BarGraphData />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        {/* <IndiaMapData /> */}
+        <GraphData />
       </CustomTabPanel>
     </Box>
   );

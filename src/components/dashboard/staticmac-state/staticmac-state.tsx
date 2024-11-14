@@ -18,6 +18,9 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import Dashboard from '../dashboard card/progressbar/Dashboard';
 import Overalltabbar from '../../navbar-component/navbarcomponent';
 import Tabledata from '../data-grid/tabledata';
+import CustomAutocomplete from '../../common/CustomAutocomplete';
+import CustomSelect from '../../common/CustomSelect';
+import TabsComponent from '../../TabsComponent';
 
 const states = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -28,21 +31,7 @@ const states = [
   "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Chandigarh"
 ];
  
-const options = {
-  first: [
-    { label: "Show MIS", value: "Show MIS" },
-    { label: "Show MAS", value: "Show MAS" },
-  ],
-  second: [
-    { label: "Show All", value: "Show All" },
-    { label: "Top 10", value: "Top 10" },
-    { label: "Top 50", value: "Top 50" },
-    { label: "Top 100", value: "Top 100" },
-    { label: "Bottom 10", value: "Bottom 10" },
-    { label: "Bottom 50", value: "Bottom 50" },
-    { label: "Bottom 100", value: "Bottom 100" }
-  ],
-};
+
 
 
 const Overall: React.FC = () => {
@@ -53,6 +42,11 @@ const Overall: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const drawerWidth = isMobile ? 200 : 190;
+  const [stateValue, setStateValue] = useState<string[]>([]);
+  const [stateIndex, setIndexValue] = useState<string>("");
+  const [stateRank, setStateRank] = useState<string>("");
+
+
   const handleSelectAll = () => {
     setSelectedStates(states);
   };
@@ -73,84 +67,40 @@ const Overall: React.FC = () => {
     state.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
- 
+  const handleSelectStateChange = (value: string[]) => {
+    setStateValue(value);
+  };
 
-
-
+  const handleSelectIndexChange = (value: string) => {
+    setIndexValue(value);
+  };
+  const handleSelectRankChange = (value: string) => {
+    setStateRank(value);
+  };
 
   return (
-    <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, overflow: 'auto', ml: { sm: `${drawerWidth}px` }, marginTop: '60px' }}>
+    <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, ml: { sm: `${drawerWidth}px` }, marginTop: '60px' }}>
        <Grid container spacing={2} sx={{ width: '100%', padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
-            <Typography variant='caption' sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}>
-              State
-            </Typography>
-            <Autocomplete
-              multiple
-              value={selectedStates}
-              onChange={handleChange}
-              options={filteredStates}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option}
-              renderOption={(props, option, { selected }) => (
-                <Box component="li" {...props}>
-                  <CheckIcon color={selected ? 'primary' : 'action'} />
-                  <Typography>{option}</Typography>
-                </Box>
-              )}
-              renderTags={(value, getTagProps) => (
-                <div style={{ maxHeight: 40, overflowY: 'auto', display: 'flex', flexWrap: 'wrap' }}>
-                  {value.map((option, index) => (
-                    <Chip
-                      // key={option}
-                      label={option}
-                      {...getTagProps({ index })}
-                      onDelete={() => {
-                        setSelectedStates((prev) => prev.filter((state) => state !== option));
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-              ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
-              ListboxComponent={React.forwardRef((props: any, ref) => (
-                <Box ref={ref}>
-                  <ListSubheader sx={{ bgcolor: 'background.paper', position: 'sticky', top: 0, zIndex: 2, padding: 1 }}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      placeholder="Search States"
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      sx={{ '& .MuiOutlinedInput-root': { height: 40 } }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <SearchIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </ListSubheader>
-                  <Box {...props} />
-                  <Box {...props}>
-                    <ListSubheader sx={{ bgcolor: 'background.paper', position: 'sticky', bottom: 0, zIndex: 1, paddingY: 1, display: 'flex', justifyContent: 'center' }}>
-                      <Button onClick={handleSelectAll} variant="outlined" sx={{ marginRight: 1 }}>
-                        Select All
-                      </Button>
-                      <Button onClick={handleDeselectAll} variant="outlined">
-                        Deselect All
-                      </Button>
-                    </ListSubheader>
-                  </Box>
-                </Box>
-              ))}
-              renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states" />
-              )}
-              popupIcon={null}
-              openOnFocus
+             <CustomAutocomplete
+              label="State"
+              placeholder="Select one or more states"
+              options={[
+                "Andhra Pradesh",
+                "Tamil Nadu",
+                "Assam",
+                "Bihar",
+                "Karnataka",
+                "Punjab",
+              ]}
+              value={stateValue}
+              onInputChange={handleSelectStateChange}
+              noOptionsText="No states found"
+              sx={{ marginTop: "4px" }}
+              selectAllLabel="Select All"
+              deselectAllLabel="Deselect All"
             />
           </FormControl>
         </Grid>
@@ -158,52 +108,35 @@ const Overall: React.FC = () => {
         {/* Rank and Index Selection */}
         <Grid item xs={12} sm={6} md={4} >
           <FormControl fullWidth >
-            <Typography variant="caption" sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}>
-              Select Index
-            </Typography>
-            <Select
-              value={values.first}
-              onChange={handleIndexChange('first')}
-              displayEmpty
-              input={<OutlinedInput sx={{ height: 55,fontFamily:'roboto' }} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Index</em> : selected}
-              sx={{
-                fontFamily: 'Roboto, sans-serif', // Set font family to Roboto
-                fontStyle:'none'
-              }}
-           >
-              {options.first.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
+          <CustomSelect
+              label="State Index"
+              placeholder="Select Index"
+              options={["Show MIS", "Show MAS"]}
+              value={stateIndex}
+              onChange={handleSelectIndexChange}
+              sx={{ marginTop: "4px", height: "39px" }}
+            />
           </FormControl>
         </Grid>
  
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
-            <Typography variant="caption" sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem', }}>
-              Select Rank
-            </Typography>
-            <Select
-              value={values.second}
-              onChange={handleIndexChange('second')}
-              displayEmpty
-              input={<OutlinedInput sx={{ height: 55 ,fontFamily:'roboto'}} />}
-              renderValue={(selected) => !selected ? <em style={{ color: 'gray',fontStyle:'normal' }}>Select Rank</em> : selected}
-              sx={{
-                fontFamily: 'Roboto, sans-serif', // Set font family to Roboto
-                fontStyle:'none'
-              }}
-
-            >
-              {options.second.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
+          <CustomSelect
+              label="Select Rank"
+              placeholder="Select Rank"
+              options={[
+                "Show All",
+                "Top 10",
+                "Top 50",
+                "Top 100",
+                "Bottom 10",
+                "Bottom 50",
+                "Bottom 100",
+              ]}
+              value={stateRank}
+              onChange={handleSelectRankChange}
+              sx={{ marginTop: "4px", height: "39px" }}
+            />
           </FormControl>
         </Grid>
       </Grid>
@@ -222,7 +155,7 @@ const Overall: React.FC = () => {
       {/* {showTabData &&<Dashboard />} */}
       
        
-      {showTabData && <Overalltabbar />}
+      {showTabData && <TabsComponent />}
     </Box>
   );
 };

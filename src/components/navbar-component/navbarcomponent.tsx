@@ -8,6 +8,9 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import Mapcontroller from '../dashboard/map-controller/mapcontroller';
 import { useTheme } from '@mui/material/styles';
 import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
+import GraphData from '../static-data/GraphData';
+import IndiaMapData from '../static-data/IndiaMapData';
+import DataGridData from '../static-data/DataGridData';
 
 
 interface TabPanelProps {
@@ -100,16 +103,16 @@ const Overalltabbar = () => {
    
            
 
-            <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
+            <Box sx={{ flexGrow: 1,  }}>
                 <CustomTabPanel value={value} index={0}>
-                <Tabledata />
+                {/* <DataGridData /> */}
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                <Graphcontroller/>
+                <GraphData/>
                     
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  <Mapcontroller/>
+                  <IndiaMapData/>
                 </CustomTabPanel>
             </Box>
         </Box>
