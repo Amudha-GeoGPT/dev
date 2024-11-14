@@ -17,11 +17,11 @@ import {
   Chip,
   Stack,
   ListSubheader,
-  // InputAdornment,
+  InputAdornment,
 } from '@mui/material';
 // import AssessmentIcon from '@mui/icons-material/Assessment';
 import CheckIcon from '@mui/icons-material/Check';
-// import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Overalltabbar from '../dashboard card/overalltoolbar';
 import DashboardIcon from '../../../assets/images/svg/akar-icons_dashboard.svg';
@@ -87,7 +87,7 @@ const SelectionField = ({
   selectedValues,
   setSelectedValues,
   searchTerm,
-  // setSearchTerm,
+  setSearchTerm,
 }: any) => {
   const filteredOptions = options.filter((option: string) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
@@ -120,19 +120,11 @@ const SelectionField = ({
         options={filteredOptions}
         disableCloseOnSelect
         getOptionLabel={(option) => option}
-
         renderOption={(props, option, { selected }) => (
-           <Box
-            component="li"
-            {...props}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography sx={{ flexBasis: "80%" }}>{option}</Typography>
-            {selected && <CheckIcon color="primary" />}
+          <Box component='li' {...props}>
+            <CheckIcon color={selected ? 'primary' : 'action'} />
+            <Typography>{option}</Typography>
           </Box>
-
         )}
         renderTags={(value, getTagProps) => (
           <div
@@ -141,6 +133,11 @@ const SelectionField = ({
               overflowY: 'auto',
               display: 'flex',
               flexWrap: 'wrap',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
             }}
           >
             {value.map((option, index) => (
@@ -157,7 +154,11 @@ const SelectionField = ({
             ))}
           </div>
         )}
-        ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
+        ListboxProps={{ style: { maxHeight: 300, overflow: 'auto', '&::-webkit-scrollbar': {
+      display: 'none'
+    },
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none' } }}
         ListboxComponent={React.forwardRef((props: any, ref) => (
           <Box ref={ref}>
             <ListSubheader
@@ -169,7 +170,7 @@ const SelectionField = ({
                 padding: 1,
               }}
             >
-              {/* <TextField
+              <TextField
                 fullWidth
                 variant='outlined'
                 placeholder={`Search ${label}`}
@@ -182,26 +183,7 @@ const SelectionField = ({
                     </InputAdornment>
                   ),
                 }}
-              /> */}
-              {/* <TextField {...props}
-  fullWidth
-  variant='outlined'
-  placeholder={`Search ${label}`}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  sx={{ 
-    '& .MuiOutlinedInput-root': { 
-      height: 40 
-    } 
-  }}
-  InputProps={{
-    startAdornment: (
-      <InputAdornment position='start'>
-        <SearchIcon />
-      </InputAdornment>
-    ),
-  }}
-/> */}
-
+              />
             </ListSubheader>
             <Box {...props} />
             <Box {...props}>
@@ -216,16 +198,31 @@ const SelectionField = ({
                   justifyContent: 'center',
                 }}
               >
-                <Button
-                  onClick={handleSelectAll}
-                  variant='outlined'
-                  sx={{ marginRight: 1 }}
-                >
-                  Select All
-                </Button>
-                <Button onClick={handleDeselectAll} variant='outlined'>
-                  Deselect All
-                </Button>
+              <Button
+  onClick={handleSelectAll}
+  variant='outlined'
+  sx={{
+    marginRight: { xs: 0.5, sm: 1 },
+    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+    padding: { xs: '2px 4px', sm: '2px 8px' },
+    minWidth: { xs: '70px', sm: '90px' }
+  }}
+>
+  Select All
+</Button>
+
+<Button 
+  onClick={handleDeselectAll} 
+  variant='outlined'
+  sx={{
+    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+    padding: { xs: '2px 4px', sm: '2px 8px' },
+    minWidth: { xs: '70px', sm: '90px' }
+  }}
+>
+  Deselect All
+</Button>
+
               </ListSubheader>
             </Box>
           </Box>
