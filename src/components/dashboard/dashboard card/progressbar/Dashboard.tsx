@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: 1600, margin: 'auto', display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' }, gap: 4 }}>
-      {['PFA', 'SSFA'].map((section, sectionIndex) => (
+      {['SSFA', 'PFA'].map((section, sectionIndex) => (
         <Box key={sectionIndex}>
           <Box
             sx={{
