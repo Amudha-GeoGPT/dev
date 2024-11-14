@@ -1,7 +1,6 @@
 import { Box, useTheme, useMediaQuery } from "@mui/material";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useState, useMemo } from "react";
 import DatamapsIndia from "react-datamaps-india";
-import debounce from 'lodash/debounce';
 
 type RegionName =
     | "Andaman & Nicobar Island"
@@ -45,13 +44,6 @@ const MapController = () => {
     const drawerWidth = isMobile ? 200 : 190;
 
     const [hoveredRegion, setHoveredRegion] = useState<RegionName | null>(null);
-
-    useEffect(() => {
-        const elementToHide = document.querySelector("#root-svg-group > g:nth-child(4)");
-        if (elementToHide instanceof HTMLElement) {
-            elementToHide.style.display = "none";
-        }
-    }, []);
 
     const regionColors = useMemo<Record<RegionName, string>>(() => ({
         "Andaman & Nicobar Island": "#FF5733",
@@ -127,16 +119,6 @@ const MapController = () => {
         "West Bengal": { value: 1321 },
     }), []);
 
-    const debouncedHover = useCallback(
-        debounce((region: RegionName | null) => {
-            setHoveredRegion(region);
-        }, 200), // Increased debounce delay to smooth out transitions
-    []);
-
-    const handleHover = (region: RegionName | null) => {
-        debouncedHover(region);
-    };
-
     return (
         <Box
             alignItems="center"
@@ -153,23 +135,21 @@ const MapController = () => {
                     regionData={regionData}
                     fillColor={(geo: { properties: { name: string } }) => {
                         const regionName = geo.properties.name as RegionName;
-                        return hoveredRegion === regionName ? "lightblue" : regionColors[regionName] || "#f5f5f5";
+                        return hoveredRegion === regionName
+                            ? "#ADD8E6"  // Custom hover color
+                            : regionColors[regionName] || "#f5f5f5";
                     }}
-                    hoverComponent={({ value }: { value: { name: string; value: number } }) => (
-                        <div style={{ background: "white", border: "1px solid black", padding: "5px" }}>
-                            <div>
-                                {value.name}: {value.value} OCs
-                            </div>
-                        </div>
-                    )}
-                    onHover={handleHover}
-                    onLeave={() => setHoveredRegion(null)}  // Immediate reset on leave to prevent flickering
                     mapLayout={{
                         startColor: "#00FF00",
                         endColor: "#FF0000",
                         noDataColor: "#f5f5f5",
                         borderColor: "black",
                     }}
+                    onMouseEnter={(geo: { properties: { name: string } }) => {
+                        const regionName = geo.properties.name as RegionName;
+                        setHoveredRegion(regionName);
+                    }}
+                     onMouseLeave={() => setHoveredRegion(null)}
                 />
             </div>
         </Box>
