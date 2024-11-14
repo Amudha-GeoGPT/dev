@@ -20,7 +20,6 @@ import {
 import { useTheme, styled, alpha } from '@mui/material/styles';
 import {
   Menu as MenuIcon,
-  Home as HomeIcon,
   ExpandLess,
   ExpandMore,
   Search as SearchIcon,
@@ -44,14 +43,17 @@ import avatariconimg from '../../assets/images/svg/Avatarimg.svg';
 import vectorheaderimg from '../../assets/images/svg/Vectorimg.svg';
 import outletwithoutclr from '../../assets/images/svg/outletimg.svg';
 import outletwithclr from '../../assets/images/svg/Vectorwithclr.svg';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import Home from '../../assets/images/svg/Home.svg';
+import search from '../../assets/images/svg/search.svg';
+import Homewithcolor from '../../assets/images/svg/Homewithcolor.svg'
+import userguide from '../../assets/images/svg/userguide.svg'
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  // '&:hover': {
+  //   backgroundColor: alpha(theme.palette.common.white, 0.25),
+  // },
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
@@ -100,6 +102,7 @@ const Headerhome: React.FC = () => {
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
 
+
   const handleDrawerToggle = () => setOpen(!open);
   // const toggleStateMenu = () => setStateOpen(!stateOpen);
   // const toggleDistrictMenu = () => setDistrictOpen(!districtOpen);
@@ -119,20 +122,20 @@ const Headerhome: React.FC = () => {
     setStaticMasVisible(false); // Hide Static MAS section
   }
   const toggleDistrictMenu = () => {
-   setDistrictOpen(!districtOpen);
-   setStateOpen(false);
+    setDistrictOpen(!districtOpen);
+    setStateOpen(false);
   }
 
   const toggleTownMenu = () => {
     // setDistrictOpen(!districtOpen);
     setDistrictOpen(false);
-   }
+  }
 
 
   const handleMenuClick = (title: string) => {
     setHeaderTitle(title);
     setSelectedItem(title); // Update selected item
-    
+
     if (isMobile || isTablet) setOpen(false);
     switch (title) {
       case "Static MAS":
@@ -150,24 +153,24 @@ const Headerhome: React.FC = () => {
       case "Static MAS-district-overall":
         navigate('/Staticmacdistrict');
         break;
-        case "Static MAS-district-Urban":
-          navigate('/Staticmacdistrict');
-          break;
-        case "Static MAS-district-Rural":
-            navigate('/Staticmacdistrict');
-            break;
-        case "Static MAS-Town":
-              navigate('/Staticmactown');
-              break;
-        case "Static MAS-Sub District Rural":
-                navigate('/Staticmacdistrict');
-                break;
-         case "Outlet Planning":
-          navigate('/Staticmacoutletplanning');
-          break;
-          case "User Guide":
-            navigate('/stateoverall');
-            break;
+      case "Static MAS-district-Urban":
+        navigate('/Staticmacdistrict');
+        break;
+      case "Static MAS-district-Rural":
+        navigate('/Staticmacdistrict');
+        break;
+      case "Static MAS-Town":
+        navigate('/Staticmactown');
+        break;
+      case "Static MAS-Sub District Rural":
+        navigate('/Staticmacdistrict');
+        break;
+      case "Outlet Planning":
+        navigate('/Staticmacoutletplanning');
+        break;
+      case "User Guide":
+        navigate('/stateoverall');
+        break;
       // Add cases for other titles  
       default:
         navigate('/');
@@ -180,7 +183,7 @@ const Headerhome: React.FC = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -214,7 +217,7 @@ const Headerhome: React.FC = () => {
       <MenuItem>
         <IconButton size="large" aria-label="search" color="inherit">
           <SearchIcon />
-        </IconButton>
+        </IconButton> 
         <p>Search</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
@@ -231,8 +234,8 @@ const Headerhome: React.FC = () => {
       <AppBar
         position="fixed"
         sx={{
-           width: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' },
-           ml: { sm: `${drawerWidth}px` },
+          width: { sm: `calc(100% - ${drawerWidth}px)`, xs: '100%' },
+          ml: { sm: `${drawerWidth}px` },
           backgroundColor: '#001B04',
         }}
       >
@@ -242,38 +245,38 @@ const Headerhome: React.FC = () => {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1, fontFamily: 'inter' }}>
             {headerTitle}
           </Typography>
-          <Search  sx={{display: { xs: 'none', md: 'flex' },width: 200,borderRadius: 12,backgroundColor: '#EDF6EE',padding: '0 8px'}}>
+          <Search sx={{ display: { xs: 'none', md: 'flex' }, width: 200, borderRadius: 12, backgroundColor: '#EDF6EE', padding: '0 8px' }}>
             <SearchIconWrapper sx={{ color: '#1E1E1E' }}>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }}   sx={{ color: '#1E1E1E' }}/>
+            <StyledInputBase placeholder="Search" inputProps={{ 'aria-label': 'search' }} sx={{ color: '#1E1E1E' }} />
           </Search>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <IconButton size="large" edge="end" aria-label="account of current user" onClick={handleProfileMenuOpen} color="inherit">
-            <img 
-          src={notificationimg} 
-          alt="notificationimg" 
-          style={{ width: 32, height: 32}}
-          color='white'
-        />
+            <IconButton size="large" edge="end" aria-label="account of current user" onClick={handleProfileMenuOpen} color="inherit">
+              <img
+                src={notificationimg}
+                alt="notificationimg"
+                style={{ width: 32, height: 32 }}
+                color='white'
+              />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" edge="end" aria-label="account of current user" onClick={handleProfileMenuOpen} color="inherit">
-            <img 
-          src={avatariconimg} 
-          alt="avatariconimg" 
-          style={{ width: 32, height: 32}}
-        />
+              <img
+                src={avatariconimg}
+                alt="avatariconimg"
+                style={{ width: 32, height: 32 }}
+              />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' },margin:2 }}>
-            <Typography variant='h6' sx={{fontSize:'16px'}}>Shobha sv</Typography>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, margin: 2 }}>
+            <Typography variant='h6' sx={{ fontSize: '16px',fontFamily:'inter'}}>Shobha sv</Typography>
           </Box>
-        </Toolbar>
+        </Toolbar>  
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
@@ -292,273 +295,320 @@ const Headerhome: React.FC = () => {
         }}
       >
         {(isMobile || isTablet) && <Toolbar />}
-        <Box>
-          <Typography variant="h6" align="center" sx={{fontSize:'16px',mt:2}}>
+        <Box sx={{ padding: 2 }}>
+          <h3 className='name'>
             <IconButton>
-            <img 
-        src={vectorheaderimg} 
-        alt="vector" 
-        style={{ width: 18, height: 16 }}
-      />
+              <img
+                src={vectorheaderimg}
+                alt="vector"
+                style={{ width: 18, height: 16, }}
+
+              />
             </IconButton>
             GEO GPT
-          </Typography>
+          </h3>
         </Box>
-        <List>
+        <List >
           {/* static mac  */}
           <ListItem
-  onClick={() => {handleMenuClick("Static MAS"); toggleStaticmasMenu();}}
-  sx={{
-    color: selectedItem.includes("Static MAS") ? 'black' : 'white',
-    backgroundColor: selectedItem.includes("Static MAS") ? 'white' : 'transparent',
-    border: selectedItem.includes("Static MAS") ? '1px solid black' : 'none',
-    borderRadius: '4px',
-    padding:'2px',
-    mt:1
-  }}
->
-<ListItemIcon>
-  <HomeIcon sx={{ 
+            onClick={() => { handleMenuClick("Static MAS"); toggleStaticmasMenu(); }}
+            sx={{
+              color: selectedItem.includes("Static MAS") ? 'black' : 'white',
+              backgroundColor: selectedItem.includes("Static MAS") ? '#BAEC36' : 'transparent',
+              border: selectedItem.includes("Static MAS") ? '1px solid black' : 'none',
+              borderRadius: '4px',
+              padding: '2px',
+              mt: 1,
+              
+            }}
+          >
+            <ListItemIcon>
+              {/* <HomeIcon sx={{ 
     color: selectedItem.includes("Static MAS") ? 'black' : 'white' 
-  }} />
-</ListItemIcon>
-            <ListItemText primary="Static MAS" />
+  }} /> */}
+              {/* <img src={Home}/> */}
+              <ListItemIcon>
+                {selectedItem === "Static MAS" ?
+                  <img
+                    src={Homewithcolor}
+                    alt="overall"
+                    style={{ width: 24, height: 24,marginLeft:15 }}
+                  /> : <img
+                    src={Home}
+                    alt="overall"
+                    style={{ width: 24, height: 24 ,marginLeft:15}}
+                  />}
+              </ListItemIcon>
+            </ListItemIcon>
+            <ListItemText  sx={{fontFamily:'inter',"& .MuiTypography-root":{
+              fontFamily:'inter'
+            }}} primary="Static MAS" />
             {staticMasOpen ? null : <ExpandMore />}
           </ListItem>
-{/* inside the list */}
-{staticMasVisible && (   
-    <>  
-        
-         {/* state */}
-          <ListItem  onClick={toggleStateMenu}>
-            <ListItemIcon> <img 
-          src={commonstateimg} 
-          alt="commonstate" 
-          style={{ width: 24, height: 24}}
-        /></ListItemIcon>
-            <ListItemText primary="State" />
-            {stateOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={stateOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                
-                onClick={() => handleMenuClick("Static MAS-State-overall")}
-                sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-State-overall" ? '#BAEC36' : 'white',
-                }}
-              >
+          {/* inside the list */}
+          {staticMasVisible && (
+            <>
 
-                <ListItemIcon>
-                  {selectedItem === "Static MAS-State-overall" ?
-                  <img 
-          src={stateoverallwithclr} 
-          alt="overall" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateoverallwithoutcolor} 
-        alt="overall" 
-        style={{ width: 24, height: 24 }}
-      />}
-                </ListItemIcon>
-                <ListItemText primary="Overall" />
+              {/* state */}
+              <ListItem onClick={toggleStateMenu}>
+                <ListItemIcon> <img
+                  src={commonstateimg}
+                  alt="commonstate"
+                  style={{ width: 24, height: 24,marginLeft:15 }}
+                /></ListItemIcon>
+                <ListItemText primary="State" />
+                {stateOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              <ListItem
-                
-                onClick={() => handleMenuClick("Static MAS-State-Urban")}
-                sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-State-Urban" ? '#BAEC36' : 'white',
-                }}
-              >
-                <ListItemIcon>
-                {selectedItem === "Static MAS-State-Urban" ?
-                  <img 
-          src={stateurbanwithcolor} 
-          alt="urban" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateurbanwithoutcolor} 
-        alt="urban" 
-        style={{ width: 24, height: 24 }}
-      />}
-                </ListItemIcon>
-                <ListItemText primary="Urban" />
-              </ListItem>
-              {/* 3 */}
-              <ListItem
-                
-                onClick={() => handleMenuClick("Static MAS-State-Rural")}
-                sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-State-Rural" ? '#BAEC36' : 'white',
-                }}
-              >
-                <ListItemIcon>
-                {selectedItem === "Static MAS-State-Rural" ?
-                  <img 
-          src={stateruralwithcolor} 
-          alt="rural" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateruralwithoutcolor} 
-        alt="rural" 
-        style={{ width: 24, height: 24 }}
-      />}
-                   </ListItemIcon>
-                <ListItemText primary="Rural" />
-              </ListItem>
-              
-              {/* Repeat for other nested items */}
-            </List>
-          </Collapse>
-          {/* District Menu */}
-          <ListItem  onClick={toggleDistrictMenu}>
-            <ListItemIcon> <img 
-          src={commondistrictimg} 
-          alt="commondistrictimg" 
-          style={{ width: 24, height: 24}}
-        /></ListItemIcon>
-            <ListItemText primary="District" />
-            {districtOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={districtOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem  sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-district-overall" ? '#BAEC36' : 'white',
-                }} onClick={() => handleMenuClick("Static MAS-district-overall")}>
-                <ListItemIcon> {selectedItem === "Static MAS-district-overall" ?
-                  <img 
-          src={stateoverallwithclr} 
-          alt="overall" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateoverallwithoutcolor} 
-        alt="overall" 
-        style={{ width: 24, height: 24 }}
-      />}</ListItemIcon>
-                <ListItemText primary="Overall" />
-              </ListItem>
-              <ListItem   onClick={() => handleMenuClick("Static MAS-district-Urban")}    sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-district-Urban" ? '#BAEC36' : 'white',
-                }}>
-                <ListItemIcon> {selectedItem === "Static MAS-district-Urban" ?
-                  <img 
-          src={stateurbanwithcolor} 
-          alt="urban" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateurbanwithoutcolor} 
-        alt="urban" 
-        style={{ width: 24, height: 24 }}
-      />}</ListItemIcon>
-                <ListItemText primary="Urban" />
-              </ListItem>
-              <ListItem  sx={{
-                  pl: 4,
-                  color: selectedItem === "Static MAS-district-Rural" ? '#BAEC36' : 'white',
-                }} onClick={() => handleMenuClick("Static MAS-district-Rural")}>
-                <ListItemIcon> {selectedItem === "Static MAS-district-Rural" ?
-                  <img 
-          src={stateruralwithcolor} 
-          alt="rural" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={stateruralwithoutcolor} 
-        alt="rural" 
-        style={{ width: 24, height: 24 }}
-      />}</ListItemIcon>
-                <ListItemText primary="Rural" />
-              </ListItem>
-            </List>
-          </Collapse>
-          {/* Town */}
-          <ListItem onClick={() => {
-  handleMenuClick("Static MAS-Town");
-  toggleTownMenu();
-}}>
-            <ListItemIcon>{selectedItem === "Static MAS-Town" ?
-                  <img 
-          src={Townwithcolor} 
-          alt="Townwithcolor" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={Townwithoutcolor} 
-        alt="Townwithcolor" 
-        style={{ width: 24, height: 24 }}
-      />}</ListItemIcon>
-            <ListItemText primary="Town" sx={{color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white' }}/>
-            
-          </ListItem>
+              <Collapse in={stateOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
 
-           {/* sub district rural */}
-           <ListItem  onClick={() => handleMenuClick("Static MAS-Sub District Rural")}>
-            <ListItemIcon>{selectedItem === "Static MAS-Sub District Rural" ?
-                  <img 
-          src={subdistrictwithcolor} 
-          alt="subdistrictwithoutcolor" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={subdistrictwithoutcolor} 
-        alt="subdistrictwithoutcolor" 
-        style={{ width: 24, height: 24 }}
-      />}</ListItemIcon>
-            <ListItemText primary="Sub District Rural"  sx={{color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }}/>
-            
-          </ListItem>
-          </>
-  )} 
+                    onClick={() => handleMenuClick("Static MAS-State-overall")}
+                    sx={{
+                      pl: 4,
+                      color: selectedItem === "Static MAS-State-overall" ? '#BAEC36' : 'white',
+                    }}
+                  >
+
+                    <ListItemIcon>
+                      {selectedItem === "Static MAS-State-overall" ?
+                        <img
+                          src={stateoverallwithclr}
+                          alt="overall"
+                          style={{ width: 24, height: 24,marginLeft:25 }}
+                        /> : <img
+                          src={stateoverallwithoutcolor}
+                          alt="overall"
+                          style={{ width: 24, height: 24,marginLeft:25 }}
+                        />}
+                    </ListItemIcon>
+                    <ListItemText primary="Overall" />
+                  </ListItem>
+                  <ListItem
+
+                    onClick={() => handleMenuClick("Static MAS-State-Urban")}
+                    sx={{
+                      pl: 4,
+                      color: selectedItem === "Static MAS-State-Urban" ? '#BAEC36' : 'white',
+                    }}
+                  >
+                    <ListItemIcon>
+                      {selectedItem === "Static MAS-State-Urban" ?
+                        <img
+                          src={stateurbanwithcolor}
+                          alt="urban"
+                          style={{ width: 24, height: 24,marginLeft:25}}
+                        /> : <img
+                          src={stateurbanwithoutcolor}
+                          alt="urban"
+                          style={{ width: 24, height: 24,marginLeft:25 }}
+                        />}
+                    </ListItemIcon>
+                    <ListItemText primary="Urban" />
+                  </ListItem>
+                  {/* 3 */}
+                  <ListItem
+
+                    onClick={() => handleMenuClick("Static MAS-State-Rural")}
+                    sx={{
+                      pl: 4,
+                      color: selectedItem === "Static MAS-State-Rural" ? '#BAEC36' : 'white',
+                    }}
+                  >
+                    <ListItemIcon>
+                      {selectedItem === "Static MAS-State-Rural" ?
+                        <img
+                          src={stateruralwithcolor}
+                          alt="rural"
+                            style={{ width: 24, height: 24,marginLeft:25 }}
+                        /> : <img
+                          src={stateruralwithoutcolor}
+                          alt="rural"
+                          style={{ width: 24, height: 24,marginLeft:25 }}
+                        />}
+                    </ListItemIcon>
+                    <ListItemText primary="Rural" />
+                  </ListItem>
+
+                  {/* Repeat for other nested items */}
+                </List>
+              </Collapse>
+              {/* District Menu */}
+              <ListItem onClick={toggleDistrictMenu}>
+                <ListItemIcon> <img
+                  src={commondistrictimg}
+                  alt="commondistrictimg"
+                  style={{ width: 24, height: 24,marginLeft:15 }}
+                /></ListItemIcon>
+                <ListItemText  primary="District" />
+                {districtOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={districtOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem sx={{
+                    pl: 4,
+                    color: selectedItem === "Static MAS-district-overall" ? '#BAEC36' : 'white',
+                  }} onClick={() => handleMenuClick("Static MAS-district-overall")}>
+                    <ListItemIcon> {selectedItem === "Static MAS-district-overall" ?
+                      <img
+                        src={stateoverallwithclr}
+                        alt="overall"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      /> : <img
+                        src={stateoverallwithoutcolor}
+                        alt="overall"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      />}</ListItemIcon>
+                    <ListItemText primary="Overall" />
+                  </ListItem>
+                  <ListItem onClick={() => handleMenuClick("Static MAS-district-Urban")} sx={{
+                    pl: 4,
+                    color: selectedItem === "Static MAS-district-Urban" ? '#BAEC36' : 'white',
+                  }}>
+                    <ListItemIcon> {selectedItem === "Static MAS-district-Urban" ?
+                      <img
+                        src={stateurbanwithcolor}
+                        alt="urban"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      /> : <img
+                        src={stateurbanwithoutcolor}
+                        alt="urban"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      />}</ListItemIcon>
+                    <ListItemText primary="Urban" />
+                  </ListItem>
+                  <ListItem sx={{
+                    pl: 4,
+                    color: selectedItem === "Static MAS-district-Rural" ? '#BAEC36' : 'white',
+                  }} onClick={() => handleMenuClick("Static MAS-district-Rural")}>
+                    <ListItemIcon> {selectedItem === "Static MAS-district-Rural" ?
+                      <img
+                        src={stateruralwithcolor}
+                        alt="rural"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      /> : <img
+                        src={stateruralwithoutcolor}
+                        alt="rural"
+                        style={{ width: 24, height: 24,marginLeft:25 }}
+                      />}</ListItemIcon>
+                    <ListItemText primary="Rural" />
+                  </ListItem>
+                </List>
+              </Collapse>
+              {/* Town */}
+              <ListItem onClick={() => {
+                handleMenuClick("Static MAS-Town");
+                toggleTownMenu();
+              }}>
+                <ListItemIcon>{selectedItem === "Static MAS-Town" ?
+                  <img
+                    src={Townwithcolor}
+                    alt="Townwithcolor"
+                    style={{ width: 24, height: 24,marginLeft:15 }}
+                  /> : <img
+                    src={Townwithoutcolor}
+                    alt="Townwithcolor"
+                    style={{ width: 24, height: 24,marginLeft:15 }}
+                  />}</ListItemIcon>
+                <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white' }} />
+
+              </ListItem>
+
+              {/* sub district rural */}
+              <ListItem onClick={() => handleMenuClick("Static MAS-Sub District Rural")}>
+                <ListItemIcon>{selectedItem === "Static MAS-Sub District Rural" ?
+                  <img
+                    src={subdistrictwithcolor}
+                    alt="subdistrictwithoutcolor"
+                    style={{ width: 24, height: 24,marginLeft:15 }}
+                  /> : <img
+                    src={subdistrictwithoutcolor}
+                    alt="subdistrictwithoutcolor"
+                    style={{ width: 24, height: 24 ,marginLeft:15 }}
+                  />}</ListItemIcon>
+                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }} />
+
+              </ListItem>
+            </>
+          )}
           <ListItem
-  onClick={() => {
-    handleMenuClick("Outlet Planning"); 
-    toggleOutletPlanningMenu();
-  }}
-  sx={{
-    color: selectedItem === "Outlet Planning" ? 'black' : 'white',
-    backgroundColor: selectedItem === "Outlet Planning" ? 'white' : 'transparent',
-    border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
-    borderRadius: '4px',
-    padding: '2px',
-    mt: 1
-  }}
->
+            onClick={() => {
+              handleMenuClick("Outlet Planning");
+              toggleOutletPlanningMenu();
+            }}
+            sx={{
+              color: selectedItem === "Outlet Planning" ? 'black' : 'white',
+              backgroundColor: selectedItem === "Outlet Planning" ? '#BAEC36' : 'transparent',
+              border: selectedItem === "Outlet Planning" ? '1px solid black' : 'none',
+              borderRadius: '4px',
+              padding: '2px',
+              mt: 1
+            }}
+          >
             <ListItemIcon>
-          {selectedItem === "Outlet Planning" ?
-                  <img 
-          src={outletwithclr} 
-          alt="rural" 
-          style={{ width: 24, height: 24}}
-        />:  <img 
-        src={outletwithoutclr} 
-        alt="rural" 
-        style={{ width: 24, height: 24 }}
-      />}
+              {selectedItem === "Outlet Planning" ?
+                <img
+                  src={outletwithclr}
+                  alt="rural"
+                  style={{ width: 24, height: 24,marginLeft:15 }}
+                /> : <img
+                  src={outletwithoutclr}
+                  alt="rural"
+                  style={{ width: 24, height: 24,marginLeft:15}}
+                />}
             </ListItemIcon>
-            <ListItemText primary="Outlet Planning" />
+            <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
+              fontFamily:'inter'
+            }}} primary="Outlet Planning" />
           </ListItem>
 
-          <ListItem
-            
+          {/* <ListItem
+
             onClick={() => handleMenuClick("User Guide")}
             sx={{
               color: selectedItem === "User Guide" ? 'black' : 'white',
               backgroundColor: selectedItem === "User Guide" ? 'white' : 'transparent',
               border: selectedItem === "User Guide" ? '1px solid black' : 'none',
               borderRadius: '4px',
-              padding:'2px',
-              mt:1
+              padding: '2px',
+              mt: 1
             }}
 
           >
             <ListItemIcon>
-           <AssignmentIcon sx={{ color:selectedItem === "User Guide" ? 'black' : 'white',marginLeft:1 }} />
+              <AssignmentIcon sx={{ color: selectedItem === "User Guide" ? 'black' : 'white', marginLeft: 1 }} />
             </ListItemIcon>
             <ListItemText primary="User Guide" />
+          </ListItem> */}
+          <ListItem
+            onClick={() => handleMenuClick("User Guide")}
+            sx={{
+              color: selectedItem === "User Guide" ? 'black' : 'white',
+              backgroundColor: selectedItem === "User Guide" ? '#BAEC36' : 'transparent',
+              border: selectedItem === "User Guide" ? '1px solid black' : 'none',
+              borderRadius: '4px',
+              padding: '2px',
+              mt: 1
+            }}
+
+          >
+            <ListItemIcon>
+              {selectedItem === "User guide" ?
+                <img
+                  src={userguide}
+                  alt="rural"
+                  style={{ width: 24, height: 24,marginLeft:15}}
+                /> : <img
+                  src={userguide}
+                  alt="rural"
+                  style={{ width: 24, height: 24,marginLeft:15}}
+                />}
+            </ListItemIcon>
+            <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
+              fontFamily:'inter'
+            }}} primary="User guide" />
           </ListItem>
-         
+
         </List>
       </Drawer>
     </Box>
