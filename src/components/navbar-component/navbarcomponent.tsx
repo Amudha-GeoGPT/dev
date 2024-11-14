@@ -8,6 +8,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import Mapcontroller from '../dashboard/map-controller/mapcontroller';
 import { useTheme } from '@mui/material/styles';
 import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
+import IndiaMap from '../dashboard/map/tamilnadumap';
 
 
 interface TabPanelProps {
@@ -109,7 +110,7 @@ const Overalltabbar = () => {
                     
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  <Mapcontroller/>
+                  <IndiaMap/>
                 </CustomTabPanel>
             </Box>
         </Box>
