@@ -1,194 +1,22 @@
-import { Box, useMediaQuery } from "@mui/material";
-import { useMemo, useState, useEffect } from "react";
-import DatamapsIndia from "react-datamaps-india";
-
-type RegionName = "Andaman & Nicobar Island" | "Andhra Pradesh" | "Arunachal Pradesh" | "Assam" | "Bihar" | "Chandigarh" | "Chhattisgarh" | "Delhi" | "Goa" | "Gujarat" | "Haryana" | "Himachal Pradesh" | "Jammu & Kashmir" | "Jharkhand" | "Karnataka" | "Kerala" | "Lakshadweep" | "Madhya Pradesh" | "Maharashtra" | "Manipur" | "Meghalaya" | "Mizoram" | "Nagaland" | "Odisha" | "Puducherry" | "Punjab" | "Rajasthan" | "Sikkim" | "Tamil Nadu" | "Telangana" | "Tripura" | "Uttar Pradesh" | "Uttarakhand" | "West Bengal";
+import React from 'react';
 
 const IndiaMap = () => {
-  const [hoveredRegion, setHoveredRegion] = useState<RegionName | null>(null);
-  const [lastHoveredRegion, setLastHoveredRegion] = useState<RegionName | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  const isSmallScreen = useMediaQuery('(max-width:600px)');
-  const isMediumScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
-
-  const boxStyles = {
-    marginTop: isSmallScreen ? '-100px' : isMediumScreen ? '-130px' : '-150px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: isSmallScreen ? '80vh' : '100vh',
-    width: isSmallScreen ? '100%' : '100vw',
-    overflow: 'hidden',
-    marginLeft: isSmallScreen ? '-50px' : isMediumScreen ? '-100px' : '-200px',
-    marginBottom: '10px',
-  };
-
-  const regionColors = useMemo(() => ({
-    "Andaman & Nicobar Island": "#FF5733",
-    "Andhra Pradesh": "#33FF57",
-    "Arunachal Pradesh": "#3357FF",
-    Assam: "#FF33A1",
-    Bihar: "#FF9933",
-    Chandigarh: "#33FFF5",
-    Chhattisgarh: "#F5FF33",
-    Delhi: "#F033FF",
-    Goa: "#FF33D4",
-    Gujarat: "#33FFB3",
-    Haryana: "#B3FF33",
-    "Himachal Pradesh": "#33B3FF",
-    "Jammu & Kashmir": "#FFD733",
-    Jharkhand: "#33D7FF",
-    Karnataka: "#FF7D33",
-    Kerala: "#FF33B3",
-    Lakshadweep: "#FFC733",
-    "Madhya Pradesh": "#33FF8C",
-    Maharashtra: "#FF337D",
-    Manipur: "#B3FFDA",
-    Meghalaya: "#DA33FF",
-    Mizoram: "#FFC3FF",
-    Nagaland: "#C3FFC3",
-    Odisha: "#FFC3C3",
-    Puducherry: "#C3B3FF",
-    Punjab: "#FFB3C3",
-    Rajasthan: "#FFBF33",
-    Sikkim: "#B3C3FF",
-    "Tamil Nadu": "#FF3366",
-    Telangana: "#33FF66",
-    Tripura: "#FF6633",
-    "Uttar Pradesh": "#FF33CC",
-    Uttarakhand: "#D2FF33",
-    "West Bengal": "#FF3380",
-  }), []);
-
-  const regionData = useMemo(() => ({
-    "Andaman & Nicobar Island": { value: 150 },
-    "Andhra Pradesh": { value: 470 },
-    "Arunachal Pradesh": { value: 248 },
-    Assam: { value: 528 },
-    Bihar: { value: 755 },
-    Chandigarh: { value: 95 },
-    Chhattisgarh: { value: 1700 },
-    Delhi: { value: 1823 },
-    Goa: { value: 508 },
-    Gujarat: { value: 624 },
-    Haryana: { value: 1244 },
-    "Himachal Pradesh": { value: 640 },
-    "Jammu & Kashmir": { value: 566 },
-    Jharkhand: { value: 814 },
-    Karnataka: { value: 2482 },
-    Kerala: { value: 899 },
-    Lakshadweep: { value: 15 },
-    "Madhya Pradesh": { value: 1176 },
-    Maharashtra: { value: 727 },
-    Manipur: { value: 314 },
-    Meghalaya: { value: 273 },
-    Mizoram: { value: 306 },
-    Nagaland: { value: 374 },
-    Odisha: { value: 395 },
-    Puducherry: { value: 245 },
-    Punjab: { value: 786 },
-    Rajasthan: { value: 1819 },
-    Sikkim: { value: 152 },
-    "Tamil Nadu": { value: 2296 },
-    Telangana: { value: 467 },
-    Tripura: { value: 194 },
-    "Uttar Pradesh": { value: 2944 },
-    Uttarakhand: { value: 1439 },
-    "West Bengal": { value: 1321 },
-  }), []);
-
-  useEffect(() => {
-    const hideSpecificElements = () => {
-      const allTextElements = document.querySelectorAll("text");
-      allTextElements.forEach((element) => {
-        const textElement = element as SVGTextElement;
-        const computedStyle = window.getComputedStyle(textElement);
-        if (
-          computedStyle.textAnchor === "middle" &&
-          computedStyle.fontSize === "7px" &&
-          computedStyle.fill === "rgb(51, 51, 51)"
-        ) {
-          textElement.style.display = "none";
-        }
-      });
-
-      const specificGroupElement = document.querySelector("#root-svg-group > g:nth-child(4)");
-      if (specificGroupElement) {
-        (specificGroupElement as HTMLElement).style.display = "none";
-      }
-    };
-
-    hideSpecificElements();
-  }, []);
-
-  const handleHover = (region: RegionName | null, event: MouseEvent) => {
-    if (region !== lastHoveredRegion) {
-      setTooltipPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-      setHoveredRegion(region);
-      setLastHoveredRegion(region);
-    }
-  };
-
-  const handleLeave = () => {
-    setHoveredRegion(null);
-  };
-
   return (
-    <Box sx={boxStyles}>
-      <Box
-        sx={{
-          height: { xs: '50vh', sm: '40vh', md: '70vh' },
-          width: { xs: '90vw', sm: '70vw', md: '50vw' },
-          position: 'relative',
-        }}
-      >
-        <DatamapsIndia
-          regionData={regionData}
-          fillColor={(geo: { properties: { name: string } }) => {
-            const regionName = geo.properties.name as RegionName;
-            return hoveredRegion === regionName
-              ? "lightblue"
-              : regionColors[regionName] || "#f5f5f5";
-          }}
-          hoverComponent={({ value }: { value: { name: string; value: number } }) => (
-            <Box
-              style={{
-                backgroundColor: "white",
-                top: tooltipPosition.y + 10, // Offset for better visibility
-                left: tooltipPosition.x + 10, // Offset for better visibility
-                pointerEvents: "none",
-                zIndex: 9999,
-                color: "black",
-                fontSize: "14px",
-                fontWeight: "bold",
-                minWidth: "auto",
-                padding: "5px",
-                borderRadius: "4px",
-                position: "fixed",
-              }}
-            >
-              {value.name}: {value.value}
-            </Box>
-          )}
-          onHover={handleHover}
-          onLeave={handleLeave}
-          mapLayout={{
-            startColor: "#00FF00",
-            endColor: "#FF0000",
-          }}
-          afterRender={(map: { svg: { select: (arg0: string) => any; }; }) => {
-            const elementToHide = map.svg.select("#root-svg-group > g:nth-child(4)");
-            if (elementToHide) {
-              elementToHide.style("display", "none");
-            }
-          }}
-        />
-      </Box>
-    </Box>
+    <svg
+      height="130%"
+      width="200%"
+      viewBox="-20 330 400 400"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ transform: 'translate(-1330px, -450px)' }} // Move the SVG up and left
+    >
+      <path
+        d="M 175.673 281.99 L 175.832 281.99 L 175.779 282.123 L 175.726 282.096 L 175.753 282.016 L 175.753 281.963 L 175.726 281.963 Z M 175.991 282.362 L 175.965 282.389 L 175.938 282.362 L 175.912 282.336 L 175.912 282.362 L 175.859 282.362 L 175.885 282.416 L 175.859 282.416 L 175.673 282.469 L 175.593 282.442 L 175.593 282.389 L 175.514 282.336 L 175.381 282.283 L 175.328 282.309 L 175.302 282.309 L 175.275 282.336 L 175.302 282.442 L 175.328 282.469 L 175.328 282.549 L 175.328 282.576 L 175.249 282.576 L 175.249 282.629 L 175.222 282.629 L 175.196 282.682 L 175.646 282.815 L 175.699 282.815 L 175.753 282.842 L 175.753 282.815 L 175.885 282.789 L 175.567 284.306 L 175.593 284.971 L 176.283 286.567 L 176.442 288.349 L 176.389 289.783 L 176.309 289.704 L 176.309 289.677 L 175.567 289.677 L 175.514 289.624 L 175.434 289.677 L 175.434 289.704 L 175.434 289.783 L 175.514 289.81 L 175.54 289.836 L 175.593 289.969 L 175.593 290.022 L 175.54 290.022 L 175.275 289.943 L 175.196 289.969 L 175.222 290.102 L 175.249 290.102 L 175.355 290.049 L 175.355 290.102 L 175.302 290.182 L 175.249 290.182 L 175.222 290.261 L 175.275 290.235 L 175.275 290.261 L 175.249 290.288 L 175.355 290.315 L 175.355 290.368 L 175.381 290.341 L 175.408 290.341 L 175.408 290.394 L 175.434 290.394 L 175.408 290.447 L 175.567 290.421 L 175.54 290.474 L 175.567 290.5 L 176.097 290.66 L 176.363 291.191 L 176.575 295.435 L 176.654 295.886 L 175.912 296.045 L 172.65 295.568 L 172.172 295.594 L 171.164 296.337 L 170.714 297.502 L 171.058 298.112 L 170.687 298.35 L 169.812 299.383 L 169.785 299.647 L 168.592 300.918 L 167.982 302.029 L 167.77 303.166 L 168.539 304.065 L 169.52 304.885 L 168.539 304.753 L 167.558 304.911 L 165.701 305.44 L 165.489 305.757 L 164.799 306.021 L 163.42 306.153 L 162.147 306.946 L 161.511 307.474 L 161.14 308.187 L 161.166 309.163 L 160.715 310.325 L 160.795 311.512 L 159.946 312.725 L 159.336 312.936 L 158.408 313.569 L 157.904 313.701 L 157.161 314.36 L 155.862 314.597 L 155.544 315.15 L 153.395 314.781 L 151.406 313.305 L 152.388 311.987 L 152.414 311.512 L 153.077 311.09 L 152.467 310.193 L 152.255 309.375 L 152.918 308.53 L 151.857 306.972 L 152.945 305.81 L 153.077 304.515 L 153.555 304.012 L 153.581 303.537 L 154.112 303.034 L 153.74 302.029 L 152.679 302.056 L 152.149 301.421 L 152.52 300.759 L 152.679 299.7 L 152.441 299.515 L 152.998 298.668 L 152.892 298.191 L 152.335 297.502 L 152.918 297.37 L 152.892 296.125 L 152.096 295.303 L 150.452 296.416 L 149.63 296.31 L 148.966 295.78 L 149.152 295.197 L 148.94 294.507 L 149.073 293.234 L 149.444 292.836 L 149.683 291.616 L 148.94 290.819 L 148.171 290.633 L 147.402 290.235 L 148.25 288.641 L 147.163 287.977 L 145.519 287.844 L 146.155 287.312 L 146.394 286.514 L 145.572 286.275 L 144.776 285.69 L 143.821 285.45 L 143.53 284.652 L 144.193 284.652 L 145.307 284.12 L 145.333 283.827 L 146.076 283.481 L 146.527 284.226 L 147.03 284.333 L 149.232 284.333 L 149.046 283.907 L 149.683 282.735 L 150.637 282.549 L 151.274 283.241 L 151.512 282.895 L 152.785 282.549 L 154.509 282.815 L 155.04 281.43 L 155.809 281.483 L 156.631 281.217 L 157.559 279.858 L 157.188 279.351 L 156.074 279.111 L 155.225 279.191 L 154.828 279.031 L 156.074 277.697 L 156.26 276.629 L 155.835 276.362 L 156.021 275.348 L 157.4 274.76 L 158.09 273.263 L 159.018 273.317 L 159.495 273.691 L 160.264 273.504 L 160.768 274.039 L 161.696 274.172 L 161.75 274.733 L 163.023 275.428 L 163.871 275.374 L 163.845 274.974 L 164.693 274.68 L 165.356 272.755 L 165.303 272.221 L 166.948 271.338 L 168.274 271.445 L 168.592 271.311 L 170.157 271.926 L 170.82 270.803 L 171.483 270.963 L 171.934 270.535 L 172.597 270.348 L 172.57 269.143 L 173.631 269.25 L 173.896 269.786 L 174.851 269.491 L 174.877 269.893 L 176.044 269.304 L 177.185 269.009 L 177.503 267.991 L 177.901 267.67 L 179.784 267.83 L 180.182 267.134 L 180.473 267.884 L 180.367 268.527 L 180.712 268.688 L 180.898 269.33 L 180.102 272.649 L 180.049 274.145 L 178.988 277.083 L 177.927 278.417 L 176.601 280.524 L 176.336 280.551 L 176.336 280.604 L 176.309 280.791 L 176.283 281.297 L 175.991 281.137 L 175.991 281.217 L 175.593 281.403 L 175.593 281.51 L 175.514 281.563 L 175.514 281.59 L 175.487 281.59 L 175.487 281.563 L 175.487 281.403 L 175.275 281.164 L 175.328 281.057 L 175.355 281.057 L 175.487 281.084 L 175.567 281.03 L 175.62 280.977 L 175.196 280.95 L 175.169 280.897 L 175.063 280.764 L 175.09 280.684 L 174.665 280.791 L 174.665 280.844 L 174.718 281.03 L 174.957 281.004 L 175.01 281.004 L 175.036 281.004 L 175.143 281.03 L 175.116 281.11 L 175.169 281.19 L 174.957 281.297 L 174.957 281.323 L 175.09 281.457 L 175.143 281.51 L 175.116 281.43 L 175.116 281.377 L 175.09 281.83 L 175.169 281.67 L 174.983 281.697 L 175.01 281.75 L 174.983 281.776 L 174.983 281.83 L 174.904 281.91 L 174.957 281.91 L 174.983 281.91 L 174.983 281.883 L 175.116 281.883 L 175.09 282.043 L 175.328 282.096 L 175.408 282.256 L 175.646 282.016 L 175.673 282.096 L 175.593 282.229 L 175.62 282.309 L 175.673 282.336 L 175.699 282.336 L 175.753 282.229 L 175.753 282.176 L 175.885 282.176 L 175.965 282.229 Z M 174.373 281.936 L 174.4 281.883 L 174.135 282.149 L 174.214 282.123 L 174.294 282.123 L 174.294 282.096 L 174.373 282.069 L 174.533 282.229 L 174.612 282.203 L 174.639 282.176 L 174.692 282.123 L 174.559 281.936 L 174.453 281.883 L 174.426 281.936 Z M 174.347 280.631 L 174.373 280.711 L 174.294 280.817 L 174.294 280.844 L 174.267 281.164 L 174.373 281.19 L 174.373 281.297 L 174.373 281.35 L 174.294 281.377 L 174.294 281.43 L 174.294 281.563 L 174.347 281.75 L 174.4 281.776 L 174.48 281.776 L 174.48 281.723 L 174.506 281.697 L 174.612 281.723 L 174.692 281.643 L 174.745 281.643 L 174.771 281.643 L 174.506 281.377 L 174.533 281.323 L 174.559 281.297 L 174.559 281.244 L 174.506 280.897 L 174.559 280.844 L 174.586 280.711 L 174.612 280.684 Z M 174.904 281.19 L 174.665 281.217 L 174.665 281.27 L 174.612 281.297 L 174.692 281.323 L 174.877 281.297 Z M 174.745 282.522 L 174.48 282.442 L 174.533 282.522 Z M 174.798 282.629 L 174.904 282.549 L 174.798 282.522 L 174.798 282.602 Z"
+        fill="#FF5733"
+        stroke="#000"
+        strokeWidth="0.5"
+        transform="scale(1.5)"
+      />
+    </svg>
   );
 };
 

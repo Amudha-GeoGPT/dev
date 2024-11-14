@@ -79,9 +79,9 @@ const Overalltabbar = () => {
         },
         color: '#101828',
         marginTop: {
-          xs: '-8px',
-          sm: '-6px',
-          md: '-4px',
+          xs: '-15px',
+          sm: '-13px',
+          md: '-10px',
         },
         marginBottom: {
           xs: '14px',  // Decreased from 8px
