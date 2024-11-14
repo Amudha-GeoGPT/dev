@@ -24,7 +24,7 @@ const Overalltabbar = () => {
       <Typography
         variant="h6"
         sx={{
-          fontFamily: 'Inter',
+          fontFamily: 'SemiBold 800',
           fontWeight: 600,
           fontSize: {
             xs: '14px',
@@ -65,7 +65,7 @@ const Overalltabbar = () => {
           <Typography
             variant="h6"
             sx={{
-              fontFamily: 'Inter',
+              fontFamily: 'SemiBold 800',
               fontWeight: 600,
               fontSize: {
                 xs: '14px',

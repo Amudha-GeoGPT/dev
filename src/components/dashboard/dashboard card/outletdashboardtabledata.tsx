@@ -83,11 +83,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#001B04',
     color: theme.palette.common.white,
-   
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    
   },
 }));
 
@@ -176,15 +174,25 @@ const DashboardTabledata: React.FC = () => {
   };
 
   return (
-    <Box sx={{borderRadius: 0, width: '100%', overflowX: 'auto', p: 2,   '& .MuiTableContainer-root': {
-      borderRadius: 3,
+    <Box sx={{
+      width: '100%',
+      overflowX: 'auto',
+      //  p:1,   alter size for table
+      '& .MuiTableContainer-root': {
+    borderRadius: 3,
+    '&::-webkit-scrollbar': {
+      display: 'none'  // Hide scrollbar for Chrome/Safari/Newer browsers
     },
-    '& .MuiTable-root': {
-      borderRadius:0,
-    },
-    '& .MuiTableCell-root': {
-      borderRadius: 0,
-    } }}>
+    scrollbarWidth: 'none',  // Hide scrollbar for Firefox
+    '-ms-overflow-style': 'none',  // Hide scrollbar for IE/Edge
+  },
+      '& .MuiTable-root': {
+        borderRadius: 0,
+      },
+      '& .MuiTableCell-root': {
+        borderRadius: 0,
+      }
+    }}>
       <TableContainer>
         <Table stickyHeader aria-label="collapsible table">
           <TableHead>
@@ -232,4 +240,4 @@ const DashboardTabledata: React.FC = () => {
   );
 };
 
-export default DashboardTabledata;
+export default DashboardTabledata
