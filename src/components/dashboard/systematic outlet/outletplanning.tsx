@@ -133,6 +133,11 @@ const SelectionField = ({
               overflowY: 'auto',
               display: 'flex',
               flexWrap: 'wrap',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
             }}
           >
             {value.map((option, index) => (
@@ -149,7 +154,11 @@ const SelectionField = ({
             ))}
           </div>
         )}
-        ListboxProps={{ style: { maxHeight: 300, overflow: 'auto' } }}
+        ListboxProps={{ style: { maxHeight: 300, overflow: 'auto', '&::-webkit-scrollbar': {
+      display: 'none'
+    },
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none' } }}
         ListboxComponent={React.forwardRef((props: any, ref) => (
           <Box ref={ref}>
             <ListSubheader
@@ -189,16 +198,31 @@ const SelectionField = ({
                   justifyContent: 'center',
                 }}
               >
-                <Button
-                  onClick={handleSelectAll}
-                  variant='outlined'
-                  sx={{ marginRight: 1 }}
-                >
-                  Select All
-                </Button>
-                <Button onClick={handleDeselectAll} variant='outlined'>
-                  Deselect All
-                </Button>
+              <Button
+  onClick={handleSelectAll}
+  variant='outlined'
+  sx={{
+    marginRight: { xs: 0.5, sm: 1 },
+    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+    padding: { xs: '2px 4px', sm: '2px 8px' },
+    minWidth: { xs: '70px', sm: '90px' }
+  }}
+>
+  Select All
+</Button>
+
+<Button 
+  onClick={handleDeselectAll} 
+  variant='outlined'
+  sx={{
+    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+    padding: { xs: '2px 4px', sm: '2px 8px' },
+    minWidth: { xs: '70px', sm: '90px' }
+  }}
+>
+  Deselect All
+</Button>
+
               </ListSubheader>
             </Box>
           </Box>
