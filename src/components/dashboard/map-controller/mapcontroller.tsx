@@ -1,8 +1,8 @@
 import { Box, useTheme, useMediaQuery } from "@mui/material";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useMemo } from "react";
 import DatamapsIndia from "react-datamaps-india";
-import debounce from 'lodash/debounce';
 
+// Define types for the regions
 type RegionName =
     | "Andaman & Nicobar Island"
     | "Andhra Pradesh"
@@ -39,19 +39,12 @@ type RegionName =
     | "Uttarakhand"
     | "West Bengal";
 
+type HoverComponentValue = { name: string; value: number };
+
 const MapController = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const drawerWidth = isMobile ? 200 : 190;
-
-    const [hoveredRegion, setHoveredRegion] = useState<RegionName | null>(null);
-
-    useEffect(() => {
-        const elementToHide = document.querySelector("#root-svg-group > g:nth-child(4)");
-        if (elementToHide instanceof HTMLElement) {
-            elementToHide.style.display = "none";
-        }
-    }, []);
 
     const regionColors = useMemo<Record<RegionName, string>>(() => ({
         "Andaman & Nicobar Island": "#FF5733",
@@ -105,11 +98,11 @@ const MapController = () => {
         "Himachal Pradesh": { value: 640 },
         "Jammu & Kashmir": { value: 566 },
         "Jharkhand": { value: 814 },
-        "Karnataka": { value: 2482 },
+        "Karnataka": { value: 2282 },
         "Kerala": { value: 899 },
         "Lakshadweep": { value: 15 },
         "Madhya Pradesh": { value: 1176 },
-        "Maharashtra": { value: 727 },
+        "Maharashtra": { value: 2287 },
         "Manipur": { value: 314 },
         "Meghalaya": { value: 273 },
         "Mizoram": { value: 306 },
@@ -122,20 +115,10 @@ const MapController = () => {
         "Tamil Nadu": { value: 2296 },
         "Telangana": { value: 467 },
         "Tripura": { value: 194 },
-        "Uttar Pradesh": { value: 2944 },
+        "Uttar Pradesh": { value: 1644 },
         "Uttarakhand": { value: 1439 },
         "West Bengal": { value: 1321 },
     }), []);
-
-    const debouncedHover = useCallback(
-        debounce((region: RegionName | null) => {
-            setHoveredRegion(region);
-        }, 200), // Increased debounce delay to smooth out transitions
-    []);
-
-    const handleHover = (region: RegionName | null) => {
-        debouncedHover(region);
-    };
 
     return (
         <Box
@@ -143,9 +126,9 @@ const MapController = () => {
             sx={{
                 flexGrow: 1,
                 p: 2,
-                overflow: 'auto',
+                overflow: 'hidden',
                 ml: { sm: `${drawerWidth}px` },
-                marginTop: '60px',
+                marginTop: '-60px',
             }}
         >
             <div style={{ position: "relative", width: "100%", height: "600px" }}>
@@ -153,22 +136,25 @@ const MapController = () => {
                     regionData={regionData}
                     fillColor={(geo: { properties: { name: string } }) => {
                         const regionName = geo.properties.name as RegionName;
-                        return hoveredRegion === regionName ? "lightblue" : regionColors[regionName] || "#f5f5f5";
+                        return regionColors[regionName] || "#f5f5f5";
                     }}
-                    hoverComponent={({ value }: { value: { name: string; value: number } }) => (
-                        <div style={{ background: "white", border: "1px solid black", padding: "5px" }}>
+                    hoverComponent={({ value }: { value: HoverComponentValue }) => (
+                        <div style={{ background: "white", border: "1px solid black", padding: "5px",position:'relative' }}>
                             <div>
-                                {value.name}: {value.value} OCs
+                                {value.name}<br />
+                                P-1: 400 <br />
+                                P-2: 200 <br />
+                                P-3: 150
                             </div>
                         </div>
                     )}
-                    onHover={handleHover}
-                    onLeave={() => setHoveredRegion(null)}  // Immediate reset on leave to prevent flickering
                     mapLayout={{
                         startColor: "#00FF00",
                         endColor: "#FF0000",
                         noDataColor: "#f5f5f5",
                         borderColor: "black",
+                        hoverColor: "blue",  // Set hover color here
+                        hoverBorderColor: "black",  // Set hover border color here
                     }}
                 />
             </div>
@@ -176,4 +162,6 @@ const MapController = () => {
     );
 };
 
+
 export default MapController;
+

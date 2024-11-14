@@ -43,8 +43,6 @@ const options = {
     { label: "Bottom 100", value: "Bottom 100" }
   ],
 };
-
-
 const Overall: React.FC = () => {
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [showTabData, setShowTabData] = useState(false);
@@ -72,12 +70,6 @@ const Overall: React.FC = () => {
   const filteredStates = states.filter((state) =>
     state.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
- 
-
-
-
-
   return (
     <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, overflow: 'auto', ml: { sm: `${drawerWidth}px` }, marginTop: '60px' }}>
        <Grid container spacing={2} sx={{ width: '100%', padding: 2 }}>
@@ -93,6 +85,7 @@ const Overall: React.FC = () => {
               onChange={handleChange}
               options={filteredStates}
               disableCloseOnSelect
+              ListboxProps={{ style: { maxHeight: 150 } }}
               getOptionLabel={(option) => option}
               renderOption={(props, option, { selected }) => (
                 <Box component="li" {...props}>
@@ -136,10 +129,10 @@ const Overall: React.FC = () => {
                   <Box {...props} />
                   <Box {...props}>
                     <ListSubheader sx={{ bgcolor: 'background.paper', position: 'sticky', bottom: 0, zIndex: 1, paddingY: 1, display: 'flex', justifyContent: 'center' }}>
-                      <Button onClick={handleSelectAll} variant="outlined" sx={{ marginRight: 1 }}>
+                      <Button onClick={handleSelectAll} variant="outlined" sx={{ marginRight: 1,textTransform:'none' }}>
                         Select All
                       </Button>
-                      <Button onClick={handleDeselectAll} variant="outlined">
+                      <Button onClick={handleDeselectAll} variant="outlined" sx={{textTransform:'none'}}>
                         Deselect All
                       </Button>
                     </ListSubheader>
@@ -147,10 +140,18 @@ const Overall: React.FC = () => {
                 </Box>
               ))}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Select one or more states"  placeholder="Select one or more states" />
+                <TextField {...params} variant="outlined"   placeholder="Select one or more states" />
               )}
               popupIcon={null}
               openOnFocus
+              sx={{backgroundColor: '#fff',
+                borderRadius: 2,
+                '& .MuiOutlinedInput-root': {
+                  height: '100%',
+                  borderRadius: 2,
+                  border: '2px solid black ',
+                 // '&.Mui fieldset': { border: '2px solid black  '  },
+                },}}
             />
           </FormControl>
         </Grid>
@@ -212,7 +213,7 @@ const Overall: React.FC = () => {
         <Button
           variant="contained"
           onClick={() => setShowTabData((prev) => !prev)}
-          sx={{ backgroundColor: 'black', color: 'white', padding: '2px 4px', fontSize: '0.65rem' }}
+          sx={{ backgroundColor: 'black', color: 'white', padding: '2px 4px', fontSize: '0.65rem',textTransform:'none' }}
         >
           <AssessmentIcon sx={{ marginRight: 0.5 }} />
           {showTabData ? 'Clear Filter' : 'Generate Report'}
