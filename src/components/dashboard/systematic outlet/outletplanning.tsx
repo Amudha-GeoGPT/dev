@@ -18,6 +18,8 @@ import {
   Stack,
   ListSubheader,
   InputAdornment,
+  ListItem,
+  List,
 } from '@mui/material';
 // import AssessmentIcon from '@mui/icons-material/Assessment';
 import CheckIcon from '@mui/icons-material/Check';
@@ -107,172 +109,165 @@ const SelectionField = ({
 
   return (
     <FormControl fullWidth>
-      <Typography
-        variant='caption'
-        sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}
+  <Typography
+    variant="caption"
+    sx={{ marginBottom: 1, textAlign: 'left', fontSize: '0.7rem' }}
+  >
+    {label}
+  </Typography>
+  <Autocomplete
+    multiple
+    value={selectedValues}
+    onChange={handleChange}
+    options={filteredOptions}
+    disableCloseOnSelect
+    getOptionLabel={(option) => option}
+    renderOption={(props, option, { selected }) => (
+      <Box
+      component="li"
+      {...props}
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Typography sx={{ flexBasis: "80%" }}>{option}</Typography>
+      {selected && <CheckIcon color="primary" />}
+    </Box>
+  )}
+    renderTags={(value, getTagProps) => (
+      <div
+        style={{
+          maxHeight: 40,
+          overflowY: 'auto',
+          display: 'flex',
+          flexWrap: 'wrap',
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
+        }}
       >
-        {label}
-      </Typography>
-      <Autocomplete
-        multiple
-        value={selectedValues}
-        onChange={handleChange}
-        options={filteredOptions}
-        disableCloseOnSelect
-        getOptionLabel={(option) => option}
-        renderOption={(props, option, { selected }) => (
-          <Box component='li' {...props}>
-            <CheckIcon color={selected ? 'primary' : 'action'} />
-            <Typography>{option}</Typography>
-          </Box>
-        )}
-        renderTags={(value, getTagProps) => (
-          <div
-            style={{
-              maxHeight: 40,
-              overflowY: 'auto',
+        {value.map((option, index) => (
+          <Chip
+            // key={option}
+            label={option}
+            {...getTagProps({ index })}
+            onDelete={() => {
+              setSelectedValues((prev: any[]) =>
+                prev.filter((state) => state !== option)
+              );
+            }}
+          />
+        ))}
+      </div>
+    )}
+    ListboxProps={{
+      style: {
+        maxHeight: 300,
+        overflow: 'auto',
+        '&::-webkit-scrollbar': { display: 'none' },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      },
+    }}
+    ListboxComponent={React.forwardRef((props, ref) => (
+      <Box ref={ref}>
+        <ListSubheader
+          sx={{
+            bgcolor: 'background.paper',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            padding: 1,
+          }}
+        >
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder={`Search ${label}`}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ '& .MuiOutlinedInput-root': { height: 40 } }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </ListSubheader>
+        <List {...props} />
+        <Box {...props}>
+          <ListSubheader
+            sx={{
+              bgcolor: 'background.paper',
+              position: 'sticky',
+              bottom: 0,
+              zIndex: 1,
+              paddingY: 1,
               display: 'flex',
-              flexWrap: 'wrap',
-              msOverflowStyle: 'none',
-              scrollbarWidth: 'none',
-              '&::-webkit-scrollbar': {
-                display: 'none'
-              }
+              justifyContent: 'center',
             }}
           >
-            {value.map((option, index) => (
-              <Chip
-                // key={option}
-                label={option}
-                {...getTagProps({ index })}
-                onDelete={() => {
-                  setSelectedValues((prev: any) =>
-                    prev.filter((state: any) => state !== option)
-                  );
-                }}
-              />
-            ))}
-          </div>
-        )}
-        ListboxProps={{ style: { maxHeight: 300, overflow: 'auto', '&::-webkit-scrollbar': {
-      display: 'none'
-    },
-    scrollbarWidth: 'none',
-    msOverflowStyle: 'none' } }}
-        ListboxComponent={React.forwardRef((props: any, ref) => (
-          <Box ref={ref}>
-            <ListSubheader
+            <Button
+              onClick={handleSelectAll}
+              variant="outlined"
               sx={{
-                bgcolor: 'background.paper',
-                position: 'sticky',
-                top: 0,
-                zIndex: 2,
-                padding: 1,
+                marginRight: { xs: 0.5, sm: 1 },
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                padding: { xs: '2px 4px', sm: '2px 8px' },
+                minWidth: { xs: '70px', sm: '90px' },
               }}
             >
-              <TextField
-                fullWidth
-                variant='outlined'
-                placeholder={`Search ${label}`}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                sx={{ '& .MuiOutlinedInput-root': { height: 40 } }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </ListSubheader>
-            <Box {...props} />
-            <Box {...props}>
-              <ListSubheader
-                sx={{
-                  bgcolor: 'background.paper',
-                  position: 'sticky',
-                  bottom: 0,
-                  zIndex: 1,
-                  paddingY: 1,
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-              <Button
-  onClick={handleSelectAll}
-  variant='outlined'
-  sx={{
-    marginRight: { xs: 0.5, sm: 1 },
-    fontSize: { xs: '0.75rem', sm: '0.875rem' },
-    padding: { xs: '2px 4px', sm: '2px 8px' },
-    minWidth: { xs: '70px', sm: '90px' }
-  }}
->
-  Select All
-</Button>
-
-<Button 
-  onClick={handleDeselectAll} 
-  variant='outlined'
-  sx={{
-    fontSize: { xs: '0.75rem', sm: '0.875rem' },
-    padding: { xs: '2px 4px', sm: '2px 8px' },
-    minWidth: { xs: '70px', sm: '90px' }
-  }}
->
-  Deselect All
-</Button>
-
-              </ListSubheader>
-            </Box>
-          </Box>
-        ))}
-        renderInput={(params) => (
-          <TextField
-  {...params}
-  variant='outlined'
-  label={`Select one or more ${label}`}
-  placeholder={`Select one or more ${label}`}
-  sx={{
-    '& .MuiInputBase-input': {
-                    height: 11.3,
-                    paddingTop: 16, // Adjust padding to make space for the label
-                  },
-                  '& .MuiInputLabel-root': {
-                    transform: 'translate(14px, 8px) scale(1)', // Adjust the initial transform
-                  },
-                  '& .MuiInputLabel-shrink': {
-                    transform: 'translate(14px, -7px) scale(0.75)', // Adjust the shrink transform
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '8px', // Reduced border radius
-                    background: '#FFFFFF',
-                    boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
-                   
-                  },
-    
-  }}
-  // InputProps={{
-  //   ...params.InputProps,
-  //   endAdornment: (
-  //     <InputAdornment position="end">
-  //       <ExpandMoreIcon
-  //         sx={{
-  //           position: 'relative',
-  //           top: { xs: '0px', sm: '1px', md: '2px' }, // Adjust top position for different screen sizes
-  //           right: { xs: '-10px', sm: '-20px', md: '-30px' }, // Adjust right position for different screen sizes
-  //         }}
-  //       />
-  //     </InputAdornment>
-  //   ),
-  // }}
-/>
-
-        )}
-        popupIcon={null}
-        openOnFocus
+              Select All
+            </Button>
+            <Button
+              onClick={handleDeselectAll}
+              variant="outlined"
+              sx={{
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                padding: { xs: '2px 4px', sm: '2px 8px' },
+                minWidth: { xs: '70px', sm: '90px' },
+              }}
+            >
+              Deselect All
+            </Button>
+          </ListSubheader>
+        </Box>
+      </Box>
+    ))}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        variant="outlined"
+        label={`Select one or more ${label}`}
+        placeholder={`Select one or more ${label}`}
+        sx={{
+          '& .MuiInputBase-input': {
+            height: 11.3,
+            paddingTop: 16, // Adjust padding to make space for the label
+          },
+          '& .MuiInputLabel-root': {
+            transform: 'translate(14px, 8px) scale(1)', // Adjust the initial transform
+          },
+          '& .MuiInputLabel-shrink': {
+            transform: 'translate(14px, -7px) scale(0.75)', // Adjust the shrink transform
+          },
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '8px', // Reduced border radius
+            background: '#FFFFFF',
+            boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
+          },
+        }}
       />
-    </FormControl>
+    )}
+    popupIcon={null}
+    openOnFocus
+  />
+</FormControl>
+
+  
+  
+
+  
   );
 };
 
