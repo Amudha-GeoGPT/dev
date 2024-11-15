@@ -62,7 +62,9 @@ const StaticCard = () => {
               sm: 2.5,
               md: 3
             },
-            height: {
+            width: '100%', // Set width to 100% of the parent container
+            height: 'auto', // Adjust height to be auto
+            minHeight: {
               xs: '100px',
               sm: '110px',
               md: '120px'

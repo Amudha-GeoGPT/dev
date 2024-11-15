@@ -146,7 +146,7 @@ const Overall: React.FC = () => {
         <Button
           variant="contained"
           onClick={() => setShowTabData((prev) => !prev)}
-          sx={{ backgroundColor: 'black', color: 'white', padding: '2px 4px', fontSize: '0.65rem' }}
+          sx={{ backgroundColor: 'black', color: 'white', padding: '2px 4px', fontSize: '0.65rem',textTransform:'none' }}
         >
           <AssessmentIcon sx={{ marginRight: 0.5 }} />
           {showTabData ? 'Clear Filter' : 'Generate Report'}

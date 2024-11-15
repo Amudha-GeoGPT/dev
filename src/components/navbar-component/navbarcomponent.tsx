@@ -8,9 +8,9 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import Mapcontroller from '../dashboard/map-controller/mapcontroller';
 import { useTheme } from '@mui/material/styles';
 import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
+import IndiaMap from '../dashboard/map/tamilnadumap';
+import MapController from '../dashboard/map-controller/mapcontroller';
 import GraphData from '../static-data/GraphData';
-import IndiaMapData from '../static-data/IndiaMapData';
-import DataGridData from '../static-data/DataGridData';
 
 
 interface TabPanelProps {
@@ -95,7 +95,7 @@ const Overalltabbar = () => {
                 }}
                 startIcon={<BarChartIcon />}
             >
-                Export CSV
+                Export CSV  
             </Button>
         </Grid>
     </Grid>
@@ -112,7 +112,7 @@ const Overalltabbar = () => {
                     
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  <IndiaMapData/>
+                <MapController/>
                 </CustomTabPanel>
             </Box>
         </Box>

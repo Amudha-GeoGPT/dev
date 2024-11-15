@@ -5,6 +5,7 @@ import Staticmacdistrict from '../components/dashboard/staticmac-district/static
 import Staticmactown from '../components/dashboard/staticmac-town/staticmac-town';
 import Staticmacoutlet from '../components/dashboard/systematic outlet/outletplanning';
 import Dashboard from '../pages/dashboard/dashboard';
+import IndiaMap from '../components/dashboard/map/tamilnadumap';
 const Router = [
   {
     path: '/',
@@ -15,7 +16,8 @@ const Router = [
       { path: '/Staticmacdistrict', element: <Staticmacdistrict /> },
       { path: '/Staticmactown', element: <Staticmactown /> },
       { path: '/stateoverall', element: <Overall /> },
-      { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
+       { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
+      // { path: '/Staticmacoutletplanning', element: <IndiaMap /> },
     ],
   },
 ];
