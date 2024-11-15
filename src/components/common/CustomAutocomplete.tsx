@@ -16,7 +16,7 @@ import {
   LabelColor,
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
-} from "../styles/fontcolor.const";
+} from "../styles/color.const";
 import { TertiaryText } from "../styles/fontsize.const";
 
 interface CustomAutocompleteProps {

@@ -1,6 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 import CustomBarChart from "../../components/common/CustomGraph";
+import { GraphFontColor } from "../styles/color.const";
+import { SmallText } from "../styles/fontsize.const";
 
 const BarGraphData: React.FC = () => {
   const colors = ["#e2f2e5", "#baec36", "#001b04"];
@@ -181,7 +183,7 @@ const BarGraphData: React.FC = () => {
   const OverallBoxStyles = {
     padding: "8px",
     borderRadius: 2,
-    border: "1px solid black",
+    border: "1px solid #E4E7EC",
     backgroundColor: "#fff",
     width: "100%",
     height: 250,
@@ -191,8 +193,9 @@ const BarGraphData: React.FC = () => {
       value: "City's",
       position: "insideBottom",
       dy: 6,
-      fontSize: 12,
+      fontSize: SmallText,
       marginTop: 5,
+      fill: GraphFontColor,
     },
     tick: { fontSize: "9px" },
     interval: 0,
@@ -206,7 +209,8 @@ const BarGraphData: React.FC = () => {
       angle: -90,
       position: "insideLeft",
       dy: 15,
-      fontSize: 12,
+      fontSize: SmallText,
+      fill: GraphFontColor,
     },
     axisLine: false,
     tickLine: false,
@@ -215,7 +219,7 @@ const BarGraphData: React.FC = () => {
     iconType: "circle",
     iconSize: 8,
     formatter: (value: any) => (
-      <span style={{ color: "#003500" }}>{value}</span>
+      <span style={{ color: GraphFontColor,fontSize:SmallText }}>{value}</span>
     ),
     verticalAlign: "top",
     align: "right",

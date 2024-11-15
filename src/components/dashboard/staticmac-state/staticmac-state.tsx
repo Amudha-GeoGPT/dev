@@ -21,6 +21,7 @@ import Tabledata from '../data-grid/tabledata';
 import CustomAutocomplete from '../../common/CustomAutocomplete';
 import CustomSelect from '../../common/CustomSelect';
 import TabsComponent from '../../TabsComponent';
+import { MainContentBackground } from '../../styles/color.const';
 
 const states = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -79,7 +80,7 @@ const Overall: React.FC = () => {
   };
 
   return (
-    <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, ml: { sm: `${drawerWidth}px` }, marginTop: '60px' }}>
+    <Box alignItems="center"  sx={{ flexGrow: 1, p: 2, ml: { sm: `${drawerWidth}px` }, marginTop: '60px',backgroundColor:MainContentBackground }}>
        <Grid container spacing={2} sx={{ width: '100%', padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
