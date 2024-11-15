@@ -15,8 +15,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 1600, margin: 'auto', display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' }, gap: 4 }}>
-      {['PFA', 'SSFA'].map((section, sectionIndex) => (
+    <Box sx={{ width: '100%', maxWidth: 4000, margin: 'auto', display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' }, gap: 4 }}>
+      {['SSFA', 'PFA'].map((section, sectionIndex) => (
         <Box key={sectionIndex}>
           <Box
             sx={{
@@ -35,8 +35,8 @@ const Dashboard = () => {
           >
             <Typography
               sx={{
-                fontFamily: 'Inter',
-                fontWeight: 600,
+                fontFamily: 'SemiBold 800',
+                fontWeight: 550,
                 fontSize: '14px',
                 lineHeight: '20px',
                 textTransform: 'capitalize',
