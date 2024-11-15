@@ -6,6 +6,7 @@ import {
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
 import { TertiaryText } from "../styles/fontsize.const";
+import DoneIcon from "@mui/icons-material/Done";
 
 interface SelectComponentProps {
   label: string;
@@ -43,15 +44,15 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
         displayEmpty
         sx={{
           ...sx,
-
+          borderRadius: "8px",
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+            border: `1.5px solid ${SelectAutoCompleteBorderColor}`,
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+            border: `1.5px solid ${SelectAutoCompleteBorderColor}`,
           },
           ".MuiOutlinedInput-notchedOutline": {
-            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+            border: `1.5px solid ${SelectAutoCompleteBorderColor}`,
           },
         }}
         renderValue={(selected) => {
@@ -64,8 +65,15 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
         }}
       >
         {options.map((option, index) => (
-          <MenuItem key={index} value={option}>
+          <MenuItem
+            key={index}
+            value={option}
+            onClick={() => {
+              onChange(option);
+            }}
+          >
             {option}
+            {option === value && <DoneIcon sx={{ marginLeft: "auto" }} />}
           </MenuItem>
         ))}
       </Select>

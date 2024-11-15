@@ -16,7 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { SelectChangeEvent } from '@mui/material/Select';
 import CustomAutocomplete from '../../common/CustomAutocomplete';
 import CustomSelect from '../../common/CustomSelect';
-import TabsComponent from '../../TabsComponent';
+import TownTabsComponent from '../../TownTabsComponent';
 
 const states = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -224,7 +224,7 @@ const handledistrictSelectAll = () => {
       {/* {showTabData && <Tabdata />} */}
       
        
-      {showTabData && <TabsComponent />}
+      {showTabData && <TownTabsComponent />}
     </Box>
   );
 };

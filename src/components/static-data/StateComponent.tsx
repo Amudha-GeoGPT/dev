@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import CustomAutocomplete from "../../components/common/CustomAutocomplete";
 import CustomSelect from "../../components/common/CustomSelect";
-import { SelectAutoCompleteBorderColor } from "../styles/color.const";
 
 export default function StateComponent() {
   const [stateValue, setStateValue] = useState<string[]>([]);
@@ -18,6 +17,7 @@ export default function StateComponent() {
   const handleSelectRankChange = (value: string) => {
     setStateRank(value);
   };
+
   return (
     <Box sx={{ px: 2 }}>
       <Grid container spacing={3}>
@@ -56,6 +56,7 @@ export default function StateComponent() {
                 marginTop: "4px",
                 height: "39px",
               }}
+              
             />
           </Box>
         </Grid>

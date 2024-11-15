@@ -5,7 +5,7 @@ import { GraphFontColor } from "../styles/color.const";
 import { SmallText } from "../styles/fontsize.const";
 
 const BarGraphData: React.FC = () => {
-  const colors = ["#e2f2e5", "#baec36", "#001b04"];
+  const colors = ["#E2F2E5", "#BAEC36", "#001B04"];
   const yKeys = ["P1", "P2", "P3"];
   const data = [
     {
@@ -162,17 +162,6 @@ const BarGraphData: React.FC = () => {
       totalPopulation: 1000000,
       households: 200000,
     },
-    {
-      city: "JAMU & KASHMIR",
-      P1: 200,
-      P2: 400,
-      P3: 600,
-      state: "Karnataka",
-      district: "Bengaluru",
-      msi: 1.2,
-      totalPopulation: 1000000,
-      households: 200000,
-    },
   ];
   const TooltipStyle = {
     backgroundColor: "#e2f2e5",
@@ -181,12 +170,12 @@ const BarGraphData: React.FC = () => {
     borderRadius: 2,
   };
   const OverallBoxStyles = {
-    padding: "8px",
+    padding: "14px",
     borderRadius: 2,
     border: "1px solid #E4E7EC",
     backgroundColor: "#fff",
     width: "100%",
-    height: 250,
+    height: "50vh",
   };
   const xAxisProps = {
     label: {
@@ -208,18 +197,31 @@ const BarGraphData: React.FC = () => {
       value: "MAS",
       angle: -90,
       position: "insideLeft",
-      dy: 15,
+      dy: 35,
       fontSize: SmallText,
       fill: GraphFontColor,
     },
     axisLine: false,
     tickLine: false,
+    domain: [0, 1000],
+    ticks: [0, 200, 400, 600, 800, 1000],
+    tick: {
+      fontSize: SmallText,
+      fill: GraphFontColor,
+    },
   };
   const legendProps = {
     iconType: "circle",
     iconSize: 8,
     formatter: (value: any) => (
-      <span style={{ color: GraphFontColor,fontSize:SmallText }}>{value}</span>
+      <span
+        style={{
+          color: GraphFontColor,
+          fontSize: SmallText,
+        }}
+      >
+        {value}
+      </span>
     ),
     verticalAlign: "top",
     align: "right",
@@ -237,7 +239,7 @@ const BarGraphData: React.FC = () => {
     barSize: 30,
   };
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box>
       <CustomBarChart
         data={data}
         xKey="city"

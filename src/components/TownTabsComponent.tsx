@@ -8,6 +8,7 @@ import DataGridData from "./static-data/DataGridData";
 import CustomButton from "./common/CustomButton";
 import ExportIcon from "../assets/icons/ExportIcon.svg";
 import { PrimaryText, SmallText } from "./styles/fontsize.const";
+import TownDataGridData from "./static-data/TownDataGridData";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -106,7 +107,7 @@ export default function TabsComponent() {
         />
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <DataGridData />
+        <TownDataGridData />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <BarGraphData />

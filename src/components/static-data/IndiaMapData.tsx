@@ -1,4 +1,5 @@
 import IndiaMap from "../../components/common/IndiaMap";
+import { SecondayText } from "../styles/fontsize.const";
 
 const IndiaMapData = () => {
   const regionColors = {
@@ -82,7 +83,7 @@ const IndiaMapData = () => {
     pointerEvents: "none",
     zIndex: 9999,
     color: "black",
-    fontSize: "14px",
+    fontSize: SecondayText,
     fontWeight: "bold",
     minWidth: "auto",
     padding: "5px",

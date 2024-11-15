@@ -4,21 +4,45 @@ import DataGridComponent from "../../components/common/DataGridComponent";
 
 const DataGridData: React.FC = () => {
   const columns: GridColDef[] = [
-    { field: "stateName", headerName: "State Name", flex: 5 },
-    { field: "districtName", headerName: "District Name", flex: 1 },
+    {
+      field: "stateName",
+      headerName: "State Name",
+      flex: 3,
+      sortable: false,
+    },
+    {
+      field: "districtName",
+      headerName: "District Name",
+      flex: 1,
+      sortable: false,
+    },
     {
       field: "population",
       headerName: "Total Population",
       type: "number",
       flex: 1,
+      sortable: false,
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "households",
       headerName: "No of Household",
       type: "number",
       flex: 1,
+      sortable: false,
+      align: "left",
+      headerAlign: "left",
     },
-    { field: "mis", headerName: "MIS", type: "number", flex: 1 },
+    {
+      field: "mis",
+      headerName: "MIS",
+      type: "number",
+      flex: 1,
+      sortable: false,
+      align: "left",
+      headerAlign: "left",
+    },
   ];
 
   const rows = [

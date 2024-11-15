@@ -9,12 +9,14 @@ import {
   Legend,
   ResponsiveContainer,
   TooltipProps,
+  ReferenceLine,
 } from "recharts";
 import { Box, Typography } from "@mui/material";
 import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { PrimaryText, SmallText } from "../styles/fontsize.const";
 
 interface CustomBarChartProps {
   data: Array<{
@@ -48,7 +50,10 @@ const CustomTooltip: React.FC<
     return (
       <Box sx={TooltipStyle}>
         {tooltipInfoLable?.map((key: any) => (
-          <Typography key={key}>{`${key}: ${data[key]}`}</Typography>
+          <Typography
+            sx={{ fontSize: PrimaryText }}
+            key={key}
+          >{`${key}: ${data[key]}`}</Typography>
         ))}
       </Box>
     );
@@ -73,7 +78,9 @@ const CustomBarChart: React.FC<CustomBarChartProps> = ({
     <Box sx={OverallBoxStyles}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
-          <CartesianGrid vertical={false} />
+          {/* <ReferenceLine y={0} stroke="transparent" /> */}
+          <CartesianGrid vertical={false} stroke="#E4E7EC" />
+
           <XAxis dataKey={xKey} {...xAxisProps} />
           <YAxis {...yAxisProps} />
           <Tooltip
