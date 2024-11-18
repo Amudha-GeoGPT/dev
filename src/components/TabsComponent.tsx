@@ -102,7 +102,6 @@ export default function TabsComponent() {
           buttonText="Export CSV"
           buttonStyles={buttonStyles}
           icon={<img src={ExportIcon} alt="Export Icon" />}
-         
         />
       </Box>
       <CustomTabPanel value={value} index={0}>

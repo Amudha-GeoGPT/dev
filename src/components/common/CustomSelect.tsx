@@ -5,7 +5,7 @@ import {
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
-import { TertiaryText } from "../styles/fontsize.const";
+import { SecondayText, TertiaryText } from "../styles/fontsize.const";
 import DoneIcon from "@mui/icons-material/Done";
 
 interface SelectComponentProps {
@@ -30,7 +30,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
       <FormLabel
         sx={{
           color: LabelColor,
-          fontSize: TertiaryText,
+          fontSize: SecondayText,
           "&.Mui-focused": {
             color: LabelColor,
           },

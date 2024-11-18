@@ -17,7 +17,7 @@ import {
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
-import { TertiaryText } from "../styles/fontsize.const";
+import { SecondayText } from "../styles/fontsize.const";
 
 interface CustomAutocompleteProps {
   options: string[];
@@ -80,7 +80,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       <FormLabel
         sx={{
           color: LabelColor,
-          fontSize: TertiaryText,
+          fontSize: SecondayText,
           "&.Mui-focused": {
             color: LabelColor,
           },
