@@ -6,7 +6,7 @@ import Tabledata from '../dashboard/data-grid/tabledata';
 import Graphcontroller from '../dashboard/graph-controller/graphcontroller';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import Mapcontroller from '../dashboard/map-controller/mapcontroller';
-import { useTheme } from '@mui/material/styles';
+import {useTheme } from '@mui/material/styles';
 import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
 
 
@@ -43,6 +43,8 @@ function CustomTabPanel(props: TabPanelProps) {
     );
 }
 
+  
+
 const Overalltabbar = () => {
     const [value, setValue] = useState(0);
     const theme = useTheme();
@@ -59,6 +61,7 @@ const Overalltabbar = () => {
     <Divider sx={{ my: '10px' }} />
     <Grid container alignItems="center" spacing={2}>
         <Grid item xs={12} md={9}>
+       
             <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                 <Tabs
                     value={value}
@@ -67,7 +70,7 @@ const Overalltabbar = () => {
                     variant={isSmDown ? 'scrollable' : 'standard'}
                     scrollButtons="auto"
                     allowScrollButtonsMobile
-                    sx={{ display: 'flex', alignItems: 'start' }}
+                    sx={{ display: 'flex', alignItems: 'start',}}
                 >
                     <Tab sx={{ textTransform: 'none',width:200 }} label="Table" {...a11yProps(0)} disableRipple />
                     <Tab sx={{ textTransform: 'none',width:200 }} label="Graph" {...a11yProps(1)} disableRipple />

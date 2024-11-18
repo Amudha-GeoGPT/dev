@@ -328,7 +328,7 @@ const Headerhome: React.FC = () => {
   }} /> */}
               {/* <img src={Home}/> */}
               <ListItemIcon>
-                {selectedItem === "Static MAS" ?
+                {selectedItem === "Static MAS" || selectedItem === "Static MAS-State-overall" || selectedItem ==="Static MAS-State-Urban" || selectedItem === "Static MAS-State-Rural" || selectedItem === "Static MAS-district-overall" || selectedItem === "Static MAS-district-Urban" || selectedItem === "Static MAS-district-Rural" || selectedItem === "Static MAS-Town" || selectedItem === "Static MAS-Sub District Rural"?
                   <img
                     src={Homewithcolor}
                     alt="overall"
