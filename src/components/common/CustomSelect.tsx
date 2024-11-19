@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormControl, FormLabel, Select, MenuItem } from "@mui/material";
 import {
   LabelColor,
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
-import { SecondayText, TertiaryText } from "../styles/fontsize.const";
+import { SecondayText } from "../styles/fontsize.const";
 import DoneIcon from "@mui/icons-material/Done";
 
 interface SelectComponentProps {
@@ -25,6 +25,8 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
   placeholder,
   sx,
 }) => {
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   return (
     <FormControl fullWidth variant="outlined">
       <FormLabel
@@ -42,6 +44,12 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         displayEmpty
+        open={isDropdownOpen}
+        onOpen={() => {
+          setDropdownOpen(true);
+          onChange("");
+        }}
+        onClose={() => setDropdownOpen(false)}
         sx={{
           ...sx,
           borderRadius: "8px",
@@ -58,7 +66,9 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
         renderValue={(selected) => {
           if (!selected)
             return (
-              <span style={{ color: PlaceholderColor }}>{placeholder}</span>
+              <span style={{ color: PlaceholderColor, fontSize: SecondayText }}>
+                {placeholder}
+              </span>
             );
 
           return selected;
@@ -70,6 +80,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
             value={option}
             onClick={() => {
               onChange(option);
+              setDropdownOpen(false);
             }}
           >
             {option}

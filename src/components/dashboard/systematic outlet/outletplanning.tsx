@@ -1,207 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Autocomplete,
-  useTheme,
-  useMediaQuery,
-  Grid,
-  FormControl,
-  Typography,
-  Chip,
-  Stack,
-  ListSubheader,
-  List,
-} from "@mui/material";
-import { borderRadius, fontSize, styled } from "@mui/system";
-import CheckIcon from "@mui/icons-material/Check";
-// import SearchIcon from '@mui/icons-material/Search';
+import { Box, useTheme, useMediaQuery, Grid, Stack } from "@mui/material";
+
 import Overalltabbar from "../dashboard card/overalltoolbar";
 import DashboardIcon from "../../../assets/images/svg/akar-icons_dashboard.svg";
 import MapIcon from "../../../assets/images/svg/map 1.svg";
 import Map1Icon from "../../../assets/images/svg/map 2.svg";
 import Dashboard1Icon from "../../../assets/images/svg/akar-icons_dashboard2.svg";
-
-import IndiaMap from "../map/tamilnadumap";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import CustomSelect from "../../common/CustomSelect";
 import CustomButton from "../../common/CustomButton";
 import { PrimaryText, SecondayText } from "../../styles/fontsize.const";
-
-const SelectionField = ({
-  label,
-  options,
-  selectedValues,
-  setSelectedValues,
-  searchTerm,
-  setSearchTerm,
-}: any) => {
-  const filteredOptions = options.filter((option: string) =>
-    option.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleSelectAll = () => {
-    setSelectedValues(options);
-  };
-
-  const handleDeselectAll = () => {
-    setSelectedValues([]);
-  };
-
-  const handleChange = (_event: React.SyntheticEvent, newValue: string[]) => {
-    setSelectedValues(newValue);
-  };
-
-  return (
-    <FormControl fullWidth>
-      <Typography
-        variant="caption"
-        sx={{ marginBottom: 1, textAlign: "left", fontSize: "0.7rem" }}
-      >
-        {label}
-      </Typography>
-      <Autocomplete
-        multiple
-        value={selectedValues}
-        onChange={handleChange}
-        options={filteredOptions}
-        disableCloseOnSelect
-        getOptionLabel={(option) => option}
-        renderOption={(props, option, { selected }) => (
-          <Box
-            component="li"
-            {...props}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography sx={{ flexBasis: "80%" }}>{option}</Typography>
-            {selected && <CheckIcon color="primary" />}
-          </Box>
-        )}
-        renderTags={(value, getTagProps) => (
-          <div
-            style={{
-              maxHeight: 40,
-              overflowY: "auto",
-              display: "flex",
-              flexWrap: "wrap",
-              msOverflowStyle: "none",
-              scrollbarWidth: "none",
-            }}
-          >
-            {value.map((option, index) => (
-              <Chip
-                // key={option}
-                label={option}
-                {...getTagProps({ index })}
-                onDelete={() => {
-                  setSelectedValues((prev: any[]) =>
-                    prev.filter((state) => state !== option)
-                  );
-                }}
-              />
-            ))}
-          </div>
-        )}
-        ListboxComponent={React.forwardRef((props, ref) => (
-          <Box ref={ref}>
-            {/* <ListSubheader
-            sx={{
-              bgcolor: 'background.paper',
-              position: 'sticky',
-              top: 0,
-              zIndex: 2,
-              padding: 1,
-            }}
-          >
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder={`Search ${label}`}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              sx={{ '& .MuiOutlinedInput-root': { height: 40 } }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </ListSubheader> */}
-            <List {...props} />
-            <ListSubheader
-              sx={{
-                bgcolor: "background.paper",
-                position: "sticky",
-                bottom: 0,
-                zIndex: 1,
-                paddingY: 1,
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                onClick={handleSelectAll}
-                variant="outlined"
-                sx={{
-                  marginRight: { xs: 0.5, sm: 1 },
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  padding: { xs: "2px 4px", sm: "2px 8px" },
-                  minWidth: { xs: "70px", sm: "90px" },
-                }}
-              >
-                Select All
-              </Button>
-              <Button
-                onClick={handleDeselectAll}
-                variant="outlined"
-                sx={{
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  padding: { xs: "2px 4px", sm: "2px 8px" },
-                  minWidth: { xs: "70px", sm: "90px" },
-                }}
-              >
-                Deselect All
-              </Button>
-            </ListSubheader>
-          </Box>
-        ))}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label={`Select one or more ${label}`}
-            placeholder={`Select one or more ${label}`}
-            sx={{
-              "& .MuiInputBase-input": {
-                height: 11.3,
-                paddingTop: 16,
-              },
-              "& .MuiInputLabel-root": {
-                transform: "translate(14px, 8px) scale(1)",
-              },
-              "& .MuiInputLabel-shrink": {
-                transform: "translate(14px, -7px) scale(0.75)",
-              },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                background: "#FFFFFF",
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-              },
-            }}
-          />
-        )}
-        popupIcon={null}
-        openOnFocus
-      />
-    </FormControl>
-  );
-};
+import TamilnaduMap from "../../static-data/TamilnaduMap";
 
 const Staticmacoutlet: React.FC = () => {
   const [activeButton, setActiveButton] = useState<"dashboard" | "map">(
@@ -285,6 +94,38 @@ const Staticmacoutlet: React.FC = () => {
     width: "100%",
     marginTop: "15px",
   };
+  const OverallButtonStyles: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    position: "sticky",
+    zIndex: 1,
+    backgroundColor: "white",
+    bottom: -8,
+    marginBottom: "-11px",
+    paddingBottom: "4px",
+    paddingTop: "4px",
+    gap: "5px",
+    // border: "1px solid green",
+    overflow: "hidden",
+  };
+  const SelectDeselectButtonStyles = {
+    textTransform: "none" as "none",
+    borderColor: "gray",
+    flexwrap: "wrap",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: "gray",
+    minWidth: "20px",
+    padding: "5px",
+    height: "25px",
+    borderRadius: "4px",
+    fontSize: "8px",
+    ":hover": {
+      borderColor: "gray",
+    },
+  };
+
   return (
     <Box
       alignItems="center"
@@ -365,6 +206,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -416,6 +260,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -436,6 +283,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -456,6 +306,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -476,6 +329,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -558,6 +414,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -609,6 +468,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -629,6 +491,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -649,6 +514,9 @@ const Staticmacoutlet: React.FC = () => {
                 sx={{ marginTop: "4px" }}
                 selectAllLabel="Select All"
                 deselectAllLabel="Deselect All"
+                optionFontSize={PrimaryText}
+                SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+                OverallButtonStyles={OverallButtonStyles}
               />
             </Grid>
 
@@ -688,9 +556,7 @@ const Staticmacoutlet: React.FC = () => {
               onClick={() => setShowMapData(true)}
             />
           </Stack>
-          {/* {showMapData && <IndiaMap />} */}
-          {showMapData && "Coming Soon..."}
-
+          {showMapData && <TamilnaduMap />}
         </>
       ) : null}
     </Box>

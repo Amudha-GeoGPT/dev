@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Drawer,
@@ -342,7 +341,7 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText  sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="Static MAS" />
+            }}} primary="Static MAS" style={{cursor:'pointer'}}/>
             {staticMasOpen ? null : <ExpandMore />}
           </ListItem>
           {/* inside the list */}
@@ -356,7 +355,7 @@ const Headerhome: React.FC = () => {
                   alt="commonstate"
                   style={{ width: 24, height: 24,marginLeft:15 }}
                 /></ListItemIcon>
-                <ListItemText primary="State" />
+                <ListItemText primary="State" sx={{cursor:'pointer'}}/>
                 {stateOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={stateOpen} timeout="auto" unmountOnExit>
@@ -382,7 +381,7 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Overall" />
+                    <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
                   </ListItem>
                   <ListItem
 
@@ -404,7 +403,7 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Urban" />
+                    <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
                   </ListItem>
                   {/* 3 */}
                   <ListItem
@@ -427,7 +426,7 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Rural" />
+                    <ListItemText primary="Rural" sx={{cursor:'pointer'}} />
                   </ListItem>
 
                   {/* Repeat for other nested items */}
@@ -440,7 +439,7 @@ const Headerhome: React.FC = () => {
                   alt="commondistrictimg"
                   style={{ width: 24, height: 24,marginLeft:15 }}
                 /></ListItemIcon>
-                <ListItemText  primary="District" />
+                <ListItemText  primary="District" sx={{cursor:'pointer'}} />
                 {districtOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={districtOpen} timeout="auto" unmountOnExit>
@@ -459,7 +458,7 @@ const Headerhome: React.FC = () => {
                         alt="overall"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Overall" />
+                    <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
                   </ListItem>
                   <ListItem onClick={() => handleMenuClick("Static MAS-district-Urban")} sx={{
                     pl: 4,
@@ -475,7 +474,7 @@ const Headerhome: React.FC = () => {
                         alt="urban"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Urban" />
+                    <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
                   </ListItem>
                   <ListItem sx={{
                     pl: 4,
@@ -491,7 +490,7 @@ const Headerhome: React.FC = () => {
                         alt="rural"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Rural" />
+                    <ListItemText primary="Rural" sx={{cursor:'pointer'}}/>
                   </ListItem>
                 </List>
               </Collapse>
@@ -510,7 +509,7 @@ const Headerhome: React.FC = () => {
                     alt="Townwithcolor"
                     style={{ width: 24, height: 24,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white' }} />
+                <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white',cursor:'pointer' }} />
 
               </ListItem>
 
@@ -526,7 +525,7 @@ const Headerhome: React.FC = () => {
                     alt="subdistrictwithoutcolor"
                     style={{ width: 24, height: 24 ,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }} />
+                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer' }} />
 
               </ListItem>
             </>
@@ -559,7 +558,7 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="Outlet Planning" />
+            }}} primary="Outlet Planning" style={{cursor:'pointer'}} />
           </ListItem>
 
           {/* <ListItem
@@ -606,7 +605,7 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="User guide" />
+            }}} primary="User guide" style={{cursor:'pointer'}}/>
           </ListItem>
 
         </List>
