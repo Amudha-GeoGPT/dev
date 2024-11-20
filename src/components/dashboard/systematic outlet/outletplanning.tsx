@@ -16,8 +16,10 @@ const Staticmacoutlet: React.FC = () => {
   const [activeButton, setActiveButton] = useState<"dashboard" | "map">(
     "dashboard"
   );
+
   const [showTabData, setShowTabData] = useState(false);
   const [showMapData, setShowMapData] = useState(false);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 200 : 190;
@@ -131,7 +133,7 @@ const Staticmacoutlet: React.FC = () => {
       alignItems="center"
       sx={{
         flexGrow: 1,
-        p: 3,
+        p: 2,
         overflow: "auto",
         ml: { sm: `${drawerWidth}px` },
         marginTop: "60px",
