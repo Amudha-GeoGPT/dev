@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
   useTheme,
   useMediaQuery,
   Grid,
@@ -47,6 +46,36 @@ const Staticmacdistrict: React.FC = () => {
       height: "15px",
     },
   };
+  const OverallButtonStyles: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    position: "sticky",
+    zIndex: 1,
+    backgroundColor: "white",
+    bottom: -8,
+    marginBottom: "-11px",
+    padding: "4px",
+    gap: "5px",
+    overflow: "hidden",
+  };
+  const SelectDeselectButtonStyles = {
+    textTransform: "none" as "none",
+    borderColor: "gray",
+    flexwrap: "wrap",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: "gray",
+    // minWidth: "60px",
+    padding: "5px",
+    height: "25px",
+    width: "100%",
+    borderRadius: "4px",
+    fontSize: PrimaryText,
+    ":hover": {
+      borderColor: "gray",
+    },
+  };
   return (
     <Box
       alignItems="center"
@@ -79,6 +108,9 @@ const Staticmacdistrict: React.FC = () => {
               sx={{ marginTop: "4px" }}
               selectAllLabel="Select All"
               deselectAllLabel="Deselect All"
+              optionFontSize={PrimaryText}
+              SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+              OverallButtonStyles={OverallButtonStyles}
             />
           </FormControl>
         </Grid>
@@ -134,6 +166,9 @@ const Staticmacdistrict: React.FC = () => {
               sx={{ marginTop: "4px" }}
               selectAllLabel="Select All"
               deselectAllLabel="Deselect All"
+              optionFontSize={PrimaryText}
+              SelectDeselectButtonStyles={SelectDeselectButtonStyles}
+              OverallButtonStyles={OverallButtonStyles}
             />
           </FormControl>
         </Grid>

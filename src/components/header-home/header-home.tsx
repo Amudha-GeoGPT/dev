@@ -510,7 +510,7 @@ const Headerhome: React.FC = () => {
                     style={{ width: 24, height: 24,marginLeft:15 }}
                   />}</ListItemIcon>
                 <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white',cursor:'pointer' }} />
- 
+
               </ListItem>
  
               {/* sub district rural */}
@@ -526,7 +526,7 @@ const Headerhome: React.FC = () => {
                     style={{ width: 24, height: 24 ,marginLeft:15 }}
                   />}</ListItemIcon>
                 <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer' }} />
- 
+
               </ListItem>
             </>
           )}

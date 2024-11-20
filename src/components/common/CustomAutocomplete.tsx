@@ -6,18 +6,16 @@ import {
   Button,
   Autocomplete,
   Chip,
+  styled,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import {
-  sharedButtonStyles,
-  ListboxComponent,
-} from "../styles/CustomAutoComplete.styles";
+
 import {
   LabelColor,
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
-import { SecondayText } from "../styles/fontsize.const";
+import { ExtraSmallText, SecondayText } from "../styles/fontsize.const";
 
 interface CustomAutocompleteProps {
   options: string[];
@@ -30,6 +28,9 @@ interface CustomAutocompleteProps {
   selectAllLabel?: string;
   deselectAllLabel?: string;
   insideplaceholder?: string;
+  optionFontSize?: string;
+  SelectDeselectButtonStyles?: React.CSSProperties;
+  OverallButtonStyles?: React.CSSProperties;
 }
 
 const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
@@ -43,6 +44,9 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   selectAllLabel,
   deselectAllLabel,
   insideplaceholder,
+  optionFontSize,
+  SelectDeselectButtonStyles,
+  OverallButtonStyles,
 }) => {
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>(value);
   const [showAllTags, setShowAllTags] = useState<boolean>(false);
@@ -69,12 +73,35 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const buttonStyles = {
-    marginRight: 1,
-    ...sharedButtonStyles,
-  };
-
+  const ListboxComponent = styled("ul")(({}) => ({
+    // border: "1px solid red",
+    whiteSpace: "nowrap",
+    "&::-webkit-scrollbar": {
+      width: "6px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "rgba(0, 0, 0, 0.3)",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "rgba(0, 0, 0, 0.5)",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "rgba(0, 0, 0, 0.1)",
+      borderRadius: "10px",
+    },
+    "& .option": {
+      display: "flex",
+      alignItems: "center",
+      padding: "6px",
+      cursor: "pointer",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      "&.selected": {
+        backgroundColor: "#f0f0f0",
+      },
+    },
+  }));
   return (
     <Box>
       <FormLabel
@@ -113,55 +140,29 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
             },
           },
         }}
-        // noOptionsText={
-        //   searchTerm && filteredOptions.length === 0
-        //     ? noOptionsText
-        //     : noOptionsText
-        // }
         ListboxComponent={(props) => (
-          <ListboxComponent {...props}>
-            {/* <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Search States"
-              sx={{
-                borderRadius: "12px",
-                "& .MuiOutlinedInput-root": {
-                  height: "40px",
-                  "& input": {
-                    padding: "4px 14px",
-                  },
-                },
-              }}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            /> */}
-            {props.children}
-            <Box className="select-buttons">
-              <Button
-                variant="outlined"
-                onClick={handleSelectAll}
-                sx={buttonStyles}
-              >
-                {selectAllLabel}
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={handleDeselectAll}
-                sx={sharedButtonStyles}
-              >
-                {deselectAllLabel}
-              </Button>
-            </Box>
-          </ListboxComponent>
+          <>
+            <ListboxComponent {...props}>
+              {props.children}
+
+              <Box sx={{ ...OverallButtonStyles }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleSelectAll}
+                  sx={SelectDeselectButtonStyles}
+                >
+                  {selectAllLabel}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleDeselectAll}
+                  sx={SelectDeselectButtonStyles}
+                >
+                  {deselectAllLabel}
+                </Button>
+              </Box>
+            </ListboxComponent>
+          </>
         )}
         renderTags={(value, getTagProps) => {
           const displayedTags = showAllTags ? value : value.slice(0, 2);
@@ -171,18 +172,40 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
             <Box
               sx={{
                 maxHeight: 40,
+                // overflowY: "hidden",
                 overflowY: "auto",
                 display: "flex",
+                alignItems: "center",
                 flexWrap: "wrap",
               }}
             >
               {displayedTags.map((option, index) => {
                 const { key, ...tagProps } = getTagProps({ index });
-                return <Chip key={option} label={option} {...tagProps} />;
+                return (
+                  <Chip
+                    key={option}
+                    label={option}
+                    {...tagProps}
+                    sx={{
+                      fontSize: ExtraSmallText,
+                      height: "24px",
+                      padding: "0px",
+                      // margin: "2px",
+                      borderRadius: "6px",
+                      backgroundColor: "#e2f2e5",
+                    }}
+                  />
+                );
               })}
               {remainingCount > 0 && !showAllTags && (
                 <Chip
-                  sx={{ marginTop: "3px" }}
+                  sx={{
+                    // marginTop: "3px",
+                    backgroundColor: "#e2f2e5",
+                    fontSize: ExtraSmallText,
+                    height: "24px",
+                    borderRadius: "6px",
+                  }}
                   label={`+${remainingCount}`}
                   onClick={() => setShowAllTags(true)}
                 />
@@ -191,7 +214,11 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           );
         }}
         renderOption={(props, option, { selected }) => (
-          <li {...props} className={`option ${selected ? "selected" : ""}`}>
+          <li
+            {...props}
+            className={`option ${selected ? "selected" : ""}`}
+            style={{ fontSize: optionFontSize }}
+          >
             <span>{option}</span>
             {selected && <DoneIcon sx={{ marginLeft: "auto" }} />}
           </li>
@@ -203,6 +230,8 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
             sx={{
               "& input::placeholder": {
                 color: PlaceholderColor,
+                fontSize: SecondayText,
+                opacity: 1,
               },
             }}
           />
