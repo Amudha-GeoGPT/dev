@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Drawer,
@@ -62,7 +61,7 @@ const Search = styled('div')(({ theme }) => ({
     width: 'auto',
   },
 }));
-
+ 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -72,7 +71,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
-
+ 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
@@ -85,7 +84,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
+ 
 const Headerhome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
@@ -96,17 +95,17 @@ const Headerhome: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState("Village Outlet Planning"); // New state to track selected item
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
-
+ 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
-
-
+ 
+ 
   const handleDrawerToggle = () => setOpen(!open);
   // const toggleStateMenu = () => setStateOpen(!stateOpen);
   // const toggleDistrictMenu = () => setDistrictOpen(!districtOpen);
-
+ 
   const toggleStateMenu = () => {
     setStateOpen(!stateOpen);
     setDistrictOpen(false);
@@ -125,17 +124,17 @@ const Headerhome: React.FC = () => {
     setDistrictOpen(!districtOpen);
     setStateOpen(false);
   }
-
+ 
   const toggleTownMenu = () => {
     // setDistrictOpen(!districtOpen);
     setDistrictOpen(false);
   }
-
-
+ 
+ 
   const handleMenuClick = (title: string) => {
     setHeaderTitle(title);
     setSelectedItem(title); // Update selected item
-
+ 
     if (isMobile || isTablet) setOpen(false);
     switch (title) {
       case "Static MAS":
@@ -176,19 +175,19 @@ const Headerhome: React.FC = () => {
         navigate('/');
     }
   };
-
+ 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+ 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+ 
   const drawerWidth = 200; // Set a fixed width for the drawer
-
+ 
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -203,7 +202,7 @@ const Headerhome: React.FC = () => {
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
-
+ 
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -217,7 +216,7 @@ const Headerhome: React.FC = () => {
       <MenuItem>
         <IconButton size="large" aria-label="search" color="inherit">
           <SearchIcon />
-        </IconButton> 
+        </IconButton>
         <p>Search</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
@@ -228,7 +227,7 @@ const Headerhome: React.FC = () => {
       </MenuItem>
     </Menu>
   );
-
+ 
   return (
     <Box display="flex">
       <AppBar
@@ -280,7 +279,7 @@ const Headerhome: React.FC = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-
+ 
       <Drawer
         variant={isMobile ? 'temporary' : 'permanent'}
         open={isTablet || open}
@@ -302,7 +301,7 @@ const Headerhome: React.FC = () => {
                 src={vectorheaderimg}
                 alt="vector"
                 style={{ width: 18, height: 16, }}
-
+ 
               />
             </IconButton>
             GEO GPT
@@ -319,16 +318,16 @@ const Headerhome: React.FC = () => {
               borderRadius: '4px',
               padding: '2px',
               mt: 1,
-              
+             
             }}
           >
             <ListItemIcon>
-              {/* <HomeIcon sx={{ 
-    color: selectedItem.includes("Static MAS") ? 'black' : 'white' 
+              {/* <HomeIcon sx={{
+    color: selectedItem.includes("Static MAS") ? 'black' : 'white'
   }} /> */}
               {/* <img src={Home}/> */}
               <ListItemIcon>
-                {selectedItem === "Static MAS" ?
+                {selectedItem === "Static MAS" || selectedItem === "Static MAS-State-overall" || selectedItem ==="Static MAS-State-Urban" || selectedItem === "Static MAS-State-Rural" || selectedItem === "Static MAS-district-overall" || selectedItem === "Static MAS-district-Urban" || selectedItem === "Static MAS-district-Rural" || selectedItem === "Static MAS-Town" || selectedItem === "Static MAS-Sub District Rural"?
                   <img
                     src={Homewithcolor}
                     alt="overall"
@@ -342,13 +341,13 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText  sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="Static MAS" />
+            }}} primary="Static MAS" style={{cursor:'pointer'}}/>
             {staticMasOpen ? null : <ExpandMore />}
           </ListItem>
           {/* inside the list */}
           {staticMasVisible && (
             <>
-
+ 
               {/* state */}
               <ListItem onClick={toggleStateMenu}>
                 <ListItemIcon> <img
@@ -356,20 +355,20 @@ const Headerhome: React.FC = () => {
                   alt="commonstate"
                   style={{ width: 24, height: 24,marginLeft:15 }}
                 /></ListItemIcon>
-                <ListItemText primary="State" />
+                <ListItemText primary="State" sx={{cursor:'pointer'}}/>
                 {stateOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={stateOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   <ListItem
-
+ 
                     onClick={() => handleMenuClick("Static MAS-State-overall")}
                     sx={{
                       pl: 4,
                       color: selectedItem === "Static MAS-State-overall" ? '#BAEC36' : 'white',
                     }}
                   >
-
+ 
                     <ListItemIcon>
                       {selectedItem === "Static MAS-State-overall" ?
                         <img
@@ -382,10 +381,10 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Overall" />
+                    <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
                   </ListItem>
                   <ListItem
-
+ 
                     onClick={() => handleMenuClick("Static MAS-State-Urban")}
                     sx={{
                       pl: 4,
@@ -404,11 +403,11 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Urban" />
+                    <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
                   </ListItem>
                   {/* 3 */}
                   <ListItem
-
+ 
                     onClick={() => handleMenuClick("Static MAS-State-Rural")}
                     sx={{
                       pl: 4,
@@ -427,9 +426,9 @@ const Headerhome: React.FC = () => {
                           style={{ width: 24, height: 24,marginLeft:25 }}
                         />}
                     </ListItemIcon>
-                    <ListItemText primary="Rural" />
+                    <ListItemText primary="Rural" sx={{cursor:'pointer'}} />
                   </ListItem>
-
+ 
                   {/* Repeat for other nested items */}
                 </List>
               </Collapse>
@@ -440,7 +439,7 @@ const Headerhome: React.FC = () => {
                   alt="commondistrictimg"
                   style={{ width: 24, height: 24,marginLeft:15 }}
                 /></ListItemIcon>
-                <ListItemText  primary="District" />
+                <ListItemText  primary="District" sx={{cursor:'pointer'}} />
                 {districtOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={districtOpen} timeout="auto" unmountOnExit>
@@ -459,7 +458,7 @@ const Headerhome: React.FC = () => {
                         alt="overall"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Overall" />
+                    <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
                   </ListItem>
                   <ListItem onClick={() => handleMenuClick("Static MAS-district-Urban")} sx={{
                     pl: 4,
@@ -475,7 +474,7 @@ const Headerhome: React.FC = () => {
                         alt="urban"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Urban" />
+                    <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
                   </ListItem>
                   <ListItem sx={{
                     pl: 4,
@@ -491,7 +490,7 @@ const Headerhome: React.FC = () => {
                         alt="rural"
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
-                    <ListItemText primary="Rural" />
+                    <ListItemText primary="Rural" sx={{cursor:'pointer'}}/>
                   </ListItem>
                 </List>
               </Collapse>
@@ -510,10 +509,10 @@ const Headerhome: React.FC = () => {
                     alt="Townwithcolor"
                     style={{ width: 24, height: 24,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white' }} />
-
+                <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white',cursor:'pointer' }} />
+ 
               </ListItem>
-
+ 
               {/* sub district rural */}
               <ListItem onClick={() => handleMenuClick("Static MAS-Sub District Rural")}>
                 <ListItemIcon>{selectedItem === "Static MAS-Sub District Rural" ?
@@ -526,8 +525,8 @@ const Headerhome: React.FC = () => {
                     alt="subdistrictwithoutcolor"
                     style={{ width: 24, height: 24 ,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white' }} />
-
+                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer' }} />
+ 
               </ListItem>
             </>
           )}
@@ -559,11 +558,11 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="Outlet Planning" />
+            }}} primary="Outlet Planning" style={{cursor:'pointer'}} />
           </ListItem>
-
+ 
           {/* <ListItem
-
+ 
             onClick={() => handleMenuClick("User Guide")}
             sx={{
               color: selectedItem === "User Guide" ? 'black' : 'white',
@@ -573,7 +572,7 @@ const Headerhome: React.FC = () => {
               padding: '2px',
               mt: 1
             }}
-
+ 
           >
             <ListItemIcon>
               <AssignmentIcon sx={{ color: selectedItem === "User Guide" ? 'black' : 'white', marginLeft: 1 }} />
@@ -590,7 +589,7 @@ const Headerhome: React.FC = () => {
               padding: '2px',
               mt: 1
             }}
-
+ 
           >
             <ListItemIcon>
               {selectedItem === "User guide" ?
@@ -606,13 +605,13 @@ const Headerhome: React.FC = () => {
             </ListItemIcon>
             <ListItemText sx={{fontFamily:'inter',"& .MuiTypography-root":{
               fontFamily:'inter'
-            }}} primary="User guide" />
+            }}} primary="User guide" style={{cursor:'pointer'}}/>
           </ListItem>
-
+ 
         </List>
       </Drawer>
     </Box>
   );
 };
-
+ 
 export default Headerhome;

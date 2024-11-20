@@ -689,7 +689,7 @@ const Staticmacoutlet: React.FC = () => {
             />
           </Stack>
           {/* {showMapData && <IndiaMap />} */}
-          {showMapData && "Coming Soon..."}
+          {/* {showMapData && "Coming Soon..."} */}
 
         </>
       ) : null}
