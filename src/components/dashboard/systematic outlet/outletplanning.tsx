@@ -9,7 +9,11 @@ import Dashboard1Icon from "../../../assets/images/svg/akar-icons_dashboard2.svg
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import CustomSelect from "../../common/CustomSelect";
 import CustomButton from "../../common/CustomButton";
-import { PrimaryText, SecondayText } from "../../styles/fontsize.const";
+import {
+  ExtraSmallText,
+  PrimaryText,
+  SecondayText,
+} from "../../styles/fontsize.const";
 import TamilnaduMap from "../../static-data/TamilnaduMap";
 
 const Staticmacoutlet: React.FC = () => {
@@ -122,12 +126,36 @@ const Staticmacoutlet: React.FC = () => {
     padding: "5px",
     height: "25px",
     borderRadius: "4px",
-    fontSize: "8px",
+    fontSize: ExtraSmallText,
     ":hover": {
       borderColor: "gray",
     },
   };
-
+  const ChipValueStyles = {
+    fontSize: ExtraSmallText,
+    height: "24px",
+    // padding: "0px",
+    borderRadius: "6px",
+    backgroundColor: "#e2f2e5",
+  };
+  const ChipNumberStyles = {
+    backgroundColor: "#e2f2e5",
+    fontSize: ExtraSmallText,
+    height: "24px",
+    borderRadius: "6px",
+  };
+  const AutocompleteTextfieldStyles: any = {
+    maxHeight: 40,
+    overflowY: "auto",
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+  };
+  const DoneIconStyles = {
+    marginLeft: "auto",
+    width: "15px",
+    height: "15px",
+  };
   return (
     <Box
       alignItems="center"
@@ -211,6 +239,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -265,6 +297,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -288,6 +324,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -311,6 +351,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -334,6 +378,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -419,6 +467,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -473,6 +525,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -496,6 +552,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={1.713}>
@@ -519,6 +579,10 @@ const Staticmacoutlet: React.FC = () => {
                 optionFontSize={PrimaryText}
                 SelectDeselectButtonStyles={SelectDeselectButtonStyles}
                 OverallButtonStyles={OverallButtonStyles}
+                ChipValueStyles={ChipValueStyles}
+                ChipNumberStyles={ChipNumberStyles}
+                AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+                DoneIconStyles={DoneIconStyles}
               />
             </Grid>
 

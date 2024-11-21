@@ -12,7 +12,7 @@ import CustomSelect from "../../common/CustomSelect";
 import TownTabsComponent from "../../TownTabsComponent";
 import CustomButton from "../../common/CustomButton";
 import GenerateReportIcon from "../../../assets/icons/GenerateReportIcon.svg";
-import { PrimaryText } from "../../styles/fontsize.const";
+import { PrimaryText, SmallText } from "../../styles/fontsize.const";
 
 const Staticmactown: React.FC = () => {
   const [showTabData, setShowTabData] = useState(false);
@@ -76,6 +76,31 @@ const Staticmactown: React.FC = () => {
       borderColor: "gray",
     },
   };
+  const ChipValueStyles = {
+    fontSize: SmallText,
+    height: "24px",
+    // padding: "0px",
+    borderRadius: "6px",
+    backgroundColor: "#e2f2e5",
+  };
+  const ChipNumberStyles = {
+    backgroundColor: "#e2f2e5",
+    fontSize: SmallText,
+    height: "24px",
+    borderRadius: "6px",
+  };
+  const AutocompleteTextfieldStyles: any = {
+    maxHeight: 40,
+    overflowY: "auto",
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+  };
+  const DoneIconStyles = {
+    marginLeft: "auto",
+    width: "15px",
+    height: "15px",
+  };
   return (
     <Box
       alignItems="center"
@@ -111,6 +136,10 @@ const Staticmactown: React.FC = () => {
               optionFontSize={PrimaryText}
               SelectDeselectButtonStyles={SelectDeselectButtonStyles}
               OverallButtonStyles={OverallButtonStyles}
+              ChipValueStyles={ChipValueStyles}
+              ChipNumberStyles={ChipNumberStyles}
+              AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+              DoneIconStyles={DoneIconStyles}
             />
           </FormControl>
         </Grid>
@@ -169,6 +198,10 @@ const Staticmactown: React.FC = () => {
               optionFontSize={PrimaryText}
               SelectDeselectButtonStyles={SelectDeselectButtonStyles}
               OverallButtonStyles={OverallButtonStyles}
+              ChipValueStyles={ChipValueStyles}
+              ChipNumberStyles={ChipNumberStyles}
+              AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+              DoneIconStyles={DoneIconStyles}
             />
           </FormControl>
         </Grid>
@@ -188,6 +221,10 @@ const Staticmactown: React.FC = () => {
               optionFontSize={PrimaryText}
               SelectDeselectButtonStyles={SelectDeselectButtonStyles}
               OverallButtonStyles={OverallButtonStyles}
+              ChipValueStyles={ChipValueStyles}
+              ChipNumberStyles={ChipNumberStyles}
+              AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
+              DoneIconStyles={DoneIconStyles}
             />
           </FormControl>
         </Grid>
