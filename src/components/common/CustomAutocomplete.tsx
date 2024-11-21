@@ -15,7 +15,7 @@ import {
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
-import { ExtraSmallText, SecondayText } from "../styles/fontsize.const";
+import { SecondayText } from "../styles/fontsize.const";
 
 interface CustomAutocompleteProps {
   options: string[];
@@ -31,6 +31,10 @@ interface CustomAutocompleteProps {
   optionFontSize?: string;
   SelectDeselectButtonStyles?: React.CSSProperties;
   OverallButtonStyles?: React.CSSProperties;
+  ChipValueStyles?: React.CSSProperties;
+  ChipNumberStyles?: React.CSSProperties;
+  AutocompleteTextfieldStyles?: React.CSSProperties;
+  DoneIconStyles?: React.CSSProperties;
 }
 
 const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
@@ -47,6 +51,10 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   optionFontSize,
   SelectDeselectButtonStyles,
   OverallButtonStyles,
+  ChipValueStyles,
+  ChipNumberStyles,
+  AutocompleteTextfieldStyles,
+  DoneIconStyles,
 }) => {
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>(value);
   const [showAllTags, setShowAllTags] = useState<boolean>(false);
@@ -169,16 +177,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           const remainingCount = value.length - displayedTags.length;
 
           return (
-            <Box
-              sx={{
-                maxHeight: 40,
-                // overflowY: "hidden",
-                overflowY: "auto",
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <Box sx={AutocompleteTextfieldStyles}>
               {displayedTags.map((option, index) => {
                 const { key, ...tagProps } = getTagProps({ index });
                 return (
@@ -186,26 +185,13 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
                     key={option}
                     label={option}
                     {...tagProps}
-                    sx={{
-                      fontSize: ExtraSmallText,
-                      height: "24px",
-                      padding: "0px",
-                      // margin: "2px",
-                      borderRadius: "6px",
-                      backgroundColor: "#e2f2e5",
-                    }}
+                    sx={ChipValueStyles}
                   />
                 );
               })}
               {remainingCount > 0 && !showAllTags && (
                 <Chip
-                  sx={{
-                    // marginTop: "3px",
-                    backgroundColor: "#e2f2e5",
-                    fontSize: ExtraSmallText,
-                    height: "24px",
-                    borderRadius: "6px",
-                  }}
+                  sx={ChipNumberStyles}
                   label={`+${remainingCount}`}
                   onClick={() => setShowAllTags(true)}
                 />
@@ -220,7 +206,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
             style={{ fontSize: optionFontSize }}
           >
             <span>{option}</span>
-            {selected && <DoneIcon sx={{ marginLeft: "auto" }} />}
+            {selected && <DoneIcon sx={DoneIconStyles} />}
           </li>
         )}
         renderInput={(params) => (
