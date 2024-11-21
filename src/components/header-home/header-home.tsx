@@ -46,6 +46,7 @@ import Home from '../../assets/images/svg/Home.svg';
 import search from '../../assets/images/svg/search.svg';
 import Homewithcolor from '../../assets/images/svg/Homewithcolor.svg'
 import userguide from '../../assets/images/svg/userguide.svg'
+import { SecondayText } from '../styles/fontsize.const';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -84,7 +85,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
+const ActiveGreenBox={
+  height:'100%',  
+  borderTopLeftRadius: '10px',   
+  borderBottomLeftRadius: '10px',
+  background:"#BAEC36",
+  width:"7px",
+  position:"absolute",
+  right:0
+}
 const Headerhome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
@@ -186,7 +195,7 @@ const Headerhome: React.FC = () => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const drawerWidth = 200; // Set a fixed width for the drawer
+  const drawerWidth = 216; // Set a fixed width for the drawer
 
   const renderMenu = (
     <Menu
@@ -366,9 +375,9 @@ const Headerhome: React.FC = () => {
                     sx={{
                       pl: 4,
                       color: selectedItem === "Static MAS-State-overall" ? '#BAEC36' : 'white',
+                      position:"relative"
                     }}
                   >
-
                     <ListItemIcon>
                       {selectedItem === "Static MAS-State-overall" ?
                         <img
@@ -382,12 +391,15 @@ const Headerhome: React.FC = () => {
                         />}
                     </ListItemIcon>
                     <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-State-overall" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
                   <ListItem
 
                     onClick={() => handleMenuClick("Static MAS-State-Urban")}
                     sx={{
                       pl: 4,
+                      position:"relative",
                       color: selectedItem === "Static MAS-State-Urban" ? '#BAEC36' : 'white',
                     }}
                   >
@@ -404,6 +416,8 @@ const Headerhome: React.FC = () => {
                         />}
                     </ListItemIcon>
                     <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-State-Urban" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
                   {/* 3 */}
                   <ListItem
@@ -411,6 +425,7 @@ const Headerhome: React.FC = () => {
                     onClick={() => handleMenuClick("Static MAS-State-Rural")}
                     sx={{
                       pl: 4,
+                      position:"relative",
                       color: selectedItem === "Static MAS-State-Rural" ? '#BAEC36' : 'white',
                     }}
                   >
@@ -427,6 +442,8 @@ const Headerhome: React.FC = () => {
                         />}
                     </ListItemIcon>
                     <ListItemText primary="Rural" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-State-Rural" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
 
                   {/* Repeat for other nested items */}
@@ -446,6 +463,7 @@ const Headerhome: React.FC = () => {
                 <List component="div" disablePadding>
                   <ListItem sx={{
                     pl: 4,
+                    position:"relative",
                     color: selectedItem === "Static MAS-district-overall" ? '#BAEC36' : 'white',
                   }} onClick={() => handleMenuClick("Static MAS-district-overall")}>
                     <ListItemIcon> {selectedItem === "Static MAS-district-overall" ?
@@ -459,9 +477,12 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-district-overall" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
                   <ListItem onClick={() => handleMenuClick("Static MAS-district-Urban")} sx={{
                     pl: 4,
+                    position:"relative",
                     color: selectedItem === "Static MAS-district-Urban" ? '#BAEC36' : 'white',
                   }}>
                     <ListItemIcon> {selectedItem === "Static MAS-district-Urban" ?
@@ -475,9 +496,12 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-district-Urban" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
                   <ListItem sx={{
                     pl: 4,
+                    position:"relative",
                     color: selectedItem === "Static MAS-district-Rural" ? '#BAEC36' : 'white',
                   }} onClick={() => handleMenuClick("Static MAS-district-Rural")}>
                     <ListItemIcon> {selectedItem === "Static MAS-district-Rural" ?
@@ -491,6 +515,8 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Rural" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-district-Rural" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
                   </ListItem>
                 </List>
               </Collapse>
@@ -510,7 +536,8 @@ const Headerhome: React.FC = () => {
                     style={{ width: 24, height: 24,marginLeft:15 }}
                   />}</ListItemIcon>
                 <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white',cursor:'pointer' }} />
-
+                {selectedItem === "Static MAS-Town" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
               </ListItem>
 
               {/* sub district rural */}
@@ -525,8 +552,9 @@ const Headerhome: React.FC = () => {
                     alt="subdistrictwithoutcolor"
                     style={{ width: 24, height: 24 ,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer' }} />
-
+                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer'}}  primaryTypographyProps={{fontSize:"16px"}} />
+                {selectedItem === "Static MAS-Sub District Rural" && (
+                    <Box sx={ActiveGreenBox}></Box>)}
               </ListItem>
             </>
           )}
