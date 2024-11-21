@@ -14,9 +14,11 @@
     "@amcharts/amcharts4-geodata": "^4.1.30",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
-    "@mui/styled-engine-sc": "^6.1.5",
+    "@mui/material": "^6.1.7",
+    
+    "@mui/x-data-grid": "^7.22.2",
     "d3": "^7.9.0",
     "i": "^0.3.7",
     "leaflet": "^1.9.4",
