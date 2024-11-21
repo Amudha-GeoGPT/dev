@@ -14,12 +14,20 @@ import {
 import { tableCellClasses } from '@mui/material/TableCell';
 import { Add, Remove } from '@mui/icons-material';
 
+interface Town {
+  townName: string;
+  jc13: number;
+  jc01: number;
+  jc02: number;
+}
+
 interface District {
   districtName: string;
   jc13: number;
   jc01: number;
   jc02: number;
   subDistricts?: District[];
+  towns?: Town[];
 }
 
 interface StateData {
@@ -43,10 +51,28 @@ const data: StateData[] = [
         jc01: 36500,
         jc02: 36500,
         subDistricts: [
-          { districtName: 'Pasanur', jc13: 10200, jc01: 10200, jc02: 10200 },
-          { districtName: 'Semparai', jc13: 10200, jc01: 10200, jc02: 10200 },
-          { districtName: 'Ammanoor', jc13: 10200, jc01: 10200, jc02: 10200 },
-          { districtName: 'Kainoor', jc13: 10200, jc01: 10200, jc02: 10200 }
+          {
+            districtName: 'Pasanur',
+            jc13: 10200,
+            jc01: 10200,
+            jc02: 10200,
+            towns: [
+              { townName: 'Town1', jc13: 5000, jc01: 5000, jc02: 5000 },
+              { townName: 'Town2', jc13: 5200, jc01: 5200, jc02: 5200 }
+            ]
+          },
+          { districtName: 'Semparai', jc13: 10200, jc01: 10200, jc02: 10200 ,  towns: [
+            { townName: 'Town1', jc13: 5000, jc01: 5000, jc02: 5000 },
+            { townName: 'Town2', jc13: 5200, jc01: 5200, jc02: 5200 }
+          ]},
+          { districtName: 'Ammanoor', jc13: 10200, jc01: 10200, jc02: 10200,  towns: [
+            { townName: 'Town1', jc13: 5000, jc01: 5000, jc02: 5000 },
+            { townName: 'Town2', jc13: 5200, jc01: 5200, jc02: 5200 }
+          ] },
+          { districtName: 'Kainoor', jc13: 10200, jc01: 10200, jc02: 10200,  towns: [
+            { townName: 'Town1', jc13: 5000, jc01: 5000, jc02: 5000 },
+            { townName: 'Town2', jc13: 5200, jc01: 5200, jc02: 5200 }
+          ] }
         ]
       }
     ]
@@ -99,15 +125,30 @@ const DashboardTabledata: React.FC = () => {
     }
   };
 
+  const renderTownRow = (town: Town, level: number, key: string) => (
+    <StyledTableRow key={key}>
+      <TableCell width={30} />
+      <TableCell style={{ paddingLeft: level * 20 }}>
+        <Typography color="textSecondary" variant="subtitle2">
+          {town.townName}
+        </Typography>
+      </TableCell>
+      <TableCell>{town.jc13}</TableCell>
+      <TableCell>{town.jc01}</TableCell>
+      <TableCell>{town.jc02}</TableCell>
+    </StyledTableRow>
+  );
+
   const renderDistrictRow = (district: District, level: number, key: string) => {
     const isExpanded = expandedRows[key];
     const hasSubDistricts = district.subDistricts && district.subDistricts.length > 0;
+    const hasTowns = district.towns && district.towns.length > 0;
 
     return (
       <React.Fragment key={key}>
         <StyledTableRow>
           <TableCell width={30}>
-            {hasSubDistricts && (
+            {(hasSubDistricts || hasTowns) && (
               <IconButton size="small" onClick={(event) => handleExpandClick(key, false, event)}>
                 {isExpanded ? <Remove /> : <Add />}
               </IconButton>
@@ -122,15 +163,36 @@ const DashboardTabledata: React.FC = () => {
           <TableCell>{district.jc01}</TableCell>
           <TableCell>{district.jc02}</TableCell>
         </StyledTableRow>
-        {isExpanded && district.subDistricts && district.subDistricts.map((subDistrict, index) =>
+        {isExpanded && hasSubDistricts && district.subDistricts.map((subDistrict, index) =>
           renderDistrictRow(subDistrict, level + 1, `${key}-${index}`)
+        )}
+        {isExpanded && hasTowns && district.towns.map((town, index) =>
+          renderTownRow(town, level + 1, `${key}-town-${index}`)
         )}
       </React.Fragment>
     );
   };
 
   return (
-    <Box sx={{ width: '100%', overflowX: 'auto', p: 2 }}>
+    <Box sx={{
+      width: '100%',
+      overflowX: 'auto',
+      //  p:1,   alter size for table
+      '& .MuiTableContainer-root': {
+    borderRadius: 3,
+    '&::-webkit-scrollbar': {
+      display: 'none'  // Hide scrollbar for Chrome/Safari/Newer browsers
+    },
+    scrollbarWidth: 'none',  // Hide scrollbar for Firefox
+    '-ms-overflow-style': 'none',  // Hide scrollbar for IE/Edge
+  },
+      '& .MuiTable-root': {
+        borderRadius: 0,
+      },
+      '& .MuiTableCell-root': {
+        borderRadius: 0,
+      }
+    }}>
       <TableContainer>
         <Table stickyHeader aria-label="collapsible table">
           <TableHead>
@@ -178,4 +240,4 @@ const DashboardTabledata: React.FC = () => {
   );
 };
 
-export default DashboardTabledata;
+export default DashboardTabledata
