@@ -94,7 +94,7 @@ const Overall: React.FC = () => {
           <FormControl fullWidth>
             <CustomAutocomplete
               label="State"
-              placeholder="Select one or more states"
+              // placeholder="Select one or more states"
               options={[
                 "Andhra Pradesh",
                 "Tamil Nadu",

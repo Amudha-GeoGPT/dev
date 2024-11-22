@@ -45,7 +45,9 @@ import outletwithclr from '../../assets/images/svg/Vectorwithclr.svg';
 import Home from '../../assets/images/svg/Home.svg';
 import search from '../../assets/images/svg/search.svg';
 import Homewithcolor from '../../assets/images/svg/Homewithcolor.svg'
-import userguide from '../../assets/images/svg/userguide.svg'
+import userguide from '../../assets/images/svg/userguide.svg';
+import Iconfeathersearch from '../../assets/images/svg/Iconfeathersearch.svg';
+import SidebarRectangleimg from '../../assets/images/svg/SidebarRectangle.svg';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -214,8 +216,8 @@ const Headerhome: React.FC = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="search" color="inherit">
-          <SearchIcon />
+        <IconButton size="small" aria-label="search">
+          <SearchIcon sx={{ color: "red" }}/>
         </IconButton>
         <p>Search</p>
       </MenuItem>
@@ -239,7 +241,7 @@ const Headerhome: React.FC = () => {
         }}
       >
         <Toolbar>
-          {(isMobile || isTablet) && (
+          {(isMobile) && (
             <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
@@ -247,9 +249,9 @@ const Headerhome: React.FC = () => {
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, fontFamily: 'inter' }}>
             {headerTitle}
           </Typography>
-          <Search sx={{ display: { xs: 'none', md: 'flex' }, width: 200, borderRadius: 12, backgroundColor: '#EDF6EE', padding: '0 8px' }}>
+          <Search sx={{ display: { xs: 'none', md: 'flex' },borderRadius: 12, backgroundColor: '#EDF6EE' }}>
             <SearchIconWrapper sx={{ color: '#1E1E1E' }}>
-              <SearchIcon />
+              <SearchIcon sx={{ color: 'grey',fontSize:'26px' }}/>
             </SearchIconWrapper>
             <StyledInputBase placeholder="Search" inputProps={{ 'aria-label': 'search' }} sx={{ color: '#1E1E1E' }} />
           </Search>
@@ -282,7 +284,7 @@ const Headerhome: React.FC = () => {
  
       <Drawer
         variant={isMobile ? 'temporary' : 'permanent'}
-        open={isTablet || open}
+        open={open}
         onClose={handleDrawerToggle}
         sx={{
           '& .MuiDrawer-paper': {
@@ -290,10 +292,11 @@ const Headerhome: React.FC = () => {
             boxSizing: 'border-box',
             backgroundColor: '#001B04',
             color: 'white',
+           
           },
         }}
       >
-        {(isMobile || isTablet) && <Toolbar />}
+        {(isMobile) && <Toolbar />}
         <Box sx={{ padding: 2 }}>
           <h3 className='name'>
             <IconButton>
@@ -379,9 +382,17 @@ const Headerhome: React.FC = () => {
                           src={stateoverallwithoutcolor}
                           alt="overall"
                           style={{ width: 24, height: 24,marginLeft:25 }}
-                        />}
+                        />
+                        }
+                         
                     </ListItemIcon>
                     <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-State-overall" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
                   <ListItem
  
@@ -404,6 +415,12 @@ const Headerhome: React.FC = () => {
                         />}
                     </ListItemIcon>
                     <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-State-Urban" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
                   {/* 3 */}
                   <ListItem
@@ -427,6 +444,12 @@ const Headerhome: React.FC = () => {
                         />}
                     </ListItemIcon>
                     <ListItemText primary="Rural" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-State-Rural" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
  
                   {/* Repeat for other nested items */}
@@ -459,6 +482,12 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Overall" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-district-overall" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
                   <ListItem onClick={() => handleMenuClick("Static MAS-district-Urban")} sx={{
                     pl: 4,
@@ -475,6 +504,12 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Urban" sx={{cursor:'pointer'}} />
+                    {selectedItem === "Static MAS-district-Urban" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
                   <ListItem sx={{
                     pl: 4,
@@ -491,6 +526,12 @@ const Headerhome: React.FC = () => {
                         style={{ width: 24, height: 24,marginLeft:25 }}
                       />}</ListItemIcon>
                     <ListItemText primary="Rural" sx={{cursor:'pointer'}}/>
+                    {selectedItem === "Static MAS-district-Rural" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:107 }}
+                        />:''}
                   </ListItem>
                 </List>
               </Collapse>
@@ -510,7 +551,12 @@ const Headerhome: React.FC = () => {
                     style={{ width: 24, height: 24,marginLeft:15 }}
                   />}</ListItemIcon>
                 <ListItemText primary="Town" sx={{ color: selectedItem === "Static MAS-Town" ? '#BAEC36' : 'white',cursor:'pointer' }} />
-
+                {selectedItem === "Static MAS-Town" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                          style={{ width: 24, height: 35,marginLeft:122 }}
+                        />:''}
               </ListItem>
  
               {/* sub district rural */}
@@ -525,8 +571,13 @@ const Headerhome: React.FC = () => {
                     alt="subdistrictwithoutcolor"
                     style={{ width: 24, height: 24 ,marginLeft:15 }}
                   />}</ListItemIcon>
-                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer' }} />
-
+                <ListItemText primary="Sub District Rural" sx={{ color: selectedItem === "Static MAS-Sub District Rural" ? '#BAEC36' : 'white',cursor:'pointer',fontWeight:"" }} />
+                {selectedItem === "Static MAS-Sub District Rural" ?
+                    <img
+                          src={SidebarRectangleimg}
+                          alt="overall"
+                           style={{ width: 10, height: 35,marginLeft:20}}
+                        />:''}
               </ListItem>
             </>
           )}

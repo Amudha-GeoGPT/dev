@@ -122,9 +122,12 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         onChange={handleAutocompleteChange}
         options={filteredOptions}
         noOptionsText={noOptionsText}
+        clearIcon={null}
         sx={{
           ...sx,
           "& .MuiOutlinedInput-root": {
+            //  width: '00px',
+             height:'40px',
             padding: "0px",
             paddingLeft: "10px",
             borderRadius: "8px",
