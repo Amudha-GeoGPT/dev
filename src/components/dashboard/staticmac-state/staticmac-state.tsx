@@ -91,11 +91,13 @@ const Overall: React.FC = () => {
     borderRadius: "6px",
   };
   const AutocompleteTextfieldStyles: any = {
+    height: "40px",
     maxHeight: 40,
-    overflowY: "auto",
+    overflow: "hidden",
     display: "flex",
     alignItems: "center",
-    flexWrap: "wrap",
+    flexWrap: "nowrap",
+    textOverflow: "ellipsis",
   };
   const DoneIconStyles = {
     marginLeft: "auto",
@@ -116,10 +118,31 @@ const Overall: React.FC = () => {
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
-          <FormControl fullWidth>
+          <FormControl fullWidth 
+          sx={{
+                '& .MuiAutocomplete-root':{
+                  '& .MuiFormControl-root':{
+                    '& .MuiInputBase-root':{
+                      '& .MuiBox-root':{
+                        '& .MuiButtonBase-root':{
+                          '& .MuiChip-label':{
+                              paddingRight:'4px',
+                              paddingLeft:'2px'
+                          },
+                          margin:'2px'
+                        }
+                      },
+                      flexWrap:'nowrap',
+                      maxHeight:'40px',
+                      gap:'1px',
+                      justifyContent: 'flex-start',
+                    "padding-right":'0px !important',
+                }}} 
+              }}>
             <CustomAutocomplete
+              
               label="State"
-              // placeholder="Select one or more states"
+              placeholder={stateValue.length === 0 ? "Select one or more states" : ""}
               options={[
                 "Andhra Pradesh",
                 "Tamil Nadu",
@@ -127,11 +150,14 @@ const Overall: React.FC = () => {
                 "Bihar",
                 "Karnataka",
                 "Punjab",
+                "Goa",
+                "Maharastra",
+                "kerala",
               ]}
               value={stateValue}
               onInputChange={handleSelectStateChange}
               noOptionsText="No states found"
-              sx={{ marginTop: "4px" }}
+              // sx={{ marginTop: "4px"}}
               selectAllLabel="Select All"
               deselectAllLabel="Deselect All"
               optionFontSize={PrimaryText}
@@ -141,7 +167,8 @@ const Overall: React.FC = () => {
               ChipNumberStyles={ChipNumberStyles}
               AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
               DoneIconStyles={DoneIconStyles}
-            />
+
+/>
           </FormControl>
         </Grid>
 
@@ -192,7 +219,7 @@ const Overall: React.FC = () => {
             )
           }
           onClick={() => setShowTabData((prev) => !prev)}
-        />
+        />  
       </Stack>
       <Box
         sx={{ borderBottom: "1px solid #D4D4D4", width: "100%", mt: 2 }}
