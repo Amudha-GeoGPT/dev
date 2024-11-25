@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Box,
+  Paper,
   useTheme,
   useMediaQuery,
   Grid,
@@ -19,7 +19,7 @@ const Overall: React.FC = () => {
   const [showTabData, setShowTabData] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 200 : 190;
+  const drawerWidth = isMobile ? 200 : 100;
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateIndex, setIndexValue] = useState<string>("");
   const [stateRank, setStateRank] = useState<string>("");
@@ -31,9 +31,11 @@ const Overall: React.FC = () => {
   const handleSelectIndexChange = (value: string) => {
     setIndexValue(value);
   };
+
   const handleSelectRankChange = (value: string) => {
     setStateRank(value);
   };
+
   const buttonStyles = {
     fontSize: PrimaryText,
     height: "33px",
@@ -47,102 +49,29 @@ const Overall: React.FC = () => {
       height: "15px",
     },
   };
-  const OverallButtonStyles: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    position: "sticky",
-    zIndex: 1,
-    backgroundColor: "white",
-    bottom: -8,
-    marginBottom: "-11px",
-    padding: "4px",
-    gap: "5px",
-    overflow: "hidden",
-  };
-  const SelectDeselectButtonStyles = {
-    textTransform: "none" as "none",
-    borderColor: "gray",
-    flexwrap: "wrap",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    color: "gray",
-    // minWidth: "60px",
-    padding: "5px",
-    height: "25px",
-    width: "100%",
-    borderRadius: "4px",
-    fontSize: PrimaryText,
-    ":hover": {
-      borderColor: "gray",
-    },
-  };
-  const ChipValueStyles = {
-    fontSize: SmallText,
-    height: "24px",
-    // padding: "0px",
-    borderRadius: "6px",
-    backgroundColor: "#e2f2e5",
-  };
-  const ChipNumberStyles = {
-    backgroundColor: "#e2f2e5",
-    fontSize: SmallText,
-    height: "24px",
-    borderRadius: "6px",
-  };
-  const AutocompleteTextfieldStyles: any = {
-    height: "40px",
-    maxHeight: 40,
-    overflow: "hidden",
-    display: "flex",
-    alignItems: "center",
-    flexWrap: "nowrap",
-    textOverflow: "ellipsis",
-  };
-  const DoneIconStyles = {
-    marginLeft: "auto",
-    width: "15px",
-    height: "15px",
-  };
+
   return (
-    <Box
-      alignItems="center"
+    <Paper
+      elevation={1}
       sx={{
-        flexGrow: 1,
+        // flexGrow: 1,
         p: 2,
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-        backgroundColor: MainContentBackground,
+        // ml: 2,
+        mt:6,
+        backgroundColor:'#FAFFFA',
+        // width: "100%", // Ensures the Paper spans the full width of its container
+        // height: "100%",
       }}
     >
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
-          <FormControl fullWidth 
-          sx={{
-                '& .MuiAutocomplete-root':{
-                  '& .MuiFormControl-root':{
-                    '& .MuiInputBase-root':{
-                      '& .MuiBox-root':{
-                        '& .MuiButtonBase-root':{
-                          '& .MuiChip-label':{
-                              paddingRight:'4px',
-                              paddingLeft:'2px'
-                          },
-                          margin:'2px'
-                        }
-                      },
-                      flexWrap:'nowrap',
-                      maxHeight:'40px',
-                      gap:'1px',
-                      justifyContent: 'flex-start',
-                    "padding-right":'0px !important',
-                }}} 
-              }}>
+          <FormControl fullWidth>
             <CustomAutocomplete
-              
               label="State"
-              placeholder={stateValue.length === 0 ? "Select one or more states" : ""}
+              placeholder={
+                stateValue.length === 0 ? "Select one or more states" : ""
+              }
               options={[
                 "Andhra Pradesh",
                 "Tamil Nadu",
@@ -152,23 +81,14 @@ const Overall: React.FC = () => {
                 "Punjab",
                 "Goa",
                 "Maharastra",
-                "kerala",
+                "Kerala",
               ]}
               value={stateValue}
               onInputChange={handleSelectStateChange}
               noOptionsText="No states found"
-              // sx={{ marginTop: "4px"}}
               selectAllLabel="Select All"
               deselectAllLabel="Deselect All"
-              optionFontSize={PrimaryText}
-              SelectDeselectButtonStyles={SelectDeselectButtonStyles}
-              OverallButtonStyles={OverallButtonStyles}
-              ChipValueStyles={ChipValueStyles}
-              ChipNumberStyles={ChipNumberStyles}
-              AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
-              DoneIconStyles={DoneIconStyles}
-
-/>
+            />
           </FormControl>
         </Grid>
 
@@ -213,19 +133,18 @@ const Overall: React.FC = () => {
           buttonStyles={buttonStyles}
           icon={
             !showTabData && (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <img src={GenerateReportIcon} alt="GenerateReportIcon" />
-              </Box>
+              <img src={GenerateReportIcon} alt="Generate Report Icon" />
             )
           }
           onClick={() => setShowTabData((prev) => !prev)}
-        />  
+        />
       </Stack>
-      <Box
-        sx={{ borderBottom: "1px solid #D4D4D4", width: "100%", mt: 2 }}
-      ></Box>
-      {showTabData && <TabsComponent />}
-    </Box>
+      {showTabData && (
+        <Paper elevation={1} sx={{ mt: 2, p: 2 }}>
+          <TabsComponent />
+        </Paper>
+      )}
+    </Paper>
   );
 };
 

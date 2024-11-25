@@ -188,7 +188,7 @@ const Headerhome: React.FC = () => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
  
-  const drawerWidth = 200; // Set a fixed width for the drawer
+  const drawerWidth = 247; // Set a fixed width for the drawer
  
   const renderMenu = (
     <Menu
@@ -576,7 +576,7 @@ const Headerhome: React.FC = () => {
                     <img
                           src={SidebarRectangleimg}
                           alt="overall"
-                           style={{ width: 10, height: 35,marginLeft:20}}
+                           style={{ width: 10, height: 35,marginLeft:18}}
                         />:''}
               </ListItem>
             </>
