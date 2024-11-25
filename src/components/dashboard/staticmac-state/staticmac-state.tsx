@@ -15,7 +15,7 @@ import { MainContentBackground } from "../../styles/color.const";
 import CustomButton from "../../common/CustomButton";
 import { PrimaryText, SmallText } from "../../styles/fontsize.const";
 import GenerateReportIcon from "../../../assets/icons/GenerateReportIcon.svg";
-
+ 
 const Overall: React.FC = () => {
   const [showTabData, setShowTabData] = useState(false);
   const theme = useTheme();
@@ -24,11 +24,11 @@ const Overall: React.FC = () => {
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateIndex, setIndexValue] = useState<string>("");
   const [stateRank, setStateRank] = useState<string>("");
-
+ 
   const handleSelectStateChange = (value: string[]) => {
     setStateValue(value);
   };
-
+ 
   const handleSelectIndexChange = (value: string) => {
     setIndexValue(value);
   };
@@ -134,7 +134,7 @@ const Overall: React.FC = () => {
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
-          <FormControl fullWidth 
+          <FormControl fullWidth
           sx={{
                 '& .MuiAutocomplete-root':{
                   '& .MuiFormControl-root':{
@@ -153,10 +153,10 @@ const Overall: React.FC = () => {
                       gap:'1px',
                       justifyContent: 'flex-start',
                     "padding-right":'0px !important',
-                }}} 
+                }}}
               }}>
             <CustomAutocomplete
-              
+             
               label="State"
               placeholder={stateValue.length === 0 ? "Select one or more states" : ""}
               options={[
@@ -183,11 +183,11 @@ const Overall: React.FC = () => {
               ChipNumberStyles={ChipNumberStyles}
               AutocompleteTextfieldStyles={AutocompleteTextfieldStyles}
               DoneIconStyles={DoneIconStyles}
-
+ 
 />
           </FormControl>
         </Grid>
-
+ 
         {/* Rank and Index Selection */}
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
@@ -201,7 +201,7 @@ const Overall: React.FC = () => {
             />
           </FormControl>
         </Grid>
-
+ 
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
             <CustomSelect
@@ -246,5 +246,5 @@ const Overall: React.FC = () => {
     </>
   );
 };
-
+ 
 export default Overall;
