@@ -188,7 +188,7 @@ const Headerhome: React.FC = () => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
  
-  const drawerWidth = 247; // Set a fixed width for the drawer
+  const drawerWidth = 200; // Set a fixed width for the drawer
  
   const renderMenu = (
     <Menu
