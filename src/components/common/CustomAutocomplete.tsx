@@ -120,6 +120,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
     },
   }));
 
+  
   return (
     <Box>
       <FormLabel
@@ -186,7 +187,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         )}
         
         renderTags={(value, getTagProps) => {
-          const displayedTags = showAllTags ? value : value.slice(0, 3);
+          const displayedTags = showAllTags ? value : value.slice(0, 2);
           const remainingCount = selectedCount - displayedTags.length;
         
           // Custom SVG as a React component
@@ -234,25 +235,26 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
                 },
               }}
             >
-              {displayedTags.map((option, index) => {
-                const { onDelete, ...tagProps } = getTagProps({ index });
-        
-                return (
-                  <Chip
-                    key={option}
-                    label={option}
-                    {...tagProps}
-                    onDelete={onDelete} // Ensure delete functionality
-                    deleteIcon={<CustomDeleteIcon onClick={onDelete} />} // Use custom SVG with delete logic
-                    sx={{
-                      ...ChipValueStyles,
-                      "& .MuiChip-deleteIcon": {
-                        margin: "0", // Remove any extra spacing
-                      },
-                    }}
-                  />
-                );
-              })}
+             {displayedTags.map((option, index) => {
+  const { onDelete, key, ...tagProps } = getTagProps({ index }); // Destructure and exclude 'key'
+
+  return (
+    <Chip
+      key={option} // Use the option as the key
+      label={option}
+      {...tagProps} // Spread remaining tagProps (excluding 'key')
+      onDelete={onDelete} // Ensure delete functionality
+      deleteIcon={<CustomDeleteIcon onClick={onDelete} />} // Use custom SVG with delete logic
+      sx={{
+        ...ChipValueStyles,
+        "& .MuiChip-deleteIcon": {
+          margin: "0", // Remove any extra spacing
+        },
+      }}
+    />
+  );
+})}
+
               {remainingCount > 0 && !showAllTags && (
                 <Chip
                   sx={ChipNumberStyles}
