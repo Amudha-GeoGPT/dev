@@ -157,15 +157,15 @@ const Staticmacoutlet: React.FC = () => {
     height: "15px",
   };
   return (
-    <Box
-      alignItems="center"
-      sx={{
-        flexGrow: 1,
-        p: 2,
-        overflow: "auto",
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-      }}
+    <
+      // alignItems="center"
+      // sx={{
+      //   flexGrow: 1,
+      //   p: 2,
+      //   overflow: "auto",
+      //   ml: { sm: `${drawerWidth}px` },
+      //   marginTop: "60px",
+      // }}
     >
       <Box
         sx={{
@@ -625,7 +625,7 @@ const Staticmacoutlet: React.FC = () => {
           {showMapData && <TamilnaduMap />}
         </>
       ) : null}
-    </Box>
+    </>
   );
 };
 

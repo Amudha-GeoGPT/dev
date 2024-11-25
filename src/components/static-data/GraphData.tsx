@@ -181,16 +181,22 @@ const BarGraphData: React.FC = () => {
     label: {
       value: "City's",
       position: "insideBottom",
-      dy: 6,
+      dy: 46,
       fontSize: SmallText,
       marginTop: 5,
       fill: GraphFontColor,
     },
-    tick: { fontSize: "9px" },
-    interval: 0,
+    tick: {
+      fontSize: "9px",
+      angle: -90, // Rotates the text vertically
+      textAnchor: "end", // Ensures proper alignment
+      dy: 4, // Adjusts vertical spacing
+    },
+    interval: 0, // Ensures all tick labels are shown
     axisLine: false,
     tickLine: false,
   };
+  
 
   const yAxisProps = {
     label: {

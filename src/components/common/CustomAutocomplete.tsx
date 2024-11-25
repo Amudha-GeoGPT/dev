@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextField,
   FormLabel,
@@ -9,14 +9,14 @@ import {
   styled,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-
+ 
 import {
   LabelColor,
   PlaceholderColor,
   SelectAutoCompleteBorderColor,
 } from "../styles/color.const";
 import { SecondayText } from "../styles/fontsize.const";
-
+ 
 interface CustomAutocompleteProps {
   options: string[];
   placeholder?: string;
@@ -36,7 +36,7 @@ interface CustomAutocompleteProps {
   AutocompleteTextfieldStyles?: React.CSSProperties;
   DoneIconStyles?: React.CSSProperties;
 }
-
+ 
 const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   options,
   placeholder,
@@ -57,9 +57,18 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   DoneIconStyles,
 }) => {
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>(value);
+  const [selectedCount, setSelectedCount] = useState<number>(value.length); // Initialize with length of `value`
   const [showAllTags, setShowAllTags] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+ 
+  // Update selectedCount whenever autocompleteValue changes
+  useEffect(() => {
+    setSelectedCount(autocompleteValue.length);
+    if (autocompleteValue.length <= 2 && showAllTags) {
+      setShowAllTags(false);
+    }
+  }, [autocompleteValue, showAllTags]);
+ 
   const handleAutocompleteChange = (
     event: React.SyntheticEvent,
     newValue: string[]
@@ -67,22 +76,22 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
     setAutocompleteValue(newValue);
     onInputChange(newValue);
   };
-
+ 
   const handleSelectAll = () => {
     setAutocompleteValue(options);
     onInputChange(options);
   };
-
+ 
   const handleDeselectAll = () => {
     setAutocompleteValue([]);
     onInputChange([]);
   };
-
+ 
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const ListboxComponent = styled("ul")(({}) => ({
-    // border: "1px solid red",
+ 
+  const ListboxComponent = styled("ul")(() => ({
     whiteSpace: "nowrap",
     "&::-webkit-scrollbar": {
       width: "6px",
@@ -110,6 +119,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       },
     },
   }));
+ 
   return (
     <Box>
       <FormLabel
@@ -130,21 +140,21 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         onChange={handleAutocompleteChange}
         options={filteredOptions}
         noOptionsText={noOptionsText}
+        clearIcon={null}
         sx={{
           ...sx,
           "& .MuiOutlinedInput-root": {
             padding: "0px",
-            paddingLeft: "10px",
             borderRadius: "8px",
-            border: `1px solid ${SelectAutoCompleteBorderColor}`,
+            border: `1.8px solid ${SelectAutoCompleteBorderColor}`,
             "& .MuiOutlinedInput-notchedOutline": {
-              border: `1px solid ${SelectAutoCompleteBorderColor}`,
+              border: "none",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              border: `1px solid ${SelectAutoCompleteBorderColor}`,
+              border: `none`,
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              border: `1px solid ${SelectAutoCompleteBorderColor}`,
+              border: `none`,
             },
           },
         }}
@@ -152,7 +162,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           <>
             <ListboxComponent {...props}>
               {props.children}
-
+ 
               <Box sx={{ ...OverallButtonStyles }}>
                 <Button
                   variant="outlined"
@@ -172,33 +182,110 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
             </ListboxComponent>
           </>
         )}
+       
         renderTags={(value, getTagProps) => {
           const displayedTags = showAllTags ? value : value.slice(0, 2);
-          const remainingCount = value.length - displayedTags.length;
-
+          const remainingCount = selectedCount - displayedTags.length;
+       
+          // Custom SVG as a React component
+          const CustomDeleteIcon = ({ onClick }: { onClick: () => void }) => (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              focusable="false"
+              aria-hidden="true"
+              onClick={onClick} // Trigger onDelete when clicked
+              style={{
+                width: "12px", // Adjust size
+                height: "12px", // Adjust size
+                fill: "black", // Default color
+                cursor: "pointer", // Pointer cursor for hover
+              }}
+            >
+              <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+          );
+       
           return (
-            <Box sx={AutocompleteTextfieldStyles}>
-              {displayedTags.map((option, index) => {
-                const { key, ...tagProps } = getTagProps({ index });
-                return (
-                  <Chip
-                    key={option}
-                    label={option}
-                    {...tagProps}
-                    sx={ChipValueStyles}
-                  />
-                );
-              })}
+            <Box
+              sx={{
+                ...AutocompleteTextfieldStyles,
+                display: "flex",
+                gap: "8px", // Space between chips
+                flexWrap: "nowrap", // Prevent wrapping
+                overflowX: showAllTags ? "auto" : "hidden",
+                maxWidth: "100%",
+                whiteSpace: "nowrap",
+                "&::-webkit-scrollbar": {
+                  height: "0px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "rgba(0, 0, 0, 0.3)",
+                  borderRadius: "1px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  background: "rgba(0, 0, 0, 0.5)",
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "rgba(0, 0, 0, 0.1)",
+                  borderRadius: "10px",
+                },
+              }}
+            >
+                           {displayedTags.map((option, index) => {
+  const { onDelete, key, ...tagProps } = getTagProps({ index }); // Destructure and exclude 'key'
+
+  return (
+    <Chip
+      key={option} // Use the option as the key
+      label={option}
+      {...tagProps} // Spread remaining tagProps (excluding 'key')
+      onDelete={onDelete} // Ensure delete functionality
+      // deleteIcon={<CustomDeleteIcon onClick={onDelete} />} // Use custom SVG with delete logic
+      deleteIcon={  <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        focusable="false"
+        aria-hidden="true"
+        // onClick={onClick} // Attach the onClick handler
+        style={{
+          width: "12px", // Adjust size
+          height: "12px", // Adjust size
+          fill: "black", // Default color
+          cursor: "pointer", // Pointer cursor for hover
+        }}
+      >
+        <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+      </svg>
+
+      }
+      sx={{
+        ...ChipValueStyles,
+        "& .MuiChip-deleteIcon": {
+          margin: "0", // Remove any extra spacing
+        },
+      }}
+    />
+  );
+})}
               {remainingCount > 0 && !showAllTags && (
                 <Chip
                   sx={ChipNumberStyles}
-                  label={`+${remainingCount}`}
-                  onClick={() => setShowAllTags(true)}
+                  label={`${remainingCount} more`}
+                  onClick={() => setShowAllTags(true)} // Expand tags on click
+                />
+              )}
+              {showAllTags && (
+                <Chip
+                  sx={ChipNumberStyles}
+                  label="Show Less" // Collapse tags on click
+                  onClick={() => setShowAllTags(false)}
                 />
               )}
             </Box>
           );
         }}
+                       
         renderOption={(props, option, { selected }) => (
           <li
             {...props}
@@ -226,5 +313,5 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
     </Box>
   );
 };
-
+ 
 export default CustomAutocomplete;
