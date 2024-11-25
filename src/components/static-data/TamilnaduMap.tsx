@@ -321,7 +321,7 @@ const Map = () => {
             pointerEvents: "none",
           }}
         >
-          District: {tooltipData.name} <br />
+          District: {tooltipData.name } <br />
           Rural/urban-Both <br />
           CK Served Outlets-20 <br />
           Non CK Served Outlets -125 <br />

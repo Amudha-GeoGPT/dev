@@ -6,6 +6,7 @@ import {
   Grid,
   FormControl,
   Stack,
+  Paper,
 } from "@mui/material";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import CustomSelect from "../../common/CustomSelect";
@@ -105,16 +106,31 @@ const Overall: React.FC = () => {
     height: "15px",
   };
   return (
-    <Box
-      alignItems="center"
-      sx={{
-        flexGrow: 1,
-        p: 2,
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-        backgroundColor: MainContentBackground,
-      }}
-    >
+    <>
+    {/* // <Box */}
+    {/* //   sx={{ */}
+    {/* //     display: 'flex',
+    //     flexDirection: 'column',
+    //     height: `calc(100vh - 60px)`, // Subtract header height
+    //     marginLeft: { sm: `${drawerWidth}px` },
+    //     marginTop: '60px',
+    //     backgroundColor: MainContentBackground,
+    //     overflow: 'auto'
+    //   }}
+    // > */}
+    {/* //   <Paper
+    //     elevation={3}
+    //     sx={{
+    //       flex: 1,
+    //       ml: 4,
+    //       p: 1,
+    //       minHeight: `calc(10vh - 180px)`, // Ensures full height coverage
+    //       width: {
+    //         xs: `calc(100% - 38px)`,
+    //         sm: `calc(100% - ${drawerWidth}px - (-158px))`
+    //       }
+    //     }}
+    //   > */}
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
         <Grid item xs={12} sm={6} md={4}>
@@ -225,7 +241,9 @@ const Overall: React.FC = () => {
         sx={{ borderBottom: "1px solid #D4D4D4", width: "100%", mt: 2 }}
       ></Box>
       {showTabData && <TabsComponent />}
-    </Box>
+      {/* </Paper>
+    </Box> */}
+    </>
   );
 };
 
