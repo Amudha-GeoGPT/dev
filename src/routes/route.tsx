@@ -17,7 +17,7 @@ const Router = [
       { path: '/Staticmactown', element: <Staticmactown /> },
       { path: '/stateoverall', element: <Overall /> },
        { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
-      // { path: '/Staticmacoutletplanning', element: <IndiaMap /> },
+      { path: '/indiaMap', element: <IndiaMap /> },
     ],
   },
 ];

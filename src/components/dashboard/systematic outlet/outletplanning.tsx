@@ -16,6 +16,7 @@ import {
 } from "../../styles/fontsize.const";
 import TamilnaduMap from "../../static-data/TamilnaduMap";
 
+
 const Staticmacoutlet: React.FC = () => {
   const [activeButton, setActiveButton] = useState<"dashboard" | "map">(
     "dashboard"

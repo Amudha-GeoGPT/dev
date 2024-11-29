@@ -170,7 +170,7 @@ const Headerhome: React.FC = () => {
         navigate('/Staticmacoutletplanning');
         break;
       case "User Guide":
-        navigate('/stateoverall');
+        navigate('/indiaMap');
         break;
       // Add cases for other titles  
       default:
