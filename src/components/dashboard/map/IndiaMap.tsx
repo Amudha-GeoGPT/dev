@@ -17,7 +17,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L, { Map as LeafletMap } from "leaflet";
 import "leaflet.markercluster";
-import { RootState, useAppDispatch } from "../../../service/store/store";
+import { RootState, useAppDispatch } from "../../../store/storet";
 import { fetchLocationDataThunk } from "../../../redux/Thunks/mapThunks";
 import {
   setSelectedState,

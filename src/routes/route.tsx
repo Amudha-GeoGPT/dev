@@ -5,7 +5,7 @@ import Staticmacdistrict from "../components/dashboard/staticmac-district/static
 import Staticmactown from "../components/dashboard/staticmac-town/staticmac-town";
 import Staticmacoutlet from "../components/dashboard/systematic outlet/outletplanning";
 import Dashboard from "../pages/dashboard/dashboard";
-import IndiaMap from "../components/dashboard/map/IndiaMap";
+import IndiaMap from "../components/dashboard/map/IndiaMapCluster";
 const Router = [
   {
     path: "/",

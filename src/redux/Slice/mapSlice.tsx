@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Outlet } from '../../service/types/map';
-
+import { Outlet, StateData, Distributor } from '../../service/types/map';
+ 
 interface MapState {
   filteredMarkers: Outlet[];
   loading: boolean;
@@ -8,17 +8,34 @@ interface MapState {
   selectedState: string;
   selectedDistrict: string;
   selectedCategory: string;
+  selectedVertical: string;
+  selectedDistributor: string;
+  selectedDistance: number;
+  distributorData: StateData | null;
+  availableDistricts: string[];
+  availableDistributors: Distributor[];
+  selectedLatitude: number | null;
+  selectedLongitude: number | null;
 }
-
+ 
 const initialState: MapState = {
   filteredMarkers: [],
   loading: false,
   error: null,
+  selectedLatitude: null,
+  selectedLongitude: null,
   selectedState: "TAMIL NADU",
   selectedDistrict: "Chennai",
-  selectedCategory: ""
+  selectedCategory: "",
+  selectedVertical: '',
+  selectedDistributor: '',
+  selectedDistance: 50,
+  distributorData: null,
+  availableDistricts: [],
+  availableDistributors: [],
+  // distributorData: null,
 };
-
+ 
 export const mapSlice = createSlice({
   name: 'map',
   initialState,
@@ -40,17 +57,49 @@ export const mapSlice = createSlice({
     },
     setSelectedCategory: (state, action: PayloadAction<string>) => {
       state.selectedCategory = action.payload;
+    },
+    setSelectedVertical: (state, action: PayloadAction<string>) => {
+      state.selectedVertical = action.payload;
+    },
+    setSelectedDistributor: (state, action: PayloadAction<string>) => {
+      state.selectedDistributor = action.payload;
+    },
+    setSelectedDistance: (state, action: PayloadAction<number>) => {
+      state.selectedDistance = action.payload;
+    },
+    setDistributorData: (state, action: PayloadAction<StateData>) => {
+      state.distributorData = action.payload;
+    },
+    setAvailableDistricts: (state, action: PayloadAction<string[]>) => {
+      state.availableDistricts = action.payload;
+    },
+    setAvailableDistributors: (state, action: PayloadAction<Distributor[]>) => {
+      state.availableDistributors = action.payload;
+    },
+    setSelectedLatitude: (state, action: PayloadAction<number | null>) => {
+      state.selectedLatitude = action.payload;
+    },
+    setSelectedLongitude: (state, action: PayloadAction<number | null>) => {
+      state.selectedLongitude = action.payload;
     }
   }
 });
-
-export const { 
-  setFilteredMarkers, 
-  setLoading, 
+ 
+export const {
+  setFilteredMarkers,
+  setLoading,
   setError,
   setSelectedState,
   setSelectedDistrict,
-  setSelectedCategory 
+  setSelectedCategory,
+  setSelectedVertical,
+  setSelectedDistributor,
+  setSelectedDistance,
+  setDistributorData,
+  setAvailableDistricts,
+  setAvailableDistributors
 } = mapSlice.actions;
-
+ 
 export default mapSlice.reducer;
+//slice
+ 
