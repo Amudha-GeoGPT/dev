@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // // import React from 'react';
 
@@ -442,79 +443,158 @@
 
 // export default IndiaMap;
 import { Box } from "@mui/material";
-import { useEffect, useRef, useMemo, useCallback } from "react";
+import { useEffect, useRef, useMemo, useCallback, useState } from "react";
 import { useSelector } from 'react-redux';
 import CustomSelect from "../../common/CustomSelect";
-import CustomButton from "../../common/CustomButton"; 
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
+import CustomButton from "../../common/CustomButton";
+import { Marker, Popup, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L, { Map as LeafletMap } from "leaflet"; // Import LeafletMap type
 import "leaflet.markercluster"; // Import marker cluster
-import { RootState, useAppDispatch } from '../../../service/store/store';
+import { RootState, useAppDispatch } from '../../../store/store';
 import { fetchLocationDataThunk } from '../../../redux/Thunks/mapThunks';
-import { LayersControl } from 'react-leaflet';
-import { setSelectedState, setSelectedDistrict, setSelectedCategory } from '../../../redux/Slice/mapSlice';
+// import { LayersControl } from 'react-leaflet';
+import { setSelectedState, setSelectedDistrict, setSelectedCategory, setFilteredMarkers } from '../../../redux/Slice/mapSlice';
+import { MapContainer, TileLayer, LayersControl } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-markercluster"; // Import MarkerClusterGroup
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 const { BaseLayer } = LayersControl;
+ 
+interface Outlet {
+  pid: string;
+  latitude: number;
+  longitude: number;
+  outletName: string;
+  overallScore: number;
+  realityScore: number;
+  censusCode?: string;
+}
+ 
+// Define the structure of the API response
+interface FetchLocationDataResponse {
+  results: { outletDetails: Outlet[] }[];
+}
 const IndiaMap = () => {
   const dispatch = useAppDispatch();
-  const mapRef = useRef<LeafletMap | null>(null); // Explicitly define the type of mapRef
-  const {
-    filteredMarkers,
-    loading,
-    selectedState,
-    selectedDistrict, 
-    selectedCategory
-  } = useSelector((state: RootState) => state.map);
-
-  const handleFilter = useCallback(async () => {
-    await dispatch(fetchLocationDataThunk({ 
-      category: selectedCategory, 
-      district: selectedDistrict 
-    }));
-    if (mapRef.current && filteredMarkers.length > 0) {
-      const bounds = L.latLngBounds(
-        filteredMarkers.map(marker => [marker.latitude, marker.longitude])
-      );
-      mapRef.current.fitBounds(bounds, { padding: [50, 50] }); // Now TypeScript knows mapRef.current is a LeafletMap
+  const mapRef = useRef<LeafletMap | null>(null);
+  const [debouncedTimer, setDebouncedTimer] = useState<NodeJS.Timeout | null>(null);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  // const [page, setPage] = useState(1);
+  // const [hasMore, setHasMore] = useState(true);
+ 
+  const { filteredMarkers, loading, selectedState, selectedDistrict, selectedCategory } = useSelector((state: RootState) => state.map);
+ 
+  // const handleFilter = useCallback(async () => {
+  //   const result = await dispatch(fetchLocationDataThunk({ category: selectedCategory, district: selectedDistrict, page, limit: 100 }));
+  //   const payload = result.payload as FetchLocationDataResponse; // Type assertion
+ 
+  //   if (payload.results.flatMap(result => result.outletDetails).length < 100) {
+  //     setHasMore(false);
+  //   }
+ 
+  //   if (mapRef.current && filteredMarkers.length > 0) {
+  //     const bounds = L.latLngBounds(filteredMarkers.map(marker => [marker.latitude, marker.longitude]));
+  //     mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+  //   }
+  // }, [dispatch, selectedCategory, selectedDistrict, filteredMarkers, page]);
+ 
+  // const loadMoreData = () => {
+  //   if (hasMore && !loading) {
+  //     setPage((prevPage: number) => prevPage + 1);
+  //   }
+  // };
+ 
+  // useEffect(() => {
+  //   handleFilter();
+  // }, [page]);
+ 
+ 
+const handleFilter = useCallback(async () => {
+  if (debouncedTimer) {
+    clearTimeout(debouncedTimer);
+  }
+ 
+  setCategoryLoading(true);
+ 
+  const timer = setTimeout(async () => {
+    try {
+      const CHUNK_SIZE = 1000000;
+      let currentPage = 1;
+      const allMarkers: Outlet[] = [];
+     
+      const fetchChunk = async () => {
+        const result = await dispatch(fetchLocationDataThunk({
+          category: selectedCategory === "All" ? "" : selectedCategory,
+          district: selectedDistrict,
+          page: currentPage,
+          limit: CHUNK_SIZE
+        }));
+       
+        const payload = result.payload as FetchLocationDataResponse;
+        const newMarkers = payload.results.flatMap(result => result.outletDetails);
+       
+        // Use batch updates for better performance
+        if (currentPage === 1) {
+          dispatch(setFilteredMarkers(newMarkers));
+        } else {
+          dispatch(setFilteredMarkers(prev => [...prev, ...newMarkers]));
+        }
+       
+        if (newMarkers.length === CHUNK_SIZE && currentPage < 3) {
+          currentPage++;
+          await fetchChunk();
+        }
+      };
+ 
+      await fetchChunk();
+    } finally {
+      setCategoryLoading(false);
     }
-  }, [dispatch, selectedCategory, selectedDistrict, filteredMarkers]);
-
-  const categoryOptions = [ 
-    "Bakery and Baked Goods Store", 
-    "Cafeteria", 
-    "Catering and Other Food Services", 
-    "Coffee Shop", 
-    "Coffee-Tea", 
-    "Consumer Goods", 
-    "Convenience Store", 
-    "Dairy Goods", 
-    "Department Store", 
-    "Drugstore", 
-    "Drugstore or Pharmacy", 
-    "Food Market-Stall", 
-    "Food-Beverage Specialty Store", 
-    "Grocery", 
-    "Home Specialty Store", 
-    "Pharmacy", 
-    "Restaurant", 
-    "Specialty Food Store", 
-    "Specialty Store", 
-    "Sweet Shop", 
-    "Tea House", 
-    "Variety Store", 
-  ]; 
-  const districtOptions = [ 
-    "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", 
-    "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", 
-    "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", 
-    "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivagangai", "Tenkasi", 
-    "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupattur", 
-    "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", 
-    "Virudhunagar", "Mayiladuthurai" 
-  ]; 
-
+  }, 300);
+ 
+  setDebouncedTimer(timer);
+}, [dispatch, selectedCategory, selectedDistrict]);
+ 
+  const categoryOptions = [
+    "All",
+    "Bakery and Baked Goods Store",
+    "Cafeteria",
+    "Catering and Other Food Services",
+    "Coffee Shop",
+    "Coffee-Tea",
+    "Consumer Goods",
+    "Convenience Store",
+    "Dairy Goods",
+    "Department Store",
+    "Drugstore",
+    "Drugstore or Pharmacy",
+    "Food Market-Stall",
+    "Food-Beverage Specialty Store",
+    "Grocery",
+    "Home Specialty Store",
+    "Pharmacy",
+    "Restaurant",
+    "Specialty Food Store",
+    "Specialty Store",
+    "Sweet Shop",
+    "Tea House",
+    "Variety Store",
+  ];
+  const districtOptions = [
+    "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri",
+    "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur",
+    "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur",
+    "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivagangai", "Tenkasi",
+    "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupattur",
+    "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram",
+    "Virudhunagar", "Mayiladuthurai"
+  ];
+ 
   const markers = useMemo(() => {
     return filteredMarkers
       .filter(outlet => outlet.latitude && outlet.longitude)
@@ -546,7 +626,7 @@ const IndiaMap = () => {
         </Marker>
       ));
   }, [filteredMarkers]);
-
+ 
   const mapOptions = {
     preferCanvas: true,
     renderer: L.canvas(),
@@ -561,7 +641,7 @@ const IndiaMap = () => {
     zoomControl: false,
     attributionControl: false,
   };
-
+ 
   useEffect(() => {
     if (mapRef.current && filteredMarkers.length > 0) {
       const bounds = L.latLngBounds(
@@ -572,7 +652,24 @@ const IndiaMap = () => {
       mapRef.current.fitBounds(bounds, { padding: [50, 50] });
     }
   }, [filteredMarkers]);
-
+  const createClusterCustomIcon = function (cluster: any) {
+    return L.divIcon({
+      html: `<span>${cluster.getChildCount()}</span>`,
+      className: 'marker-cluster-custom',
+      iconSize: L.point(40, 40, true),
+    });
+  };
+ 
+  const markerClusterOptions = {
+    chunkedLoading: true,
+    chunkInterval: 100,
+    chunkDelay: 50,
+    maxClusterRadius: 100,
+    spiderfyOnMaxZoom: false,
+    disableClusteringAtZoom: 16,
+    removeOutsideVisibleBounds: true,
+    animate: false
+  };
   return (
     <Box sx={{ height: "80%", width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", p: 1, gap: "10px" }}>
@@ -602,40 +699,66 @@ const IndiaMap = () => {
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <CustomButton buttonText="Filter" onClick={handleFilter} disabled={loading} />
+      <CustomButton
+      buttonText={
+        !selectedCategory || !selectedDistrict
+          ? "Please select category and district"
+          : categoryLoading
+            ? "Loading..."
+            : "Filter"
+      }
+      onClick={handleFilter}
+      disabled={loading || categoryLoading || !isValid}
+      sx={{
+        backgroundColor: !isValid ? '#f5f5f5' : undefined,
+        '&:hover': {
+          backgroundColor: !isValid ? '#f5f5f5' : undefined
+        }
+      }}
+    />
       </Box>
       <Box sx={{ height: "700px", width: "100%", mt: 2 }}>
         <MapContainer
           ref={mapRef}
-          center={[11.1271, 78.6569]} // Tamil Nadu center
+          center={[11.1271, 78.6569]}
           zoom={7}
           style={{ height: "100%", width: "100%" }}
           {...mapOptions}
         >
-         <LayersControl position="topright">
-  <BaseLayer checked name="Street">
-    <TileLayer
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      maxZoom={19}
-      tileSize={256}
-      subdomains={['a', 'b', 'c']}
-      keepBuffer={2}
-    />
-  </BaseLayer>
-  <BaseLayer name="Satellite with Labels">
-  <TileLayer
-    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-    maxZoom={19}
-  />
- 
-</BaseLayer>
-
-</LayersControl>
-          {markers}
-        </MapContainer>
+          <LayersControl position="topright">
+            <BaseLayer checked name="Street">
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                maxZoom={19}
+                tileSize={256}
+                subdomains={['a', 'b', 'c']}
+                keepBuffer={2}
+              />
+            </BaseLayer>
+            <BaseLayer name="Satellite with Labels">
+              <TileLayer
+                url="http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}"
+                maxZoom={20}
+              />
+            </BaseLayer>
+          </LayersControl>
+         
+  <MarkerClusterGroup
+    {...markerClusterOptions}
+    key={filteredMarkers.length} // Force re-render on data change
+    chunkedLoading={true}
+    removeOutsideVisibleBounds={true}
+  >
+    {markers}
+  </MarkerClusterGroup>
+</MapContainer>
+        {/* {hasMore && (
+          <CustomButton buttonText="Load More" onClick={loadMoreData} disabled={loading} />
+        )} */}
       </Box>
     </Box>
   );
 };
-
-export default IndiaMap;
+ 
+export default IndiaMap;  // final 
+ 

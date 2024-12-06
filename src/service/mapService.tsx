@@ -14,7 +14,7 @@ export const mapService = {
           districtName: district,
           subdistrictName: "",
           villageTownName: "",
-          pincode: "600028",
+          // pincode: "600028",
           category: category,
         }),
       }
