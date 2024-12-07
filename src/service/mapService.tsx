@@ -14,7 +14,7 @@ export const mapService = {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          stateName: "TAMIL NADU",
+          stateName: "Tamil Nadu",
           districtName: district,
           subdistrictName: "",
           villageTownName: "",
@@ -48,5 +48,3 @@ export const mapService = {
     return data;
   }
 };
-
- 

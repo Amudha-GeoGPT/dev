@@ -97,9 +97,9 @@ export const {
   setSelectedDistance,
   setDistributorData,
   setAvailableDistricts,
-  setAvailableDistributors
+  setAvailableDistributors,
+  setSelectedLatitude,
+  setSelectedLongitude
 } = mapSlice.actions;
  
 export default mapSlice.reducer;
-//slice
- 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,7 +14,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import L, { Map as LeafletMap } from "leaflet";
+import { Map as LeafletMap } from "leaflet";
 import "leaflet.markercluster";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { RootState, useAppDispatch } from "../../../store/store";
@@ -28,33 +29,22 @@ import {
   setAvailableDistricts,
   setAvailableDistributors,
   setFilteredMarkers,
+  setSelectedLatitude,
+  setSelectedLongitude,
 } from "../../../redux/Slice/mapSlice";
+import { Circle } from "react-leaflet";
+import L from "leaflet";
+// import markerIcon from '../../../assets/icons/map-marker-2-256.png';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const { BaseLayer } = LayersControl;
-
-interface Outlet {
-  pid: string;
-  latitude: number;
-  longitude: number;
-  outletName: string;
-  overallScore: number;
-  realityScore: number;
-  censusCode?: string;
-}
 
 const IndiaMap = () => {
   const dispatch = useAppDispatch();
   const mapRef = useRef<LeafletMap | null>(null);
-  const [debouncedTimer, setDebouncedTimer] = useState<NodeJS.Timeout | null>(
-    null
-  );
-  const [categoryLoading, setCategoryLoading] = useState(false);
-  const [isValid, setIsValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const {
-    filteredMarkers,
     loading,
     selectedState,
     selectedDistrict,
@@ -70,28 +60,13 @@ const IndiaMap = () => {
 
   const verticalOptions = ["S&D", "CK Retail"];
   const distanceOptions = [25, 50];
-  const getDistrictOptions = () => {
-    if (!distributorData || !selectedState) return [];
+  const [outletData, setOutletData] = useState<any>(null);
+  const [distributorRadius, setDistributorRadius] = useState<{
+    center: [number, number];
+    radius: number;
+    color: string;
+  } | null>(null);
 
-    return (
-      distributorData[selectedState]?.map(
-        (districtObj) => Object.keys(districtObj)[0]
-      ) || []
-    );
-  };
-
-  const getDistributorOptions = () => {
-    if (!distributorData || !selectedState || !selectedDistrict) return [];
-
-    const districtObj = distributorData[selectedState]?.find(
-      (obj) => obj[selectedDistrict]
-    );
-    return districtObj
-      ? districtObj[selectedDistrict]?.distributor_list?.map(
-          (d) => d.distributorName
-        ) || []
-      : [];
-  };
   const categoryOptions = [
     "Bakery and Baked Goods Store",
     "Cafeteria",
@@ -115,16 +90,11 @@ const IndiaMap = () => {
     "Sweet Shop",
     "Tea House",
     "Variety Store",
-  ]; 
-
+  ];
 
   useEffect(() => {
     if (selectedVertical === "S&D") {
-      setIsLoading(true);
-      setError(null);
-      dispatch(fetchDistributorDataThunk())
-        .catch((err) => setError(err.message))
-        .finally(() => setIsLoading(false));
+      dispatch(fetchDistributorDataThunk());
     }
   }, [selectedVertical, dispatch]);
 
@@ -194,10 +164,85 @@ const IndiaMap = () => {
       }
     }
   };
+  // const [distributorRadius, setDistributorRadius] = useState<{
+  //   center: [number, number];
+  //   radius: number;
+  // } | null>(null);
+  const blueIcon = L.icon({
+    iconUrl: LocationOnIcon,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
+  const purpleIcon = L.icon({
+    iconUrl: "path/to/purple-marker.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
+  const fetchMapResults = async (distributorName: string) => {
+    try {
+      const distributor = availableDistributors.find(
+        (d) => d.distributorName === distributorName
+      );
+      if (!distributor) return;
+
+      const response = await fetch(
+        "https://geogptdev.ckdigital.in/api/getmapresult",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vertical: "sales",
+            distributorName: distributorName,
+            latitude: distributor.latitude,
+            longitude: distributor.longitude,
+            distance: selectedDistance,
+            pincode: "",
+            category: "",
+          }),
+        }
+      );
+
+      const responseData = await response.json();
+      setOutletData(responseData);
+
+      const outletType = responseData.results[0]?.outletTagged;
+
+      setDistributorRadius({
+        center: [distributor.latitude, distributor.longitude],
+        radius: selectedDistance * 1000,
+        color: outletType === "Universal Outlet" ? "#0000FF" : "#800080",
+      });
+
+      if (mapRef.current) {
+        mapRef.current.setView(
+          [distributor.latitude, distributor.longitude],
+          12
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching map results:", error);
+    }
+  };
+
+  const handleDistributorSelect = (value: string) => {
+    dispatch(setSelectedDistributor(value));
+    const distributor = availableDistributors.find(
+      (d) => d.distributorName === value
+    );
+
+    if (distributor) {
+      fetchMapResults(value);
+    }
+  };
 
   const mapOptions = {};
-  const markerClusterOptions = {}; 
-  const markers: never[] = []; 
+  const markerClusterOptions = {};
   const selectedDistributorMarker =
     selectedDistributor && availableDistributors.length > 0
       ? availableDistributors.find(
@@ -249,7 +294,6 @@ const IndiaMap = () => {
               value={selectedDistrict}
               onChange={(value) => dispatch(setSelectedDistrict(value))}
               sx={{ marginTop: "4px", height: "39px" }}
-              disabled={!selectedState || !distributorData}
             />
 
             <CustomSelect
@@ -257,20 +301,8 @@ const IndiaMap = () => {
               placeholder="Select Distributor"
               options={availableDistributors.map((d) => d.distributorName)}
               value={selectedDistributor}
-              onChange={(value) => {
-                dispatch(setSelectedDistributor(value));
-                const distributor = availableDistributors.find(
-                  (d) => d.distributorName === value
-                );
-                if (distributor && mapRef.current) {
-                  mapRef.current.setView(
-                    [distributor.latitude, distributor.longitude],
-                    12
-                  );
-                }
-              }}
+              onChange={handleDistributorSelect}
               sx={{ marginTop: "4px", height: "39px" }}
-              disabled={!selectedDistrict}
             />
             <CustomSelect
               label="Distance"
@@ -333,8 +365,6 @@ const IndiaMap = () => {
           </Box>
         </>
       )}
-
-      {/* Map Container */}
       <Box sx={{ height: "700px", width: "100%", mt: 2 }}>
         <MapContainer
           ref={mapRef}
@@ -352,7 +382,7 @@ const IndiaMap = () => {
           <LayersControl position="topright">
             <BaseLayer checked name="Street">
               <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                url={`https://surveyoutlet.blob.core.windows.net/geogpt/TAMILNADU/{z}/{x}/{y}.png?sv=2023-01-03&se=2025-01-04T10%3A33%3A54Z&sr=c&sp=rl&sig=sXlqL0SFvPHYKCPt4cTLum8b38wz6Kf%2FqcvHnc5fU9M%3D`}
                 maxZoom={19}
                 tileSize={256}
                 subdomains={["a", "b", "c"]}
@@ -361,7 +391,7 @@ const IndiaMap = () => {
             </BaseLayer>
             <BaseLayer name="Satellite with Labels">
               <TileLayer
-                url="http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}"
+                url={`http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}`}
                 maxZoom={20}
               />
             </BaseLayer>
@@ -369,20 +399,44 @@ const IndiaMap = () => {
 
           <MarkerClusterGroup {...markerClusterOptions}>
             {selectedDistributorMarker && (
-              <Marker
-                position={[
-                  selectedDistributorMarker.latitude,
-                  selectedDistributorMarker.longitude,
-                ]}
-              >
-                <Popup>
-                  <div>
-                    <strong>{selectedDistributorMarker.distributorName}</strong>
-                    <br />
-                    Code: {selectedDistributorMarker.distributorCode}
-                  </div>
-                </Popup>
-              </Marker>
+              <>
+                <Marker
+                  position={[
+                    selectedDistributorMarker.latitude,
+                    selectedDistributorMarker.longitude,
+                  ]}
+                  icon={
+                    outletData?.results[0]?.outletTagged === "Universal Outlet"
+                      ? blueIcon
+                      : purpleIcon
+                  }
+                >
+                  <Popup>
+                    <div>
+                      <strong>
+                        {selectedDistributorMarker.distributorName}
+                      </strong>
+                      <br />
+                      Code: {selectedDistributorMarker.distributorCode}
+                      <br />
+                      Type: {outletData?.results[0]?.outletTagged}
+                    </div>
+                  </Popup>
+                </Marker>
+
+                {distributorRadius && selectedVertical === "S&D" && (
+                  <Circle
+                    center={distributorRadius.center}
+                    radius={distributorRadius.radius}
+                    pathOptions={{
+                      color: distributorRadius.color,
+                      fillColor: distributorRadius.color,
+                      fillOpacity: 0.1,
+                      weight: 1,
+                    }}
+                  />
+                )}
+              </>
             )}
           </MarkerClusterGroup>
         </MapContainer>
