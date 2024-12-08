@@ -1,6 +1,7 @@
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import CustomSelect from "../../common/CustomSelect";
@@ -46,6 +47,8 @@ const { BaseLayer } = LayersControl;
 const IndiaMap = () => {
   const dispatch = useAppDispatch();
   const mapRef = useRef<LeafletMap | null>(null);
+  const [selectedInputMethod, setSelectedInputMethod] = useState("Distributor");
+  const [selectedPincode, setSelectedPincode] = useState("");
   
   const {
     loading,
@@ -209,14 +212,43 @@ const IndiaMap = () => {
               onChange={(value) => dispatch(setSelectedDistrict(value))}
               sx={{ marginTop: "4px", height: "39px" }}
             />
+            {/* Dropdown to select between Distributor and Pincode */}
             <CustomSelect
-              label="Distributor"
-              placeholder="Select Distributor"
-              options={availableDistributors.map((d) => d.distributorName)}
-              value={selectedDistributor}
-              onChange={handleDistributorSelect}
+              label="Select Input Method"
+              placeholder="Choose Input Method"
+              options={["Distributor", "Pincode"]}
+              value={selectedInputMethod}
+              onChange={(value) => setSelectedInputMethod(value)}
               sx={{ marginTop: "4px", height: "39px" }}
             />
+            {selectedInputMethod === "Distributor" ? (
+              <CustomSelect
+                label="Distributor"
+                placeholder="Select Distributor"
+                options={availableDistributors.map((d) => d.distributorName)}
+                value={selectedDistributor}
+                onChange={handleDistributorSelect}
+                sx={{ marginTop: "4px", height: "39px" }}
+              />
+            ) : (
+              <Box sx={{ marginTop: "4px" }}>
+                <label htmlFor="pincode">Pincode</label>
+                <input
+                  id="pincode"
+                  type="text"
+                  placeholder="Enter Pincode"
+                  value={selectedPincode}
+                  onChange={(e) => setSelectedPincode(e.target.value)}
+                  style={{
+                    height: '39px',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                    width: '100%', // Full width
+                  }}
+                />
+              </Box>
+            )}
             <CustomSelect
               label="Distance"
               placeholder="Select Distance"
@@ -241,26 +273,82 @@ const IndiaMap = () => {
       </Box>
       {selectedVertical === "CK Retail" && (
         <>
-          <CustomSelect
-            label="Latitude"
-            placeholder="Select Latitude"
-            options={["13.0269700125116", "27.096548"]}
-            value={selectedLatitude?.toString() || ""}
-            onChange={(value) =>
-              handleLatLongChange(parseFloat(value), selectedLongitude || 0)
-            }
-            sx={{ marginTop: "4px", height: "39px" }}
-          />
-          <CustomSelect
-            label="Longitude"
-            placeholder="Select Longitude"
-            options={["80.25721997409174", "93.62047"]}
-            value={selectedLongitude?.toString() || ""}
-            onChange={(value) =>
-              handleLatLongChange(selectedLatitude || 0, parseFloat(value))
-            }
-            sx={{ marginTop: "4px", height: "39px" }}
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              marginTop: '4px',
+            }}
+          >
+            <CustomSelect
+              label="Select Input Method"
+              placeholder="Choose Input Method"
+              options={["Latitude/Longitude", "Pincode"]}
+              value={selectedInputMethod}
+              onChange={(value) => setSelectedInputMethod(value)}
+              sx={{ marginTop: "4px", height: "39px" }}
+            />
+            {selectedInputMethod === "Latitude/Longitude" ? (
+              <>
+                <label htmlFor="latitude">Latitude</label>
+                <input
+                  id="latitude"
+                  type="text"
+                  placeholder="Select Latitude"
+                  value={selectedLatitude?.toString() || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!isNaN(parseFloat(value))) {
+                      handleLatLongChange(parseFloat(value), selectedLongitude || 0);
+                    }
+                  }}
+                  style={{
+                    height: '39px',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                  }}
+                />
+                <label htmlFor="longitude">Longitude</label>
+                <input
+                  id="longitude"
+                  type="text"
+                  placeholder="Select Longitude"
+                  value={selectedLongitude?.toString() || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!isNaN(parseFloat(value))) {
+                      handleLatLongChange(selectedLatitude || 0, parseFloat(value));
+                    }
+                  }}
+                  style={{
+                    height: '39px',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <label htmlFor="pincode">Pincode</label>
+                <input
+                  id="pincode"
+                  type="text"
+                  placeholder="Enter Pincode"
+                  value={selectedPincode || ""}
+                  onChange={(e) => setSelectedPincode(e.target.value)}
+                  style={{
+                    height: '39px',
+                    padding: '8px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                  }}
+                />
+              </>
+            )}
+          </Box>
           <CustomSelect
             label="Distance (km)"
             placeholder="Select Distance"
@@ -330,11 +418,11 @@ const IndiaMap = () => {
                     <br />
                     Pincode: {outlet.pincode}
                     <br />
-                    PID: {outlet.pid}
+                    PID: {typeof outlet.pid === 'object' ? outlet.pid.$numberDouble : outlet.pid} {/* Check if PID is an object */}
                     <br />
-                    Overall Score: {outlet.overallScore}
+                    Overall Score: {typeof outlet.overallScore === 'object' ? outlet.overallScore.$numberDouble : outlet.overallScore} {/* Check if Overall Score is an object */}
                     <br />
-                    Reality Score: {outlet.realityScore}
+                    Reality Score: {typeof outlet.realityScore === 'object' ? outlet.realityScore.$numberDouble : outlet.realityScore} {/* Check if Reality Score is an object */}
                     <br />
                     Type: {outlet.outletTagged}
                     <br />
@@ -345,6 +433,35 @@ const IndiaMap = () => {
             ))}
           </MarkerClusterGroup>
         </MapContainer>
+      </Box>
+      <Box 
+        sx={{ 
+          position: 'absolute', 
+          top: '225px', 
+          right: '20px', 
+          backgroundColor: 'white', 
+          padding: '10px', 
+          borderRadius: '5px', 
+          boxShadow: 2,
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'flex-start', 
+          maxWidth: '250px' // Set a max width for better control
+        }}
+      >
+        <h4 style={{ margin: '0 0 10px 0' }}>Market Criteria</h4>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+          <div style={{ backgroundColor: 'green', width: '20px', height: '20px', marginRight: '5px' }}></div>
+          <span>P1 Market</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+          <div style={{ backgroundColor: 'yellow', width: '20px', height: '20px', marginRight: '5px' }}></div>
+          <span>P2 Market</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+          <div style={{ backgroundColor: 'red', width: '20px', height: '20px', marginRight: '5px' }}></div>
+          <span>P3 Market</span>
+        </div>
       </Box>
     </Box>
   );
