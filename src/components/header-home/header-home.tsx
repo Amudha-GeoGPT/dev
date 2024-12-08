@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
   IconButton,
@@ -27,25 +26,22 @@ const Headerhome: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     navigate('/indiaMap');
   }, [navigate]);
 
   const handleDrawerToggle = () => setOpen(!open);
-  
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-  
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
-  
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+  
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -119,9 +115,10 @@ const Headerhome: React.FC = () => {
             sx={{ 
               fontFamily: 'inter',
               display: { xs: 'none', sm: 'block' }, // Hide on mobile
+              marginLeft: '-100px', // Adjust this value to move it left or right
             }}
           >
-            Map Outlet Planning
+            Map Outlet Tool
           </Typography>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
             <IconButton size="small" aria-label="search">
