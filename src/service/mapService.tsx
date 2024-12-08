@@ -1,7 +1,27 @@
-import { LocationDataParams } from '../service/types/map';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  LocationDataParams,
+  FetchLocationDataResponse,
+  DistributorResponse
+} from './types/map';
 
 export const mapService = {
-  fetchLocationData: async ({ category, district }: LocationDataParams) => {
+  fetchMapResults: async (params: any) => {
+    const response = await fetch(
+      "https://geogptdev.ckdigital.in/api/getmapresult",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params)
+      }
+    );
+    return response.json();
+  },
+
+  fetchFilterData: async (params: any) => {
     const response = await fetch(
       "https://geogptdev.ckdigital.in/api/filter",
       {
@@ -9,20 +29,22 @@ export const mapService = {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          stateName: "TAMIL NADU",
-          districtName: district,
-          subdistrictName: "",
-          villageTownName: "",
-          // pincode: "600028",
-          category: category,
-        }),
+        body: JSON.stringify(params)
       }
     );
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch location data');
-    }
-    return data;
+    return response.json();
+  },
+
+  fetchDistributorData: async () => {
+    const response = await fetch(
+      "https://geogptdev.ckdigital.in/api/getdistfilter",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    );
+    return response.json();
   }
 };

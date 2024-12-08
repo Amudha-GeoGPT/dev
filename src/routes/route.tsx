@@ -4,20 +4,19 @@ import Overall from '../components/dashboard/staticmac-state/staticmac-state';
 import Staticmacdistrict from '../components/dashboard/staticmac-district/staticmac-disrtict';
 import Staticmactown from '../components/dashboard/staticmac-town/staticmac-town';
 import Staticmacoutlet from '../components/dashboard/systematic outlet/outletplanning';
-import Dashboard from '../pages/dashboard/dashboard';
 import IndiaMap from '../components/dashboard/map/tamilnadumap';
+
 const Router = [
   {
     path: '/',
     element: <Headerlayout />,
     children: [
-      { path: '/', element: <Dashboard /> },
+      { path: '/', element: <IndiaMap /> },
+      { path: '/indiaMap', element: <IndiaMap /> },
       { path: '/stateoverall', element: <Overall /> },
       { path: '/Staticmacdistrict', element: <Staticmacdistrict /> },
       { path: '/Staticmactown', element: <Staticmactown /> },
-      { path: '/stateoverall', element: <Overall /> },
-       { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
-      { path: '/indiaMap', element: <IndiaMap /> },
+      { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
     ],
   },
 ];

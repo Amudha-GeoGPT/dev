@@ -1,46 +1,69 @@
-// Define the structure of an outlet
-interface Outlet {
-  pid: string;
-  latitude: number;
-  longitude: number;
-  outletName: string;
-  overallScore: number;
-  realityScore: number;
-  censusCode?: string;
-}
-
-// Define the structure of the API response
-interface FetchLocationDataResponse {
-  results: { outletDetails: Outlet[] }[];
-}
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { mapService } from '../../service/mapService';
-import { setFilteredMarkers, setLoading, setError } from '../Slice/mapSlice';
+import { 
+  setFilteredMarkers, 
+  setLoading, 
+  setError, 
+  setDistributorData,
+  setOutletData 
+} from '../Slice/mapSlice';
 
-// Use the defined response type
-export const fetchLocationDataThunk = createAsyncThunk<FetchLocationDataResponse, { category: string; district: string; page?: number; limit?: number }>(
-  'map/fetchLocationData',
-  async (params, { dispatch }) => {
+export const fetchMapResultsThunk = createAsyncThunk(
+  'map/fetchMapResults',
+  async ({ distributorName, latitude, longitude, distance }: any, { dispatch }) => {
     try {
       dispatch(setLoading(true));
-      dispatch(setError(null));
-
-      const data = await mapService.fetchLocationData(params);
-
-      if (data.results && data.results.length > 0) {
-        const outlets = data.results.flatMap(result => result.outletDetails);
-        dispatch(setFilteredMarkers(outlets));
-      } else {
-        dispatch(setFilteredMarkers([]));
-      }
-
-      return data; // Return the data to be used in the component
+      const response = await mapService.fetchMapResults({
+        vertical: "sales",
+        distributorName,
+        latitude,
+        longitude,
+        distance,
+        pincode: "",
+        category: ""
+      });
+      dispatch(setOutletData(response));
+      return response;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      dispatch(setError(errorMessage));
-      dispatch(setFilteredMarkers([]));
-      throw error; // Re-throw the error to handle it in the component if needed
+      dispatch(setError('Failed to fetch map results'));
+      throw error;
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
+);
+
+export const fetchFilterDataThunk = createAsyncThunk(
+  'map/fetchFilterData',
+  async (params: any, { dispatch }) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await mapService.fetchFilterData(params);
+      if (response.results) {
+        dispatch(setFilteredMarkers(response.results.flatMap((result: any) => result.outletDetails)));
+      }
+      return response;
+    } catch (error) {
+      dispatch(setError('Failed to fetch filter data'));
+      throw error;
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
+);
+
+export const fetchDistributorDataThunk = createAsyncThunk(
+  'map/fetchDistributorData',
+  async (_, { dispatch }) => {
+    try {
+      dispatch(setLoading(true));
+      const data = await mapService.fetchDistributorData();
+      dispatch(setDistributorData(data.results));
+      return data;
+    } catch (error) {
+      dispatch(setError('Failed to fetch distributor data'));
+      throw error;
     } finally {
       dispatch(setLoading(false));
     }
