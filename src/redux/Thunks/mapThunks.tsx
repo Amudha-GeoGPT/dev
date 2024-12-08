@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { mapService } from '../../service/mapService';
-import { 
-  setFilteredMarkers, 
-  setLoading, 
-  setError, 
+import {
+  setFilteredMarkers,
+  setLoading,
+  setError,
   setDistributorData,
-  setOutletData 
+  setOutletData
 } from '../Slice/mapSlice';
 
 export const fetchMapResultsThunk = createAsyncThunk(
