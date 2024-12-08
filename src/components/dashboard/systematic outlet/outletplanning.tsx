@@ -16,6 +16,7 @@ import {
 } from "../../styles/fontsize.const";
 import TamilnaduMap from "../../static-data/TamilnaduMap";
 
+
 const Staticmacoutlet: React.FC = () => {
   const [activeButton, setActiveButton] = useState<"dashboard" | "map">(
     "dashboard"
@@ -157,15 +158,15 @@ const Staticmacoutlet: React.FC = () => {
     height: "15px",
   };
   return (
-    <Box
-      alignItems="center"
-      sx={{
-        flexGrow: 1,
-        p: 2,
-        overflow: "auto",
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-      }}
+    <
+      // alignItems="center"
+      // sx={{
+      //   flexGrow: 1,
+      //   p: 2,
+      //   overflow: "auto",
+      //   ml: { sm: `${drawerWidth}px` },
+      //   marginTop: "60px",
+      // }}
     >
       <Box
         sx={{
@@ -625,7 +626,7 @@ const Staticmacoutlet: React.FC = () => {
           {showMapData && <TamilnaduMap />}
         </>
       ) : null}
-    </Box>
+    </>
   );
 };
 

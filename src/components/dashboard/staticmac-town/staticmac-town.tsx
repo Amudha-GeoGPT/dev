@@ -102,15 +102,15 @@ const Staticmactown: React.FC = () => {
     height: "15px",
   };
   return (
-    <Box
-      alignItems="center"
-      sx={{
-        flexGrow: 1,
-        p: 2,
-        overflow: "auto",
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-      }}
+    <
+      // alignItems="center"
+      // sx={{
+      //   flexGrow: 1,
+      //   p: 2,
+      //   overflow: "auto",
+      //   ml: { sm: `${drawerWidth}px` },
+      //   marginTop: "60px",
+      // }}
     >
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
@@ -286,7 +286,7 @@ const Staticmactown: React.FC = () => {
       ></Box>
 
       {showTabData && <TownTabsComponent />}
-    </Box>
+    </>
   );
 };
 
