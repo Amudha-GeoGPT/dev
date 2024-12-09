@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { MapContainer, Marker, TileLayer, useMap, Popup } from "react-leaflet";
+import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -14,22 +14,6 @@ const icon = L.icon({
   iconSize: [38, 38],
 });
 
-function ResetCenterView(props: { selectPosition: any }) {
-  const { selectPosition } = props;
-  const map = useMap();
-
-  React.useEffect(() => {
-    if (selectPosition) {
-      map.setView(
-        L.latLng(selectPosition?.lat, selectPosition?.lon),
-        map.getZoom(),
-        { animate: true }
-      );
-    }
-  }, [selectPosition]);
-
-  return null;
-}
 interface Outlet {
     censusCode: string;
     latitude: number;
@@ -54,7 +38,7 @@ export default function SearchBox() {
     const [markers, setMarkers] = useState<MarkerData[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [selectedDistrict, setSelectedDistrict] = useState<string>("");
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
   
   const categoryOptions = [
     "Bakery and Baked Goods Store", "Cafeteria", "Catering and Other Food Services",
@@ -113,7 +97,7 @@ export default function SearchBox() {
   };
 
 
-  const handleCategoryChange = (event: any, value: string | null) => {
+  const handleCategoryChange = (_event: any, value: string | null) => {
     if (value) {
       setSelectedCategory(value);
       if (selectedDistrict) {
@@ -122,7 +106,7 @@ export default function SearchBox() {
     }
   };
 
-  const handleDistrictChange = (event: any, value: string | null) => {
+  const handleDistrictChange = (_event: any, value: string | null) => {
     if (value) {
       setSelectedDistrict(value);
       if (selectedCategory) {

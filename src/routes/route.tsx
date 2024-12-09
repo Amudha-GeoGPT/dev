@@ -1,10 +1,10 @@
-import React from 'react';
 import Headerlayout from '../layouts/dashboard-layout/Headerlayout';
 import Overall from '../components/dashboard/staticmac-state/staticmac-state';
 import Staticmacdistrict from '../components/dashboard/staticmac-district/staticmac-disrtict';
 import Staticmactown from '../components/dashboard/staticmac-town/staticmac-town';
 import Staticmacoutlet from '../components/dashboard/systematic outlet/outletplanning';
-import IndiaMap from '../components/dashboard/map/tamilnadumap';
+import IndiaMap from '../components/dashboard/map/Tamilnadumap';
+
 
 const Router = [
   {
