@@ -1,7 +1,6 @@
 import React, { useState, MouseEvent } from "react";
 import { Box } from "@mui/material";
 import LocationImg from "../../assets/images/location.svg";
-import Tooltip from "../common/Tooltip";
 import { tamilNaduDistricts, District } from "./DistrictsData";
 
 const Map: React.FC = () => {

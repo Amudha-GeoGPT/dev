@@ -1,26 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Box,
-  useTheme,
-  useMediaQuery,
   Grid,
   FormControl,
   Stack,
-  Paper,
 } from "@mui/material";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import CustomSelect from "../../common/CustomSelect";
 import TabsComponent from "../../TabsComponent";
-import { MainContentBackground } from "../../styles/color.const";
 import CustomButton from "../../common/CustomButton";
 import { PrimaryText, SmallText } from "../../styles/fontsize.const";
 import GenerateReportIcon from "../../../assets/icons/GenerateReportIcon.svg";
  
 const Overall: React.FC = () => {
   const [showTabData, setShowTabData] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 200 : 190;
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateIndex, setIndexValue] = useState<string>("");
   const [stateRank, setStateRank] = useState<string>("");
@@ -41,7 +35,7 @@ const Overall: React.FC = () => {
     padding: "14px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderRadius: "6px",
     "& img": {
       width: "15px",
@@ -62,7 +56,7 @@ const Overall: React.FC = () => {
     overflow: "hidden",
   };
   const SelectDeselectButtonStyles = {
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderColor: "gray",
     flexwrap: "wrap",
     whiteSpace: "nowrap",

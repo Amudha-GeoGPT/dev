@@ -1,17 +1,18 @@
+ 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { mapService } from '../../service/mapService';
 import { 
-  setFilteredMarkers, 
   setLoading, 
   setError, 
   setDistributorData,
   setOutletData 
 } from '../Slice/mapSlice';
 
+// Updated thunk to include pincode
 export const fetchMapResultsThunk = createAsyncThunk(
   'map/fetchMapResults',
-  async ({ distributorName, latitude, longitude, distance }: any, { dispatch }) => {
+  async ({ distributorName, latitude, longitude, distance, pincode }: any, { dispatch }) => {
     try {
       dispatch(setLoading(true));
       const response = await mapService.fetchMapResults({
@@ -20,10 +21,11 @@ export const fetchMapResultsThunk = createAsyncThunk(
         latitude,
         longitude,
         distance,
-        pincode: "",
+        pincode, // Include pincode in the request
         category: ""
       });
-      dispatch(setOutletData(response));
+      // Ensure response is an array
+      dispatch(setOutletData(response.results || []));
       return response;
     } catch (error) {
       dispatch(setError('Failed to fetch map results'));
@@ -41,7 +43,7 @@ export const fetchFilterDataThunk = createAsyncThunk(
       dispatch(setLoading(true));
       const response = await mapService.fetchFilterData(params);
       if (response.results) {
-        dispatch(setFilteredMarkers(response.results.flatMap((result: any) => result.outletDetails)));
+        dispatch(setOutletData(response.results));
       }
       return response;
     } catch (error) {
