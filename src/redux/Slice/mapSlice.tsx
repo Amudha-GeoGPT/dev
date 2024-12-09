@@ -17,7 +17,7 @@ interface MapState {
   availableDistributors: Distributor[];
   selectedLatitude: number | null;
   selectedLongitude: number | null;
-  outletData: any;
+  outletData: any[];
 }
 
 const initialState: MapState = {
@@ -35,7 +35,7 @@ const initialState: MapState = {
   distributorData: null,
   availableDistricts: [],
   availableDistributors: [],
-  outletData: null
+  outletData: [], // Initialize as an empty array
 };
 
 export const mapSlice = createSlice({

@@ -51,7 +51,7 @@
 
 import { Outlet } from "react-router-dom";
 import Headerhome from "../../components/header-home/header-home";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
 
 const Headerlayout = () => {
@@ -73,7 +73,7 @@ const Headerlayout = () => {
         }}
       >
         <Grid
-          elevation={3}
+          container
           sx={{
             flex: 1,
             ml: 4,
@@ -91,5 +91,4 @@ const Headerlayout = () => {
     </>
   );
 };
-
 export default Headerlayout;
