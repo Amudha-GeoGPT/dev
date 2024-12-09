@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { Box, Typography, Grid, useTheme } from '@mui/material';
+ 
+import { Box, Typography, Grid } from '@mui/material';
 import StaticCard from './card';
 import Dashboard from './progressbar/Dashboard';
 import TableDashboard from './tabledatadashboard';
 
 const Overalltabbar = () => {
-  const theme = useTheme();
 
   return (
     <Box

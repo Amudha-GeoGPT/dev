@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
   BarChart,
@@ -9,14 +10,13 @@ import {
   Legend,
   ResponsiveContainer,
   TooltipProps,
-  ReferenceLine,
 } from "recharts";
 import { Box, Typography } from "@mui/material";
 import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
-import { PrimaryText, SmallText } from "../styles/fontsize.const";
+import { PrimaryText } from "../styles/fontsize.const";
 
 interface CustomBarChartProps {
   data: Array<{

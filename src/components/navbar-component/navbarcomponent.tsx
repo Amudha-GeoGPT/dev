@@ -2,13 +2,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useState } from 'react';
 import { Box, Button, Divider, useMediaQuery,Grid} from '@mui/material';
-import Tabledata from '../dashboard/data-grid/tabledata';
-import Graphcontroller from '../dashboard/graph-controller/graphcontroller';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import Mapcontroller from '../dashboard/map-controller/mapcontroller';
 import {useTheme } from '@mui/material/styles';
-import Staticmacoutlet from '../dashboard/systematic outlet/outletplanning';
-import IndiaMap from '../dashboard/map/tamilnadumap';
 import MapController from '../dashboard/map-controller/mapcontroller';
 import GraphData from '../static-data/GraphData';
 

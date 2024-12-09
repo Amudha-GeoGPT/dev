@@ -7,16 +7,16 @@ import {
 } from "../styles/color.const";
 import { SecondayText } from "../styles/fontsize.const";
 import DoneIcon from "@mui/icons-material/Done";
-
+ 
 interface SelectComponentProps {
-  label: string;
+  label?: string | boolean;
   options: string[];
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
   sx?: React.CSSProperties;
 }
-
+ 
 const CustomSelect: React.FC<SelectComponentProps> = ({
   label,
   options,
@@ -26,20 +26,22 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
   sx,
 }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-
+ 
   return (
     <FormControl fullWidth variant="outlined">
-      <FormLabel
-        sx={{
-          color: LabelColor,
-          fontSize: SecondayText,
-          "&.Mui-focused": {
+      {(typeof label === "string" && label) || false ? (
+        <FormLabel
+          sx={{
             color: LabelColor,
-          },
-        }}
-      >
-        {label}
-      </FormLabel>
+            fontSize: SecondayText,
+            "&.Mui-focused": {
+              color: LabelColor,
+            },
+          }}
+        >
+          {label}
+        </FormLabel>
+      ) : null}
       <Select
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -70,7 +72,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
                 {placeholder}
               </span>
             );
-
+ 
           return selected;
         }}
       >
@@ -91,5 +93,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
     </FormControl>
   );
 };
-
+ 
 export default CustomSelect;
+ 
+ 
