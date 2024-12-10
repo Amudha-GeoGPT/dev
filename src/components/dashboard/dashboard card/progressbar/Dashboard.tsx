@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+ 
+import { Box, Typography } from '@mui/material';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 const Dashboard = () => {
-  const theme = useTheme();
 
   const cardData = [
     { title: 'City Count', value: 20, text: '1' },

@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Box,
-  useTheme,
-  useMediaQuery,
+ 
   Grid,
   FormControl,
   Stack,
@@ -19,10 +19,7 @@ const Staticmactown: React.FC = () => {
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateIndex, setIndexValue] = useState<string>("");
   const [stateRank, setStateRank] = useState<string>("");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 200 : 190;
-
+ 
   const handleSelectStateChange = (value: string[]) => {
     setStateValue(value);
   };
@@ -39,7 +36,7 @@ const Staticmactown: React.FC = () => {
     padding: "14px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderRadius: "6px",
     "& img": {
       width: "15px",
@@ -60,7 +57,7 @@ const Staticmactown: React.FC = () => {
     overflow: "hidden",
   };
   const SelectDeselectButtonStyles = {
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderColor: "gray",
     flexwrap: "wrap",
     whiteSpace: "nowrap",
@@ -102,15 +99,15 @@ const Staticmactown: React.FC = () => {
     height: "15px",
   };
   return (
-    <Box
-      alignItems="center"
-      sx={{
-        flexGrow: 1,
-        p: 2,
-        overflow: "auto",
-        ml: { sm: `${drawerWidth}px` },
-        marginTop: "60px",
-      }}
+    <
+      // alignItems="center"
+      // sx={{
+      //   flexGrow: 1,
+      //   p: 2,
+      //   overflow: "auto",
+      //   ml: { sm: `${drawerWidth}px` },
+      //   marginTop: "60px",
+      // }}
     >
       <Grid container spacing={2} sx={{ width: "100%", padding: 2 }}>
         {/* States Selection */}
@@ -286,7 +283,7 @@ const Staticmactown: React.FC = () => {
       ></Box>
 
       {showTabData && <TownTabsComponent />}
-    </Box>
+    </>
   );
 };
 

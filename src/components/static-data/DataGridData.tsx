@@ -97,7 +97,7 @@ const DataGridData: React.FC = () => {
   ];
   return (
     <Box>
-      <DataGridComponent columns={columns} rows={rows} />
+      <DataGridComponent columns={columns} rows={rows} fontSize={""} />
     </Box>
   );
 };
