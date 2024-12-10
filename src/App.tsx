@@ -1,13 +1,13 @@
-import Router from './routes/route';
+import Router from "./routes/RouteManager";
 import { useRoutes } from "react-router-dom";
-import './App.css';
+import "./App.css";
 function App() {
-  const Routing=useRoutes(Router);
- return(
-  //  <div className="container">
-  //    <MainPage/>
-  //   </div>
-  <div >{Routing}</div>
- )
+  const Routing = useRoutes(Router);
+  return (
+    //  <div className="container">
+    //    <MainPage/>
+    //   </div>
+    <div>{Routing}</div>
+  );
 }
-export default App
+export default App;

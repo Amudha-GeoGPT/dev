@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import DataGridComponent from "../../components/common/DataGridComponent";
 
+
 const DataGridData: React.FC = () => {
   const columns: GridColDef[] = [
     {
@@ -95,6 +96,7 @@ const DataGridData: React.FC = () => {
       mis: 63.795,
     },
   ];
+  
   return (
     <Box>
       <DataGridComponent columns={columns} rows={rows} fontSize={""} />
