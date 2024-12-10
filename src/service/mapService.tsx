@@ -23,7 +23,7 @@ export const mapService = {
 
   fetchFilterData: async (params: any) => {
     const response = await fetch(
-      "https://geogptdev.ckdigital.in/api/filter",
+      "https://geogptdev.ckdigital.in/api/getmapresult",
       {
         method: "POST",
         headers: {

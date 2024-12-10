@@ -1,7 +1,8 @@
+/* eslint-disable no-empty-pattern */
+ 
 import React, { useState, useEffect } from 'react';
 import {
   IconButton,
-  useMediaQuery,
   Box,
   Toolbar,
   AppBar,
@@ -9,9 +10,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import {
-  Menu as MenuIcon,
   Search as SearchIcon,
   AccountCircle,
 } from '@mui/icons-material';
@@ -19,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import vectorheaderimg from '../../assets/images/svg/Vectorimg.svg';
 
 const Headerhome: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
   // const theme = useTheme();
@@ -30,7 +29,6 @@ const Headerhome: React.FC = () => {
     navigate('/indiaMap');
   }, [navigate]);
 
-  const handleDrawerToggle = () => setOpen(!open);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMenuClose = () => {
@@ -91,11 +89,11 @@ const Headerhome: React.FC = () => {
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          {isMobile && (
+          {/* {isMobile && (
             <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
-          )}
+          )} */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
               <img

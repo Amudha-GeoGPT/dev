@@ -21,7 +21,7 @@ const buttonStyles = {
   padding: "14px",
   backgroundColor: "#001B04",
   color: "#FFFFFF",
-  textTransform: "none" as "none",
+  textTransform: "none" as const,
   borderRadius: "4px",
   "&:hover": {
     backgroundColor: "#0A330A",

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import { styled } from "@mui/material/styles";
 
 export const ListboxComponent = styled("ul")(({ }) => ({

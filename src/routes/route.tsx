@@ -5,6 +5,7 @@ import Headerlayout from '../layouts/dashboard-layout/Headerlayout';
 // import Staticmacoutlet from '../components/dashboard/systematic outlet/outletplanning';
 import IndiaMap from '../components/dashboard/map/tamilnadumap';
 
+
 const Router = [
   {
     path: '/',
