@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
   BarChart,
@@ -9,14 +10,13 @@ import {
   Legend,
   ResponsiveContainer,
   TooltipProps,
-  ReferenceLine,
 } from "recharts";
 import { Box, Typography } from "@mui/material";
 import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
-import { PrimaryText, SmallText } from "../styles/fontsize.const";
+import { PrimaryText } from "../styles/fontsize.const";
 
 interface CustomBarChartProps {
   data: Array<{
@@ -77,7 +77,12 @@ const CustomBarChart: React.FC<CustomBarChartProps> = ({
   return (
     <Box sx={OverallBoxStyles}>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+        <BarChart data={data} margin={{
+            top: 10, // Adjust top margin if needed
+            right: 10,
+            left: 10,
+            bottom: 40, // Add space below the X-axis
+          }}>
           {/* <ReferenceLine y={0} stroke="transparent" /> */}
           <CartesianGrid vertical={false} stroke="#E4E7EC" />
 
@@ -102,6 +107,7 @@ const CustomBarChart: React.FC<CustomBarChartProps> = ({
               radius={index === yKeys.length - 1 ? [8, 8, 0, 0] : [0, 0, 0, 0]}
             />
           ))}
+          
         </BarChart>
       </ResponsiveContainer>
     </Box>

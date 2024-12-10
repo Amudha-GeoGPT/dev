@@ -99,7 +99,7 @@ const DataGridData: React.FC = () => {
   const fontSize = SmallText;
   return (
     <Box>
-      <DataGridComponent columns={columns} rows={rows} fontSize={fontSize} />
+      <DataGridComponent columns={columns} rows={rows} fontSize={""} />
     </Box>
   );
 };
