@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  LocationDataParams,
-  FetchLocationDataResponse,
-  DistributorResponse
-} from './types/map';
+// import {
+//   LocationDataParams,
+//   FetchLocationDataResponse,
+//   DistributorResponse
+// } from './types/map';
 
 export const mapService = {
   fetchMapResults: async (params: any) => {

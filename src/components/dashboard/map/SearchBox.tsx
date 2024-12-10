@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import { useState } from "react";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
@@ -8,9 +8,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
@@ -21,7 +19,7 @@ interface Place {
 }
 
 export default function SearchBox(props: { selectPosition: any; setSelectPosition: any }) {
-  const { selectPosition, setSelectPosition } = props;
+  const { setSelectPosition } = props;
   const [searchText, setSearchText] = useState<string>(""); // Declare searchText
   const [listPlace, setListPlace] = useState<Place[]>([]);
 

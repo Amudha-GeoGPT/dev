@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const StaticCard = () => {
-  const theme = useTheme();
 
   const cardData = [
     { title: 'Total Village', value: '17530' },

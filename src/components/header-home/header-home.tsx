@@ -24,7 +24,6 @@ const Headerhome: React.FC = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
 
   useEffect(() => {

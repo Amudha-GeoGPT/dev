@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles";
 
-export const ListboxComponent = styled("ul")(({ theme }) => ({
+export const ListboxComponent = styled("ul")(({ }) => ({
   // "& .select-buttons": {
   //   display: "flex",
   //   justifyContent: "center",

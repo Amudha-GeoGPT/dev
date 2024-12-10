@@ -1,7 +1,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import CustomSelect from "../../common/CustomSelect";
@@ -36,7 +36,6 @@ import {
   setAvailableDistributors,
   setSelectedLatitude,
   setSelectedLongitude,
-  setOutletData,
 } from "../../../redux/Slice/mapSlice";
 import L from "leaflet";
 import markerIcon from '../../../assets/icons/map-marker-2-256.png';

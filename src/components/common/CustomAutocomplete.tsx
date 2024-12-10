@@ -59,7 +59,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>(value);
   const [selectedCount, setSelectedCount] = useState<number>(value.length); // Initialize with length of `value`
   const [showAllTags, setShowAllTags] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm] = useState<string>("");
  
   // Update selectedCount whenever autocompleteValue changes
   useEffect(() => {
@@ -70,7 +70,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   }, [autocompleteValue, showAllTags]);
  
   const handleAutocompleteChange = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     newValue: string[]
   ) => {
     setAutocompleteValue(newValue);
@@ -188,23 +188,6 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
           const remainingCount = selectedCount - displayedTags.length;
        
           // Custom SVG as a React component
-          const CustomDeleteIcon = ({ onClick }: { onClick: () => void }) => (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              focusable="false"
-              aria-hidden="true"
-              onClick={onClick} // Trigger onDelete when clicked
-              style={{
-                width: "12px", // Adjust size
-                height: "12px", // Adjust size
-                fill: "black", // Default color
-                cursor: "pointer", // Pointer cursor for hover
-              }}
-            >
-              <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-            </svg>
-          );
        
           return (
             <Box
