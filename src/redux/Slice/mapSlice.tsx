@@ -11,7 +11,7 @@ interface MapState {
   selectedCategory: string;
   selectedVertical: string;
   selectedDistributor: string;
-  selectedDistance: number;
+  selectedDistance: number | null; 
   distributorData: StateData | null;
   availableDistricts: string[];
   availableDistributors: Distributor[];
@@ -31,13 +31,12 @@ const initialState: MapState = {
   selectedCategory: "",
   selectedVertical: '',
   selectedDistributor: '',
-  selectedDistance: 50,
+  selectedDistance: null, // Initialize as a number (0 or any default value you prefer)
   distributorData: null,
   availableDistricts: [],
   availableDistributors: [],
   outletData: [], // Initialize as an empty array
 };
-
 export const mapSlice = createSlice({
   name: 'map',
   initialState,
