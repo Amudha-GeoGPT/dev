@@ -1,8 +1,8 @@
+ 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Box,
-  useTheme,
-  useMediaQuery,
   Grid,
   FormControl,
   Stack,
@@ -19,9 +19,6 @@ const Staticmacdistrict: React.FC = () => {
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateIndex, setIndexValue] = useState<string>("");
   const [stateRank, setStateRank] = useState<string>("");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 200 : 190;
 
   const handleSelectStateChange = (value: string[]) => {
     setStateValue(value);
@@ -39,7 +36,7 @@ const Staticmacdistrict: React.FC = () => {
     padding: "14px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderRadius: "6px",
     "& img": {
       width: "15px",
@@ -60,7 +57,7 @@ const Staticmacdistrict: React.FC = () => {
     overflow: "hidden",
   };
   const SelectDeselectButtonStyles = {
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderColor: "gray",
     flexwrap: "wrap",
     whiteSpace: "nowrap",

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Box, useTheme, useMediaQuery, Grid, Stack } from "@mui/material";
+import { Box,  Grid, Stack } from "@mui/material";
 
 import Overalltabbar from "../dashboard card/overalltoolbar";
 import DashboardIcon from "../../../assets/images/svg/akar-icons_dashboard.svg";
@@ -25,9 +26,7 @@ const Staticmacoutlet: React.FC = () => {
   const [showTabData, setShowTabData] = useState(false);
   const [showMapData, setShowMapData] = useState(false);
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 200 : 190;
+ 
   const [stateValue, setStateValue] = useState<string[]>([]);
   const [stateTopRank, setTopRank] = useState<string>("");
   const [stateMarketCriteria, setMarketCriteria] = useState<string>("");
@@ -51,7 +50,7 @@ const Staticmacoutlet: React.FC = () => {
     padding: "14px",
     backgroundColor: "#E3E3E3",
     color: "#1E1E1E",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderRadius: "8px",
     "&:hover": {
       backgroundColor: "#d3d3d3",
@@ -64,7 +63,7 @@ const Staticmacoutlet: React.FC = () => {
     padding: "14px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderRadius: "8px",
     "&:hover": {
       backgroundColor: "#001303",
@@ -77,7 +76,7 @@ const Staticmacoutlet: React.FC = () => {
     color: activeButton === "dashboard" ? "#FFFFFF" : "#1E1E1E",
     border: activeButton === "dashboard" ? "none" : "none ",
     boxShadow: "none",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     "&:hover": {
       backgroundColor: activeButton === "dashboard" ? "#002B07" : "#E2F2E5",
       boxShadow: "none",
@@ -90,7 +89,7 @@ const Staticmacoutlet: React.FC = () => {
     color: activeButton === "map" ? "#FFFFFF" : "#1E1E1E",
     border: activeButton === "map" ? "none" : "none",
     boxShadow: "none",
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     "&:hover": {
       backgroundColor: activeButton === "map" ? "#002B07" : "#E2F2E5",
       boxShadow: "none",
@@ -117,7 +116,7 @@ const Staticmacoutlet: React.FC = () => {
     overflow: "hidden",
   };
   const SelectDeselectButtonStyles = {
-    textTransform: "none" as "none",
+    textTransform: "none" as const,
     borderColor: "gray",
     flexwrap: "wrap",
     whiteSpace: "nowrap",

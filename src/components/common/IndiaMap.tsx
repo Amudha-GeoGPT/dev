@@ -60,7 +60,7 @@ const IndiaMap = ({
     null
   );
 
-  const [tooltipPosition, setTooltipPosition] = useState<{
+  const [, setTooltipPosition] = useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
