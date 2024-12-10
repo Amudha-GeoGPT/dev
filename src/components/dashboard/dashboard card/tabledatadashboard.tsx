@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardTabledata from './outletdashboardtabledata';
+// import DashboardTabledata from './outletdashboardtabledata';
 import { Box, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -138,7 +138,7 @@ const TableDashboard = () => {
             </Typography>
             {openSections[section.title] && (
               <Box sx={styles.contentTable}>
-                <DashboardTabledata />
+                {/* <DashboardTabledata /> */}
               </Box>
             )}
           </Box>

@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Typography } from '@mui/material';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';

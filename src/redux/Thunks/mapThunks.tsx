@@ -6,7 +6,7 @@ import {
   setLoading, 
   setError, 
   setDistributorData,
-  setOutletData 
+  setOutletData
 } from '../Slice/mapSlice';
 
 // Updated thunk to include pincode

@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Typography, Grid } from '@mui/material';
 import StaticCard from './card';
 import Dashboard from './progressbar/Dashboard';
