@@ -45,15 +45,15 @@ import {
   SelectAutoCompleteBorderColor,
 } from "../../styles/color.const";
 import { SecondayText } from "../../styles/fontsize.const";
- 
+
 const { BaseLayer } = LayersControl;
- 
+
 const IndiaMap = () => {
   const dispatch = useAppDispatch();
   const mapRef = useRef<LeafletMap | null>(null);
   const [selectedInputMethod, setSelectedInputMethod] = useState("Distributor");
   const [selectedPincode, setSelectedPincode] = useState("");
- 
+
   const {
     loading,
     selectedState,
@@ -68,7 +68,7 @@ const IndiaMap = () => {
     selectedLongitude,
     outletData,
   } = useSelector((state: RootState) => state.map);
- 
+
   const verticalOptions = ["S&D", "CK Retail"];
   const distanceOptions = [5, 10, 25, 50];
   const categoryOptions = [
@@ -95,22 +95,23 @@ const IndiaMap = () => {
     "Tea House",
     "Variety Store",
   ];
- 
+
   useEffect(() => {
     if (selectedVertical === "S&D") {
       dispatch(fetchDistributorDataThunk());
     }
   }, [selectedVertical, dispatch]);
- 
+
   useEffect(() => {
     if (distributorData && selectedState) {
       const districts = distributorData[selectedState]
         ?.map((districtObj) => Object.keys(districtObj)[0])
-        .filter(Boolean);
+        .filter(Boolean)
+        .sort();
       dispatch(setAvailableDistricts(districts || []));
     }
   }, [selectedState, distributorData, dispatch]);
- 
+
   useEffect(() => {
     if (distributorData && selectedState && selectedDistrict) {
       const districtObj = distributorData[selectedState]?.find(
@@ -123,7 +124,25 @@ const IndiaMap = () => {
       }
     }
   }, [selectedDistrict, selectedState, distributorData, dispatch]);
- 
+
+  useEffect(() => {
+    if (mapRef.current) {
+      if (selectedLatitude && selectedLongitude) {
+        mapRef.current.setView([selectedLatitude, selectedLongitude], 12);
+      } else if (selectedDistributor) {
+        const distributor = availableDistributors.find(
+          (d) => d.distributorName === selectedDistributor
+        );
+        if (distributor) {
+          mapRef.current.setView(
+            [distributor.latitude, distributor.longitude],
+            12
+          );
+        }
+      }
+    }
+  }, [availableDistributors, selectedDistributor, selectedLatitude, selectedLongitude]);
+
   const handleLatLongChange = (lat: number, long: number) => {
     dispatch(setSelectedLatitude(lat));
     dispatch(setSelectedLongitude(long));
@@ -131,7 +150,7 @@ const IndiaMap = () => {
       mapRef.current.setView([lat, long], 12);
     }
   };
- 
+
   const handleFilter = () => {
     if (selectedVertical === "S&D" && selectedInputMethod === "Pincode") {
       if (!selectedPincode) {
@@ -148,9 +167,8 @@ const IndiaMap = () => {
           pincode: selectedPincode,
         })
       ).then(() => {
-        // Focus the map to the selected coordinates after fetching results
         if (mapRef.current && selectedLatitude && selectedLongitude) {
-          mapRef.current.setView([selectedLatitude, selectedLongitude], 12); // Adjust zoom level as needed
+          mapRef.current.setView([selectedLatitude, selectedLongitude], 12);
         }
       });
     } else if (selectedVertical === "CK Retail") {
@@ -165,14 +183,13 @@ const IndiaMap = () => {
           pincode: selectedPincode,
         })
       ).then(() => {
-        // Focus the map to the selected coordinates after fetching results
         if (mapRef.current && selectedLatitude && selectedLongitude) {
-          mapRef.current.setView([selectedLatitude, selectedLongitude], 12); // Adjust zoom level as needed
+          mapRef.current.setView([selectedLatitude, selectedLongitude], 12);
         }
       });
     }
   };
- 
+
   const handleDistributorSelect = (value: string) => {
     dispatch(setSelectedDistributor(value));
     const distributor = availableDistributors.find(
@@ -189,26 +206,26 @@ const IndiaMap = () => {
       );
     }
   };
- 
+
   const blueIcon = L.icon({
     iconUrl: markerIcon,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
   });
- 
+
   const purpleIcon = L.icon({
     iconUrl: markerPurpleIcon,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
   });
- 
+
   const mapOptions = {};
   const textFieldStyle = {
     width: "100%",
     marginTop: "3px",
- 
+
     "& .MuiInputBase-root": {
       height: "39px",
       padding: "0 14px",
@@ -241,7 +258,7 @@ const IndiaMap = () => {
     fontSize: SecondayText,
     flexGrow: 1,
   };
- 
+
   return (
     <Box sx={{ height: "80%", width: "100%" }}>
       <Box
@@ -332,7 +349,7 @@ const IndiaMap = () => {
                 />
               </Box>
             )}
- 
+
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
               <CustomButton
                 buttonText="Filter"
@@ -357,7 +374,7 @@ const IndiaMap = () => {
           </>
         )}
       </Box>
- 
+
       {selectedVertical === "CK Retail" && (
         <>
           <Box sx={{ display: "flex", gap: 5.5, alignItems: "flex-start" }}>
@@ -383,7 +400,7 @@ const IndiaMap = () => {
               sx={{ ...textFieldStyle, flexGrow: 1 }}
               variant={"outlined"}
             />
- 
+
             <CustomTextfield
               placeholder="Select Longitude"
               value={selectedLongitude?.toString() || ""}
@@ -404,7 +421,7 @@ const IndiaMap = () => {
               variant={"outlined"}
             />
              <CustomSelect
-              label="Distance"
+              label=""
               placeholder="Select Distance"
               options={distanceOptions.map(String)}
               value={String(selectedDistance)}
@@ -412,7 +429,7 @@ const IndiaMap = () => {
               sx={{ marginTop: "4px", height: "39px" }}
             />
           </Box>
- 
+
           <Box sx={{ display: "flex", alignItems: "center", marginTop: "6px" }}>
             <CustomButton
               buttonText={!selectedCategory ? "Select category" : "Filter"}
@@ -422,7 +439,7 @@ const IndiaMap = () => {
           </Box>
         </>
       )}
- 
+
       <Box sx={{ height: "735px", width: "100%", mt: 2, position: "relative" }}>
         <MapContainer
           ref={mapRef}
@@ -454,7 +471,7 @@ const IndiaMap = () => {
               />
             </BaseLayer>
           </LayersControl>
- 
+
           {outletData && outletData.length > 1000 ? (
             <MarkerClusterGroup>
               {outletData.map((outlet: any) => (
@@ -628,7 +645,5 @@ const IndiaMap = () => {
     </Box>
   );
 };
- 
+
 export default IndiaMap;
- 
- 

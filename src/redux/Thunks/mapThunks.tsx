@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { mapService } from '../../service/mapService';
@@ -9,7 +9,17 @@ import {
   setOutletData
 } from '../Slice/mapSlice';
 
-// Updated thunk to include pincode
+// Define the structure of a district object if known
+interface District {
+  [key: string]: any;
+}
+
+// Define the structure of the state data
+interface StateData {
+  [state: string]: District[];
+}
+
+// Thunk to fetch map results including pincode
 export const fetchMapResultsThunk = createAsyncThunk(
   'map/fetchMapResults',
   async ({ distributorName, latitude, longitude, distance, pincode }: any, { dispatch }) => {
@@ -21,10 +31,9 @@ export const fetchMapResultsThunk = createAsyncThunk(
         latitude,
         longitude,
         distance,
-        pincode, // Include pincode in the request
+        pincode,
         category: ""
       });
-      // Ensure response is an array
       dispatch(setOutletData(response.results || []));
       return response;
     } catch (error) {
@@ -36,6 +45,7 @@ export const fetchMapResultsThunk = createAsyncThunk(
   }
 );
 
+// Thunk to fetch filter data
 export const fetchFilterDataThunk = createAsyncThunk(
   'map/fetchFilterData',
   async (params: any, { dispatch }) => {
@@ -55,14 +65,28 @@ export const fetchFilterDataThunk = createAsyncThunk(
   }
 );
 
+// Thunk to fetch distributor data and sort districts
 export const fetchDistributorDataThunk = createAsyncThunk(
   'map/fetchDistributorData',
   async (_, { dispatch }) => {
     try {
       dispatch(setLoading(true));
       const data = await mapService.fetchDistributorData();
-      dispatch(setDistributorData(data.results));
-      return data;
+      
+      // Sort the districts for each state
+      const sortedData: StateData = Object.keys(data.results).reduce((acc, state) => {
+        const districts = data.results[state];
+        const sortedDistricts = districts.sort((a: {}, b: {}) => {
+          const districtA = Object.keys(a)[0];
+          const districtB = Object.keys(b)[0];
+          return districtA.localeCompare(districtB);
+        });
+        acc[state] = sortedDistricts;
+        return acc;
+      }, {} as StateData);
+
+      dispatch(setDistributorData(sortedData));
+      return sortedData;
     } catch (error) {
       dispatch(setError('Failed to fetch distributor data'));
       throw error;
