@@ -1,7 +1,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import CustomSelect from "../../common/CustomSelect";
 import CustomButton from "../../common/CustomButton";
