@@ -478,7 +478,7 @@ const IndiaMap = () => {
             <BaseLayer name="Satellite with Labels">
               <TileLayer
                 url={`http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}`}
-                maxZoom={20}
+                maxZoom={22}
               />
             </BaseLayer>
           </LayersControl>
