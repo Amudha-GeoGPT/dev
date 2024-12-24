@@ -173,6 +173,7 @@ const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
                   {selectAllLabel}
                 </Button>
                 <Button
+                  
                   variant="outlined"
                   onClick={handleDeselectAll}
                   sx={SelectDeselectButtonStyles}

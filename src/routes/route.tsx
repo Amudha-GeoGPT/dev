@@ -1,24 +1,44 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Navigate, RouteObject } from 'react-router-dom';
 import Headerlayout from '../layouts/dashboard-layout/Headerlayout';
-// import Overall from '../components/dashboard/staticmac-state/staticmac-state';
-// import Staticmacdistrict from '../components/dashboard/staticmac-district/staticmac-disrtict';
-// import Staticmactown from '../components/dashboard/staticmac-town/staticmac-town';
-// import Staticmacoutlet from '../components/dashboard/systematic outlet/outletplanning';
+import { Login } from '../pages/login/login';
+import { ProtectedRoute } from '../store/actions/ProtectedRoute';
 import IndiaMap from '../components/dashboard/map/tamilnadumap';
+import { AdminPage } from '../pages/Admin/AdminPage';
+import { EmptyPage } from '../pages/userReport/empty';
+const routes: RouteObject[] = [
 
-
-const Router = [
+  {
+    path: '/login',
+    element: <Login />
+  },
   {
     path: '/',
-    element: <Headerlayout />,
+    element: (
+      <ProtectedRoute>
+        <Headerlayout />
+      </ProtectedRoute>
+    ),
     children: [
-      { path: '/', element: <IndiaMap /> },
-      { path: '/indiaMap', element: <IndiaMap /> },
-      // { path: '/stateoverall', element: <Overall /> },
-      // { path: '/Staticmacdistrict', element: <Staticmacdistrict /> },
-      // { path: '/Staticmactown', element: <Staticmactown /> },
-      // { path: '/Staticmacoutletplanning', element: <Staticmacoutlet /> },
-    ],
-  },
+    
+      { 
+        path: 'indiaMap', 
+        element: <IndiaMap /> 
+      },
+      {
+        path: 'admin',
+        element: <AdminPage />
+      },
+      {
+        path: 'empty',
+        element: <EmptyPage />
+      }
+    ]
+  }
 ];
 
-export default Router;
+
+
+export default routes;
+
+

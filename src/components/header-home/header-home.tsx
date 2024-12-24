@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-empty-pattern */
  
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useState, useEffect } from 'react';
 import {
   IconButton,
@@ -25,9 +27,9 @@ const Headerhome: React.FC = () => {
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate('/indiaMap');
-  }, [navigate]);
+  // useEffect(() => {
+  //   navigate('/');
+  // }, [navigate]);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
@@ -103,10 +105,10 @@ const Headerhome: React.FC = () => {
               />
             </IconButton>
             <Typography variant="h6" noWrap sx={{ fontFamily: 'inter' }}>
-              GEO GPT
+              REPORT
             </Typography>
           </Box>
-          <Typography 
+          {/* <Typography 
             variant="h6" 
             noWrap 
             sx={{ 
@@ -116,7 +118,7 @@ const Headerhome: React.FC = () => {
             }}
           >
             Map Outlet Tool
-          </Typography>
+          </Typography> */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
             <IconButton size="small" aria-label="search">
               {/* <SearchIcon sx={{ color: "red" }}/> */}
