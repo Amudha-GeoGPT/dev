@@ -4,13 +4,13 @@ import Headerlayout from '../layouts/dashboard-layout/Headerlayout';
 import { Login } from '../pages/login/login';
 import { ProtectedRoute } from '../store/actions/ProtectedRoute';
 import IndiaMap from '../components/dashboard/map/tamilnadumap';
-import { AdminPage } from '../pages/Admin/AdminPage';
 import { EmptyPage } from '../pages/userReport/empty';
+import AdminPage from '../pages/Admin/AdminPage';
 const routes: RouteObject[] = [
 
   {
-    path: '/login',
-    element: <Login />
+    path: 'admin',
+    element: <AdminPage />
   },
   {
     path: '/',

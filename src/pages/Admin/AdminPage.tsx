@@ -1,190 +1,298 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
-import { Box, Button, Dialog, Grid, IconButton, styled, Theme } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import CustomAutocomplete from '../../components/common/CustomAutocomplete';
-import CustomTextfield from '../../components/common/CustomTextfield';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import SortIcon from '@mui/icons-material/Sort';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { BoxOwnProps } from '@mui/system';
-import { JSX } from 'react/jsx-runtime';
+import {
+  Box,
+  Grid,
+  Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Autocomplete,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import CustomTextfield from "../../components/common/CustomTextfield";
+import CustomButton from "../../components/common/CustomButton";
+import { buttonStyles, textFieldStyle } from "./AdminPage.style";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { PrimaryText } from "../../components/styles/fontsize.const";
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: 'white',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[1],
-  width: '100%',
-  height: '50px',
-  minHeight: '60px',
-}));
+const AdminPage = () => {
+  const [role, setRole] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [columnName, setColumnName] = useState<string>("");
+  const [filterSortOption, setFilterSortOption] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [reportName, setReportName] = useState<string>("");
+  const [gridData, setGridData] = useState<any[]>([]);
 
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: theme.spacing(2),
-    padding: theme.spacing(1),
-    background: 'linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%)'
-  }
-}));
-
-interface ColumnOption {
-  name: string;
-  children: ColumnOption[];
-}
-
-export const AdminPage = () => {
-  const navigate = useNavigate();
-  const [formState, setFormState] = useState({
-    selectedRoles: [] as string[],
-    reportName: '',
-    columnName: [] as string[],
-    openDialog: false
-  });
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const handleColumnNameChange = (values: string[]) => {
+    const columnsThatRequireDialog = [
+      "name",
+      "assignee",
+      "completionPercentage",
+      "endDate",
+      "startDate",
+      "subtask",
+      "task",
+      "teamLead",
+    ];
   
-
-  const columnOptions: ColumnOption[] = [
-    {
-      name: 'Name',
-      children: [
-        {
-          name: 'Age',
-          children: [
-            {
-              name: 'TL',
-              children: []
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  const flattenedOptions = columnOptions.map(option => option.name);
-
-  const handleFormChange = (field: string, value: any) => {
-    setFormState(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleGenerateReport = () => handleFormChange('openDialog', true);
-  
-  const handleContinue = () => {
-    handleFormChange('openDialog', false);
-    navigate('/indiaMap');
-  };
-
-  const handleFilter = (columnName: string) => {
-    // Implement filter logic here
-    console.log('Filtering:', columnName);
-  };
-
-  const handleSort = (columnName: string) => {
-    // Implement sort logic here
-    console.log('Sorting:', columnName);
-  };
-
-  const handleExpand = (columnName: string) => {
-    setExpandedItems(prev =>
-      prev.includes(columnName)
-        ? prev.filter(item => item !== columnName)
-        : [...prev, columnName]
+    // Check if any newly selected value requires opening the dialog
+    const requiresDialog = values.some((value) =>
+      columnsThatRequireDialog.includes(value)
     );
+  
+    if (requiresDialog) {
+      setOpenDialog(true);
+    }
+  };
+  
+
+  const handleRoleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: string[]
+  ) => {
+    setRole(newValue);
   };
 
-  const isExpanded = (columnName: string) => expandedItems.includes(columnName);
+  const handleFilterSortChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFilterSortOption(event.target.value);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+  const handleGenerate = async () => {
+    const payload = {
+      role_id: role,
+      reportName: reportName,
+      columnName: [
+        {
+          columnName: columnName,
+          sort: filterSortOption === "sort" ? "true" : "false",
+          filter: filterSortOption === "filter" ? "true" : "false",
+        },
+      ],
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/getfiltered", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched data:", data);
+
+      // Check for both "success" and the typo "sucess"
+      if (data.message === "success" || data.message === "sucess") {
+        setGridData(data.results);
+      } else {
+        console.error("Failed to fetch filtered data:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/getroles");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.message === "sucess") {
+          setRoles(data.results);
+        } else {
+          console.error("Failed to fetch roles:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
+  const columns: GridColDef[] = [
+    { field: "ID", headerName: "ID" },
+    { field: "role_id", headerName: "Role" },
+    { field: "name", headerName: "Name", width: 130 },
+    { field: "task", headerName: "Task", width: 130 },
+    { field: "subtask", headerName: "Subtask", width: 180 },
+    { field: "assignee", headerName: "Assignee", width: 130 },
+    { field: "teamLead", headerName: "Team Lead" },
+    { field: "completionPercentage", headerName: "Completion" },
+    { field: "startDate", headerName: "Start Date", width: 170 },
+    { field: "endDate", headerName: "End Date", width: 170 },
+  ];
 
   return (
-    <>
-      <StyledBox>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <CustomAutocomplete
-              options={["IT", "SALES", "OTHER"]}
-              label="Select Role"
-              placeholder="Choose Role"
-              onInputChange={(value) => handleFormChange('selectedRoles', value)}
-              selectAllLabel="Select All"
-              deselectAllLabel="Deselect All"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <CustomTextfield
-              label="Report Name"
-              value={formState.reportName}
-              onChange={(e) => handleFormChange('reportName', e.target.value)}
-              variant="outlined"
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-           
-<CustomAutocomplete
-  options={flattenedOptions}  // Pass the flattened array of strings
-  label="Column Name"
-  placeholder="Select columns"
-  value={formState.columnName}
-  onInputChange={(value) => handleFormChange('columnName', value)}
-  renderOption={(props: JSX.IntrinsicAttributes & { component: React.ElementType<any, keyof React.JSX.IntrinsicElements>; } & BoxOwnProps<Theme> & Omit<any, keyof BoxOwnProps<Theme>>, option: string) => (
-    <Box {...props}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-        <span>{option.toString()}</span>
-        <Box>
-          <IconButton onClick={() => handleFilter(option.toString())} size="small">
-            <FilterListIcon />
-          </IconButton>
-          <IconButton onClick={() => handleSort(option.toString())} size="small">
-            <SortIcon />
-          </IconButton>
-          {typeof option === 'string' && columnOptions.find(col => col.name === option)?.children && columnOptions.find(col => col.name === option)!.children!.length > 0 && (
-            <IconButton onClick={() => handleExpand(option)} size="small">
-              {isExpanded(option) ? <RemoveIcon /> : <AddIcon />}
-            </IconButton>
+    <Grid container spacing={2} alignItems="center">
+      <Grid item xs={3}>
+        <Autocomplete
+          multiple
+          id="multiple-limit-tags"
+          options={roles}
+          value={role}
+          onChange={handleRoleChange}
+          renderInput={(params) => (
+            <TextField {...params} label="Role" placeholder="Select Role" />
           )}
-        </Box>
-      </Box>
-    </Box>
-  )}/>
-          </Grid>
+          sx={{ marginTop: "4px", height: "39px" }}
+        />
+      </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Button
-              variant="contained"
-              onClick={handleGenerateReport}
-              fullWidth
-              sx={{
-                background: 'linear-gradient(135deg, #6e8efb 0%, #a777e3 100%)',
-                height: '56px'
-              }}
+      <Grid item xs={3}>
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            Report Name
+          </Typography>
+          <CustomTextfield
+            value={reportName}
+            onChange={(e) => setReportName(e.target.value)}
+            placeholder="Enter Report Name"
+            sx={{ ...textFieldStyle }}
+            variant={"outlined"}
+          />
+        </Box>
+      </Grid>
+      <Grid item xs={3}>
+  <Autocomplete
+    multiple
+    id="column-name-multiple-autocomplete"
+    options={[
+      "name",
+      "assignee",
+      "completionPercentage",
+      "endDate",
+      "role_id",
+      "startDate",
+      "subtask",
+      "task",
+      "teamLead",
+    ]}
+    value={columnName ? columnName.split(",") : []} // Ensure value is an array
+    onChange={(
+      event: React.SyntheticEvent<Element, Event>,
+      newValues: string[]
+    ) => {
+      const newValue = newValues.join(",");
+      handleColumnNameChange(newValues); // Pass the updated array of selected values
+      setColumnName(newValue); // Update the state
+    }}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="Column Names"
+        placeholder="Select Columns"
+      />
+    )}
+    sx={{ marginTop: "4px", height: "39px" }}
+  />
+</Grid>
+
+
+      <Grid item xs={3}>
+        <CustomButton
+          buttonText="Generate"
+          buttonStyles={buttonStyles}
+          icon={false}
+          onClick={handleGenerate}
+        />
+      </Grid>
+
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogContent>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Select Option</FormLabel>
+            <RadioGroup
+              row
+              value={filterSortOption}
+              onChange={handleFilterSortChange}
             >
-              Generate Report
-            </Button>
-          </Grid>
-        </Grid>
-      </StyledBox>
+              <FormControlLabel
+                value="filter"
+                control={<Radio />}
+                label="Filter"
+              />
+              <FormControlLabel value="sort" control={<Radio />} label="Sort" />
+            </RadioGroup>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <CustomButton
+            buttonText="Cancel"
+            buttonStyles={{ ...buttonStyles, backgroundColor: "#BDBDBD" }}
+            onClick={handleDialogClose}
+          />
+          <CustomButton
+            buttonText="Apply"
+            buttonStyles={buttonStyles}
+            onClick={handleDialogClose}
+          />
+        </DialogActions>
+      </Dialog>
 
-      <StyledDialog
-        open={formState.openDialog}
-        onClose={() => handleFormChange('openDialog', false)}
-      >
-        <Box sx={{ p: 3, textAlign: 'center' }}>
-          <h2>Success!</h2>
-          <p>Report generated successfully! 🎉</p>
-          <Button
-            onClick={handleContinue}
-            variant="contained"
-            sx={{
-              background: 'linear-gradient(135deg, #6e8efb 0%, #a777e3 100%)',
-              width: '150px',
-              mt: 2
-            }}
-          >
-            Continue
-          </Button>
-        </Box>
-      </StyledDialog>
-    </>
+      {/* DataGrid to display the filtered data */}
+      <Grid item xs={12} sx={{ mt: 5 }}>
+        <DataGrid
+          rows={gridData}
+          columns={columns}
+          pageSize={5}
+          getRowId={(row) => row.ID}
+          sx={{
+            borderRadius: "10px",
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "#001B04",
+              color: "white",
+              fontSize: "12px",
+            },
+            "& .MuiDataGrid-columnHeaderCheckbox .MuiCheckbox-root": {
+              color: "white",
+            },
+            "& .MuiDataGrid-columnHeader .MuiDataGrid-sortIcon": {
+              // display: "none",
+            },
+            "& .MuiDataGrid-columnHeader .MuiDataGrid-filterIcon": {
+              display: "none",
+            },
+            "& .MuiDataGrid-columnHeader .MuiDataGrid-menuIcon": {
+              display: "none",
+            },
+            "& .MuiDataGrid-row:nth-of-type(even)": {
+              // backgroundColor: "#F6F6F6",
+            },
+            "& .MuiCheckbox-root.Mui-checked": {
+              color: "#7f56d9",
+            },
+            "& .MuiDataGrid-iconSeparator": {
+              display: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: PrimaryText,
+            },
+          }}
+        />
+      </Grid>
+    </Grid>
   );
 };
+
+export default AdminPage;

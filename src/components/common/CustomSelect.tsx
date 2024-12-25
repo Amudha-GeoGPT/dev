@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormControl, FormLabel, Select, MenuItem } from "@mui/material";
+import { FormControl, FormLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import {
   LabelColor,
   PlaceholderColor,
@@ -7,16 +7,17 @@ import {
 } from "../styles/color.const";
 import { SecondayText } from "../styles/fontsize.const";
 import DoneIcon from "@mui/icons-material/Done";
- 
+
 interface SelectComponentProps {
   label?: string | boolean;
   options: string[];
   value: string;
   placeholder: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, event?: SelectChangeEvent<string>) => void; // Adjusted type
   sx?: React.CSSProperties;
+  id?: any;
 }
- 
+
 const CustomSelect: React.FC<SelectComponentProps> = ({
   label,
   options,
@@ -26,7 +27,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
   sx,
 }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
- 
+
   return (
     <FormControl fullWidth variant="outlined">
       {(typeof label === "string" && label) || false ? (
@@ -44,12 +45,12 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
       ) : null}
       <Select
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: SelectChangeEvent<string>) => onChange(e.target.value, e)} // Type the event here
         displayEmpty
         open={isDropdownOpen}
         onOpen={() => {
           setDropdownOpen(true);
-          onChange("");
+          onChange("", undefined); // Handle empty selection
         }}
         onClose={() => setDropdownOpen(false)}
         sx={{
@@ -72,7 +73,7 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
                 {placeholder}
               </span>
             );
- 
+
           return selected;
         }}
       >
@@ -93,7 +94,5 @@ const CustomSelect: React.FC<SelectComponentProps> = ({
     </FormControl>
   );
 };
- 
+
 export default CustomSelect;
- 
- 
