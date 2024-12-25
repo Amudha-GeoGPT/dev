@@ -40,17 +40,15 @@ const AdminPage = () => {
       "task",
       "teamLead",
     ];
-  
-    // Check if any newly selected value requires opening the dialog
+
     const requiresDialog = values.some((value) =>
       columnsThatRequireDialog.includes(value)
     );
-  
+
     if (requiresDialog) {
       setOpenDialog(true);
     }
   };
-  
 
   const handleRoleChange = (
     event: React.SyntheticEvent<Element, Event>,
@@ -97,7 +95,6 @@ const AdminPage = () => {
       const data = await response.json();
       console.log("Fetched data:", data);
 
-      // Check for both "success" and the typo "sucess"
       if (data.message === "success" || data.message === "sucess") {
         setGridData(data.results);
       } else {
@@ -174,40 +171,39 @@ const AdminPage = () => {
         </Box>
       </Grid>
       <Grid item xs={3}>
-  <Autocomplete
-    multiple
-    id="column-name-multiple-autocomplete"
-    options={[
-      "name",
-      "assignee",
-      "completionPercentage",
-      "endDate",
-      "role_id",
-      "startDate",
-      "subtask",
-      "task",
-      "teamLead",
-    ]}
-    value={columnName ? columnName.split(",") : []} // Ensure value is an array
-    onChange={(
-      event: React.SyntheticEvent<Element, Event>,
-      newValues: string[]
-    ) => {
-      const newValue = newValues.join(",");
-      handleColumnNameChange(newValues); // Pass the updated array of selected values
-      setColumnName(newValue); // Update the state
-    }}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label="Column Names"
-        placeholder="Select Columns"
-      />
-    )}
-    sx={{ marginTop: "4px", height: "39px" }}
-  />
-</Grid>
-
+        <Autocomplete
+          multiple
+          id="column-name-multiple-autocomplete"
+          options={[
+            "name",
+            "assignee",
+            "completionPercentage",
+            "endDate",
+            "role_id",
+            "startDate",
+            "subtask",
+            "task",
+            "teamLead",
+          ]}
+          value={columnName ? columnName.split(",") : []}
+          onChange={(
+            event: React.SyntheticEvent<Element, Event>,
+            newValues: string[]
+          ) => {
+            const newValue = newValues.join(",");
+            handleColumnNameChange(newValues);
+            setColumnName(newValue);
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Column Names"
+              placeholder="Select Columns"
+            />
+          )}
+          sx={{ marginTop: "4px", height: "39px" }}
+        />
+      </Grid>
 
       <Grid item xs={3}>
         <CustomButton
@@ -250,7 +246,6 @@ const AdminPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* DataGrid to display the filtered data */}
       <Grid item xs={12} sx={{ mt: 5 }}>
         <DataGrid
           rows={gridData}
