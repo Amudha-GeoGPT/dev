@@ -38,6 +38,7 @@ export const textFieldStyle = {
     color: "#FFFFFF",
     textTransform: "none" as const,
     borderRadius: "4px",
+    mt:2.5,
     "&:hover": {
       backgroundColor: "#0A330A",
     },

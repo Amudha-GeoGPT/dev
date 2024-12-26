@@ -1,36 +1,36 @@
+import React, { useEffect, useState } from "react";
 import {
-  Box,
   Grid,
-  Typography,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
+  Autocomplete,
+  TextField,
   Dialog,
   DialogActions,
   DialogContent,
-  Autocomplete,
-  TextField,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import CustomTextfield from "../../components/common/CustomTextfield";
 import CustomButton from "../../components/common/CustomButton";
-import { buttonStyles, textFieldStyle } from "./AdminPage.style";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { PrimaryText } from "../../components/styles/fontsize.const";
+import { buttonStyles } from "./AdminPage.style";
+import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
   const [role, setRole] = useState<string[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
-  const [columnName, setColumnName] = useState<string>("");
+  const [columnsData, setColumnsData] = useState<
+    { columnName: string; sort: string; filter: string }[]
+  >([]);
   const [filterSortOption, setFilterSortOption] = useState<string>("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [currentColumn, setCurrentColumn] = useState<string | null>(null);
   const [reportName, setReportName] = useState<string>("");
   const [gridData, setGridData] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   const handleColumnNameChange = (values: string[]) => {
-    const columnsThatRequireDialog = [
+    const dialogTriggerColumns = [
       "name",
       "assignee",
       "completionPercentage",
@@ -41,11 +41,24 @@ const AdminPage = () => {
       "teamLead",
     ];
 
-    const requiresDialog = values.some((value) =>
-      columnsThatRequireDialog.includes(value)
+    const updatedColumns = values.map((value) => {
+      const existingColumn = columnsData.find(
+        (col) => col.columnName === value
+      );
+      return (
+        existingColumn || { columnName: value, sort: "false", filter: "false" }
+      );
+    });
+
+    setColumnsData(updatedColumns);
+    // sessionStorage.setItem("columnsNameData", JSON.stringify(updatedColumns));
+
+    const newColumn = values.find(
+      (value) => !columnsData.some((col) => col.columnName === value)
     );
 
-    if (requiresDialog) {
+    if (newColumn && dialogTriggerColumns.includes(newColumn)) {
+      setCurrentColumn(newColumn);
       setOpenDialog(true);
     }
   };
@@ -55,6 +68,7 @@ const AdminPage = () => {
     newValue: string[]
   ) => {
     setRole(newValue);
+    // sessionStorage.setItem("roleData", JSON.stringify(newValue));
   };
 
   const handleFilterSortChange = (
@@ -63,20 +77,36 @@ const AdminPage = () => {
     setFilterSortOption(event.target.value);
   };
 
-  const handleDialogClose = () => {
+  const applyFilterOrSort = () => {
+    if (currentColumn) {
+      setColumnsData((prevColumns) =>
+        prevColumns.map((col) =>
+          col.columnName === currentColumn
+            ? {
+                ...col,
+                sort: filterSortOption === "sort" ? "true" : "false",
+                filter: filterSortOption === "filter" ? "true" : "false",
+              }
+            : col
+        )
+      );
+    }
+    setFilterSortOption("");
+    setCurrentColumn(null);
     setOpenDialog(false);
   };
+
+  const handleDialogClose = () => {
+    setFilterSortOption("");
+    setCurrentColumn(null);
+    setOpenDialog(false);
+  };
+
   const handleGenerate = async () => {
     const payload = {
       role_id: role,
       reportName: reportName,
-      columnName: [
-        {
-          columnName: columnName,
-          sort: filterSortOption === "sort" ? "true" : "false",
-          filter: filterSortOption === "filter" ? "true" : "false",
-        },
-      ],
+      columnName: columnsData,
     };
 
     try {
@@ -96,7 +126,15 @@ const AdminPage = () => {
       console.log("Fetched data:", data);
 
       if (data.message === "success" || data.message === "sucess") {
+        sessionStorage.setItem("gridData", JSON.stringify(data.results));
         setGridData(data.results);
+        navigate("/reportgrid", {
+          state: {
+            gridData: data.results,
+            columnsData: columnsData,
+            roles: role,
+          },
+        });
       } else {
         console.error("Failed to fetch filtered data:", data.message);
       }
@@ -104,6 +142,8 @@ const AdminPage = () => {
       console.error("Error fetching filtered data:", error);
     }
   };
+
+  console.log(gridData, "gridData");
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -127,21 +167,28 @@ const AdminPage = () => {
     fetchRoles();
   }, []);
 
-  const columns: GridColDef[] = [
-    { field: "ID", headerName: "ID" },
-    { field: "role_id", headerName: "Role" },
-    { field: "name", headerName: "Name", width: 130 },
-    { field: "task", headerName: "Task", width: 130 },
-    { field: "subtask", headerName: "Subtask", width: 180 },
-    { field: "assignee", headerName: "Assignee", width: 130 },
-    { field: "teamLead", headerName: "Team Lead" },
-    { field: "completionPercentage", headerName: "Completion" },
-    { field: "startDate", headerName: "Start Date", width: 170 },
-    { field: "endDate", headerName: "End Date", width: 170 },
-  ];
+  useEffect(() => {
+    sessionStorage.removeItem("gridData");
+    sessionStorage.removeItem("columnsData");
+  }, []);
 
+  // useEffect(() => {
+  //   const sessionData: any = sessionStorage.getItem("roleData");
+  //   const parsedData = JSON.parse(sessionData);
+  //   if (parsedData) {
+  //     setRole(parsedData);
+  //   }
+  // }, [role]);
+
+  // useEffect(() => {
+  //   const sessionData = sessionStorage.getItem("columnsNameData");
+  //   if (sessionData) {
+  //     const parsedData = JSON.parse(sessionData);
+  //     setColumnsData(parsedData);
+  //   }
+  // }, [columnsData]);
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container spacing={2} alignItems="center" >
       <Grid item xs={3}>
         <Autocomplete
           multiple
@@ -155,20 +202,8 @@ const AdminPage = () => {
           sx={{ marginTop: "4px", height: "39px" }}
         />
       </Grid>
-
       <Grid item xs={3}>
-        <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Report Name
-          </Typography>
-          <CustomTextfield
-            value={reportName}
-            onChange={(e) => setReportName(e.target.value)}
-            placeholder="Enter Report Name"
-            sx={{ ...textFieldStyle }}
-            variant={"outlined"}
-          />
-        </Box>
+      <TextField id="outlined-basic" label="Report Name" variant="outlined"  sx={{ marginTop: "4px", height: "39px" }} />
       </Grid>
       <Grid item xs={3}>
         <Autocomplete
@@ -185,14 +220,12 @@ const AdminPage = () => {
             "task",
             "teamLead",
           ]}
-          value={columnName ? columnName.split(",") : []}
+          value={columnsData.map((col) => col.columnName)}
           onChange={(
             event: React.SyntheticEvent<Element, Event>,
             newValues: string[]
           ) => {
-            const newValue = newValues.join(",");
             handleColumnNameChange(newValues);
-            setColumnName(newValue);
           }}
           renderInput={(params) => (
             <TextField
@@ -241,51 +274,10 @@ const AdminPage = () => {
           <CustomButton
             buttonText="Apply"
             buttonStyles={buttonStyles}
-            onClick={handleDialogClose}
+            onClick={applyFilterOrSort}
           />
         </DialogActions>
       </Dialog>
-
-      <Grid item xs={12} sx={{ mt: 5 }}>
-        <DataGrid
-          rows={gridData}
-          columns={columns}
-          pageSize={5}
-          getRowId={(row) => row.ID}
-          sx={{
-            borderRadius: "10px",
-            "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#001B04",
-              color: "white",
-              fontSize: "12px",
-            },
-            "& .MuiDataGrid-columnHeaderCheckbox .MuiCheckbox-root": {
-              color: "white",
-            },
-            "& .MuiDataGrid-columnHeader .MuiDataGrid-sortIcon": {
-              // display: "none",
-            },
-            "& .MuiDataGrid-columnHeader .MuiDataGrid-filterIcon": {
-              display: "none",
-            },
-            "& .MuiDataGrid-columnHeader .MuiDataGrid-menuIcon": {
-              display: "none",
-            },
-            "& .MuiDataGrid-row:nth-of-type(even)": {
-              // backgroundColor: "#F6F6F6",
-            },
-            "& .MuiCheckbox-root.Mui-checked": {
-              color: "#7f56d9",
-            },
-            "& .MuiDataGrid-iconSeparator": {
-              display: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              fontSize: PrimaryText,
-            },
-          }}
-        />
-      </Grid>
     </Grid>
   );
 };
