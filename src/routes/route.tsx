@@ -1,10 +1,11 @@
 import { RouteObject, Navigate } from "react-router-dom";
 import AdminPage from "../pages/Admin/AdminPage";
 import Report from "../pages/Admin/Report";
+import DynamicApiDataGrid from "../pages/Admin/ReportProject";
  
 const routes: RouteObject[] = [
   {
-    path: "/admin",
+    path: "/reportform",
     element: <AdminPage />,
   },
   {
@@ -13,7 +14,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/",
-    element: <Navigate to="/admin" replace />,
+    element: <Navigate to="/reportform" replace />,
+  },
+  {
+    path: "/reportproject",
+    element: <DynamicApiDataGrid />,
   },
 ];
  

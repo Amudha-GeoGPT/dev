@@ -35,6 +35,7 @@ const AdminPage = () => {
       "assignee",
       "completionPercentage",
       "endDate",
+      "role_id",
       "startDate",
       "subtask",
       "task",
@@ -133,7 +134,8 @@ const AdminPage = () => {
             gridData: data.results,
             columnsData: columnsData,
             roles: role,
-            reportName: reportName,          },
+            reportName: reportName,
+          },
         });
       } else {
         console.error("Failed to fetch filtered data:", data.message);
@@ -188,7 +190,7 @@ const AdminPage = () => {
   //   }
   // }, [columnsData]);
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container spacing={2} alignItems="center" sx={{ p: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
         <Autocomplete
           multiple

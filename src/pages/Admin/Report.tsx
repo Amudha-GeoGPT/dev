@@ -38,17 +38,17 @@ const Report: React.FC<ReportProps> = () => {
 
   const filteredData = useMemo(() => {
     if (selectedRole === "All Records") {
-      return gridData; // Reset to all records if "All Records" is selected
+      return gridData;
     }
-    return gridData.filter((row: any) => row.role_id === selectedRole); // Filter based on selected role
+    return gridData.filter((row: any) => row.role_id === selectedRole);
   }, [selectedRole, gridData]);
 
   const handleFilterChange = useCallback((model: GridFilterModel) => {
-    setFilterModel(model); // Update filter model on filter change
+    setFilterModel(model);
   }, []);
 
   const handleSortModelChange = useCallback((model: any[]) => {
-    setSortModel(model); 
+    setSortModel(model);
   }, []);
 
   const columns: GridColDef[] = useMemo(
@@ -156,10 +156,9 @@ const Report: React.FC<ReportProps> = () => {
   );
 
   const handleDownload = () => {
-    // Apply filtering logic from the filter model
     const finalFilteredData = filteredData.filter((row: any) => {
       return filterModel.items.every((filter) => {
-        const value = row[filter.field]; // Access the column value with 'field'
+        const value = row[filter.field];
         if (filter.operator === "contains") {
           return value
             ?.toString()
@@ -169,14 +168,11 @@ const Report: React.FC<ReportProps> = () => {
         if (filter.operator === "equals") {
           return value?.toString() === filter.value;
         }
-        // Add other operator cases as needed
         return true;
       });
     });
 
-    // Apply sorting logic from the sort model
     const sortedData = finalFilteredData.sort((a: any, b: any) => {
-      // Iterate over the sorting model and apply the sorting
       return sortModel.reduce((acc: any, sort: any) => {
         const { field, sort: sortOrder } = sort;
         if (acc !== 0) return acc;
@@ -190,19 +186,16 @@ const Report: React.FC<ReportProps> = () => {
       }, 0);
     });
 
-    // Convert the sorted and filtered data to Excel format
     const ws = XLSX.utils.json_to_sheet(sortedData);
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Report");
 
-    // Set the filename based on reportName, default to "report.xlsx"
-    const fileName = reportName ? `${reportName}.xlsx` : "report.xlsx";
-    console.log("Exporting file as:", fileName); // Log file name for debugging
+    const fileName = reportName ? `${reportName}.xlsx` : "Report.xlsx";
+    console.log("Exporting file as:", fileName);
 
-    // Write the Excel file with the dynamic report name
     XLSX.writeFile(wb, fileName);
-    };
+  };
 
   return (
     <>
@@ -236,9 +229,8 @@ const Report: React.FC<ReportProps> = () => {
                   },
                 }}
                 onClick={() => {
-                  // Reset the selected role and filter model
                   setSelectedRole("All Records");
-                  setFilterModel({ items: [] }); // Clear filters
+                  setFilterModel({ items: [] });
                 }}
               >
                 <Typography variant="body1">All Records</Typography>
@@ -307,7 +299,7 @@ const Report: React.FC<ReportProps> = () => {
               pageSize={5}
               filterModel={filterModel}
               onFilterModelChange={handleFilterChange}
-              sortModel={sortModel} // Pass sortModel to DataGrid
+              sortModel={sortModel}
               onSortModelChange={handleSortModelChange}
               sx={{
                 minWidth: "100%",
