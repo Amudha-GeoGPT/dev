@@ -133,7 +133,7 @@ const AdminPage = () => {
             gridData: data.results,
             columnsData: columnsData,
             roles: role,
-          },
+            reportName: reportName,          },
         });
       } else {
         console.error("Failed to fetch filtered data:", data.message);
@@ -188,8 +188,8 @@ const AdminPage = () => {
   //   }
   // }, [columnsData]);
   return (
-    <Grid container spacing={2} alignItems="center" >
-      <Grid item xs={3}>
+    <Grid container spacing={2} alignItems="center">
+      <Grid item xs={12} sm={6} md={3}>
         <Autocomplete
           multiple
           id="multiple-limit-tags"
@@ -199,13 +199,19 @@ const AdminPage = () => {
           renderInput={(params) => (
             <TextField {...params} label="Role" placeholder="Select Role" />
           )}
-          sx={{ marginTop: "4px", height: "39px" }}
         />
       </Grid>
-      <Grid item xs={3}>
-      <TextField id="outlined-basic" label="Report Name" variant="outlined"  sx={{ marginTop: "4px", height: "39px" }} />
+      <Grid item xs={12} sm={6} md={3}>
+        <TextField
+          id="outlined-basic"
+          label="Report Name"
+          variant="outlined"
+          fullWidth
+          value={reportName}
+          onChange={(e) => setReportName(e.target.value)}
+        />{" "}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={6} md={3}>
         <Autocomplete
           multiple
           id="column-name-multiple-autocomplete"
@@ -234,11 +240,10 @@ const AdminPage = () => {
               placeholder="Select Columns"
             />
           )}
-          sx={{ marginTop: "4px", height: "39px" }}
         />
       </Grid>
 
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={6} md={3}>
         <CustomButton
           buttonText="Generate"
           buttonStyles={buttonStyles}

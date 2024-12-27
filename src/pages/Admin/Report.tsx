@@ -27,23 +27,28 @@ const Report: React.FC<ReportProps> = () => {
   const gridData = location.state?.gridData || [];
   const locationRoles = location.state?.roles || [];
   const locationColumnsData: ColumnData[] = location.state?.columnsData || [];
-
+  const reportName = location.state?.reportName;
   const [selectedRole, setSelectedRole] = useState<string | null>(
     "All Records"
   );
   const [filterModel, setFilterModel] = useState<GridFilterModel>({
     items: [],
   });
+  const [sortModel, setSortModel] = useState<any[]>([]);
 
   const filteredData = useMemo(() => {
     if (selectedRole === "All Records") {
-      return gridData;
+      return gridData; // Reset to all records if "All Records" is selected
     }
-    return gridData.filter((row: any) => row.role_id === selectedRole);
+    return gridData.filter((row: any) => row.role_id === selectedRole); // Filter based on selected role
   }, [selectedRole, gridData]);
 
   const handleFilterChange = useCallback((model: GridFilterModel) => {
-    setFilterModel(model);
+    setFilterModel(model); // Update filter model on filter change
+  }, []);
+
+  const handleSortModelChange = useCallback((model: any[]) => {
+    setSortModel(model); 
   }, []);
 
   const columns: GridColDef[] = useMemo(
@@ -151,15 +156,53 @@ const Report: React.FC<ReportProps> = () => {
   );
 
   const handleDownload = () => {
-    sessionStorage.setItem("filteredData", JSON.stringify(filteredData));
+    // Apply filtering logic from the filter model
+    const finalFilteredData = filteredData.filter((row: any) => {
+      return filterModel.items.every((filter) => {
+        const value = row[filter.field]; // Access the column value with 'field'
+        if (filter.operator === "contains") {
+          return value
+            ?.toString()
+            .toLowerCase()
+            .includes(filter.value?.toLowerCase());
+        }
+        if (filter.operator === "equals") {
+          return value?.toString() === filter.value;
+        }
+        // Add other operator cases as needed
+        return true;
+      });
+    });
 
-    const ws = XLSX.utils.json_to_sheet(filteredData);
+    // Apply sorting logic from the sort model
+    const sortedData = finalFilteredData.sort((a: any, b: any) => {
+      // Iterate over the sorting model and apply the sorting
+      return sortModel.reduce((acc: any, sort: any) => {
+        const { field, sort: sortOrder } = sort;
+        if (acc !== 0) return acc;
+
+        const valueA = a[field];
+        const valueB = b[field];
+
+        if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      }, 0);
+    });
+
+    // Convert the sorted and filtered data to Excel format
+    const ws = XLSX.utils.json_to_sheet(sortedData);
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Report");
 
-    XLSX.writeFile(wb, "report.xlsx");
-  };
+    // Set the filename based on reportName, default to "report.xlsx"
+    const fileName = reportName ? `${reportName}.xlsx` : "report.xlsx";
+    console.log("Exporting file as:", fileName); // Log file name for debugging
+
+    // Write the Excel file with the dynamic report name
+    XLSX.writeFile(wb, fileName);
+    };
 
   return (
     <>
@@ -192,7 +235,11 @@ const Report: React.FC<ReportProps> = () => {
                     backgroundColor: "rgba(0, 0, 0, 0.1)",
                   },
                 }}
-                onClick={() => setSelectedRole("All Records")}
+                onClick={() => {
+                  // Reset the selected role and filter model
+                  setSelectedRole("All Records");
+                  setFilterModel({ items: [] }); // Clear filters
+                }}
               >
                 <Typography variant="body1">All Records</Typography>
               </ListItemButton>
@@ -205,7 +252,10 @@ const Report: React.FC<ReportProps> = () => {
                       backgroundColor: "rgba(0, 0, 0, 0.1)",
                     },
                   }}
-                  onClick={() => setSelectedRole(role)}
+                  onClick={() => {
+                    setSelectedRole(role);
+                    setFilterModel({ items: [] });
+                  }}
                 >
                   <Typography variant="body1">{role}</Typography>
                 </ListItemButton>
@@ -215,26 +265,30 @@ const Report: React.FC<ReportProps> = () => {
         </Drawer>
 
         <Box sx={{ flexGrow: 1, overflowX: "hidden" }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
-
-          <ArrowBackIcon
-            sx={{
-              cursor: "pointer",
-              marginBottom: 2,
-              "&:hover": {
-                color: "primary.main",
-              },
-            }}
-            onClick={() => navigate(-1)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleDownload}
-            sx={{ marginTop: 2 }}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ marginBottom: 2 }}
           >
-            Download
-          </Button>
+            <ArrowBackIcon
+              sx={{
+                cursor: "pointer",
+                marginBottom: 2,
+                "&:hover": {
+                  color: "primary.main",
+                },
+              }}
+              onClick={() => navigate(-1)}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleDownload}
+              sx={{ marginTop: 2 }}
+            >
+              Download
+            </Button>
           </Box>
           <Box
             sx={{
@@ -253,6 +307,8 @@ const Report: React.FC<ReportProps> = () => {
               pageSize={5}
               filterModel={filterModel}
               onFilterModelChange={handleFilterChange}
+              sortModel={sortModel} // Pass sortModel to DataGrid
+              onSortModelChange={handleSortModelChange}
               sx={{
                 minWidth: "100%",
               }}
