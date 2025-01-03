@@ -2,7 +2,6 @@ import { useState } from "react";
 import CustomSelectSearch from "../../common/CustomSelectSearch";
 import { Box, Grid, Typography } from "@mui/material";
 import CustomButton from "../../common/CustomButton";
-import { SmallText } from "../../styles/fontsize.const";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import AnotherDataGrid from "./AnotherDataGrid";
 import "leaflet/dist/leaflet.css";
@@ -32,6 +31,9 @@ type Ranges = {
 };
 
 const NewMap = () => {
+  const [selectedVertical, setselectedVertical] = useState<Option | null>(null);
+  const [selectedState, setSelectedState] = useState<Option | null>(null);
+  const [selectedMetro, setSelectedMetro] = useState<Option | null>(null);
   const [clicked, setClicked] = useState<boolean>(false);
   const [selectedMetropolitan, setSelectedMetropolitan] =
     useState<Option | null>(null);
@@ -58,7 +60,9 @@ const NewMap = () => {
       col5: "",
     },
   ]);
-
+  const [selectedTaluk, setSelectedTaluk] = useState<Option | null>(null);
+  const [selectedWard, setSelectedWard] = useState<Option | null>(null);
+  const [selectedPincode, setSelectedPincode] = useState<Option | null>(null);
   const handleMetropolitanChange = (value: Option | null) =>
     setSelectedMetropolitan(value);
 
@@ -88,22 +92,12 @@ const NewMap = () => {
           gt300: { wards: 0, population: 0 },
         };
 
-        // Map API response data to the ranges object
         Object.keys(results).forEach((range: string) => {
           const mappedRange = mapRangeKey(range);
           if (ranges[mappedRange]) {
             ranges[mappedRange].wards = results[range].no_of_wards;
             ranges[mappedRange].population = results[range].no_of_population;
           }
-          //   const transformedWards = results[range].data.map((item: any) => ({
-          //     coordinates: item.boundaries.map((boundary: any) => [
-          //       boundary.latitude,
-          //       boundary.longitude,
-          //     ]),
-          //     color_code: item.color_code,
-          //     ward_name: item.ward_name,
-          //   }));
-          //   setWardDataForMap((prevData) => [...prevData, ...transformedWards]);
         });
 
         setRows([
@@ -178,9 +172,8 @@ const NewMap = () => {
 
     if (specificRange) {
       const specificData = specificRange.data;
-      setSpecificRangeData(specificData); // Store the filtered data for the map
+      setSpecificRangeData(specificData);
 
-      // Transform the specific range data to match the structure needed for the map
       const transformedWards = specificData.map((item: any) => ({
         coordinates: item.boundaries.map((boundary: any) => [
           boundary.latitude,
@@ -188,27 +181,22 @@ const NewMap = () => {
         ]),
         color_code: item.color_code,
         ward_name: item.ward_name,
+        ward_no: item.ward_no,
       }));
 
-      // Update the map data state with the transformed data for the specific range
       setWardDataForMap(transformedWards);
 
       setClicked(true);
-      console.log("Ward Name:", specificData[0].ward_name);
-      console.log("Population Count:", specificData[0].population_count);
-      console.log("CK Outlet Count:", specificData[0].ck_outlet_count);
-      console.log("Color Code:", specificData[0].color_code);
     } else {
-      console.log("Range data not found");
       setClicked(false);
-      setWardDataForMap([]); // Reset map data if no range is found
+      setWardDataForMap([]);
     }
   };
 
   const buttonStyles = {
-    fontSize: SmallText,
+    fontSize: "12px",
     height: "40px",
-    padding: "14px",
+    padding: "18px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
     textTransform: "none" as const,
@@ -217,12 +205,344 @@ const NewMap = () => {
       backgroundColor: "#0A330A",
     },
   };
+  const verticalData = [
+    "S&D",
+    "Marketing",
+    "IT & Support",
+    "Human Resource",
+    "CRM",
+    "Inventory",
+    "Logistics",
+  ];
+  const stateData = ["Tamil Nadu"];
+  const metroOrNonMetro = ["Metro", "Non-Metro"];
+  const taluk = [
+    "Taluk 1",
+    "Taluk 2",
+    "Taluk 3",
+    "Taluk 4",
+    "Taluk 5",
+    "Taluk 6",
+    "Taluk 7",
+  ];
+  const ward = [
+    "0001",
+
+    "0002",
+
+    "0003",
+
+    "0004",
+
+    "0005",
+
+    "0006",
+
+    "0007",
+
+    "0008",
+
+    "0009",
+
+    "0010",
+
+    "0011",
+
+    "0012",
+
+    "0013",
+
+    "0014",
+
+    "0015",
+
+    "0016",
+
+    "0017",
+
+    "0018",
+
+    "0019",
+
+    "0020",
+
+    "0021",
+
+    "0022",
+
+    "0023",
+
+    "0024",
+
+    "0025",
+
+    "0026",
+
+    "0027",
+
+    "0028",
+
+    "0029",
+
+    "0030",
+
+    "0031",
+
+    "0032",
+
+    "0033",
+
+    "0034",
+
+    "0035",
+
+    "0036",
+
+    "0037",
+
+    "0038",
+
+    "0039",
+
+    "0040",
+
+    "0041",
+
+    "0042",
+
+    "0043",
+
+    "0044",
+
+    "0045",
+
+    "0046",
+
+    "0047",
+
+    "0048",
+
+    "0049",
+
+    "0050",
+
+    "0051",
+
+    "0052",
+
+    "0053",
+
+    "0054",
+
+    "0055",
+
+    "0056",
+
+    "0057",
+
+    "0058",
+
+    "0059",
+
+    "0060",
+
+    "0061",
+
+    "0062",
+
+    "0063",
+
+    "0064",
+
+    "0065",
+
+    "0066",
+
+    "0067",
+
+    "0068",
+
+    "0069",
+
+    "0070",
+
+    "0071",
+
+    "0072",
+
+    "0073",
+
+    "0074",
+
+    "0075",
+
+    "0076",
+
+    "0077",
+
+    "0078",
+
+    "0079",
+
+    "0080",
+
+    "0081",
+
+    "0082",
+
+    "0083",
+
+    "0084",
+
+    "0085",
+
+    "0086",
+
+    "0087",
+
+    "0088",
+
+    "0089",
+
+    "0090",
+
+    "0091",
+
+    "0092",
+
+    "0093",
+
+    "0094",
+
+    "0095",
+
+    "0096",
+
+    "0097",
+
+    "0098",
+
+    "0099",
+
+    "0100",
+
+    "0101",
+
+    "0102",
+
+    "0103",
+
+    "0104",
+
+    "0105",
+
+    "0106",
+
+    "0107",
+
+    "0108",
+
+    "0109",
+
+    "0110",
+
+    "0111",
+
+    "0112",
+
+    "0113",
+
+    "0114",
+
+    "0115",
+
+    "0116",
+
+    "0117",
+
+    "0118",
+
+    "0119",
+
+    "0120",
+
+    "0121",
+
+    "0122",
+
+    "0123",
+
+    "0124",
+
+    "0125",
+
+    "0126",
+
+    "0127",
+
+    "0128",
+
+    "0129",
+
+    "0130",
+
+    "0131",
+
+    "0132",
+
+    "0133",
+
+    "0134",
+
+    "0135",
+
+    "0136",
+
+    "0137",
+
+    "0138",
+
+    "0139",
+
+    "0140",
+
+    "0141",
+
+    "0142",
+
+    "0143",
+
+    "0144",
+
+    "0145",
+
+    "0146",
+
+    "0147",
+
+    "0148",
+
+    "0149",
+
+    "0150",
+
+    "0151",
+
+    "0152",
+
+    "0153",
+
+    "0154",
+
+    "0155",
+  ];
+  const pincode = [6005007];
 
   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
       headerName: "CK Outlets",
-      flex: 1,
+      flex: 2.5,
       renderCell: (params) => <Typography sx={{}}>{params.value}</Typography>,
       headerClassName: "headerCell",
       sortable: false,
@@ -230,7 +550,7 @@ const NewMap = () => {
     {
       field: "col1",
       headerName: "<50",
-      flex: 1,
+      flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "red" }}>&lt;50</span>,
       renderCell: (params) => (
@@ -246,7 +566,7 @@ const NewMap = () => {
     {
       field: "col2",
       headerName: "51 to 100",
-      flex: 1,
+      flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "orange" }}>51 to 100</span>,
 
@@ -264,7 +584,7 @@ const NewMap = () => {
     {
       field: "col3",
       headerName: "101 to 200",
-      flex: 1,
+      flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>101 to 200</span>,
 
@@ -281,7 +601,7 @@ const NewMap = () => {
     {
       field: "col4",
       headerName: "201 to 300",
-      flex: 1,
+      flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>201 to 300</span>,
 
@@ -298,7 +618,7 @@ const NewMap = () => {
     {
       field: "col5",
       headerName: ">300",
-      flex: 1,
+      flex: 1.2,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>&gt;300</span>,
 
@@ -313,64 +633,140 @@ const NewMap = () => {
       ),
     },
   ];
-
+  const handleVerticalChange = (value: Option | null) =>
+    setselectedVertical(value);
+  const handleStateChange = (value: Option | null) => setSelectedState(value);
+  const handleMetroChange = (value: Option | null) => setSelectedMetro(value);
+  const handleTalukChange = (value: Option | null) => setSelectedTaluk(value);
+  const handleWardChange = (value: Option | null) => setSelectedWard(value);
+  const handlePincodeChange = (value: Option | null) =>
+    setSelectedPincode(value);
   return (
-    <Box sx={{ width: "100%" }}>
-      <Grid container spacing={2} sx={{ p: 2 }}>
-        <Grid item xs={1.5}>
-          <CustomSelectSearch
-            label="Metropolitan"
-            placeholder="Select Metropolitan"
-            options={[{ label: "Chennai", value: "Chennai" }]}
-            value={selectedMetropolitan}
-            onChange={handleMetropolitanChange}
-          />
-        </Grid>
-        <Grid item xs={12} sx={{ mt: 3 }}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <CustomButton buttonText="Clear All" buttonStyles={buttonStyles} />
-            <CustomButton
-              buttonText="Apply Filter"
-              buttonStyles={buttonStyles}
-              onClick={handleApplyFilter}
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Grid container spacing={1} sx={{ p: 2 }}>
+          <Grid item xs={2}>
+            <CustomSelectSearch
+              label="Verticals"
+              placeholder="Select Verticals"
+              options={verticalData}
+              value={selectedVertical}
+              onChange={handleVerticalChange}
             />
-          </Box>
+          </Grid>
+          <Grid item xs={2}>
+            <CustomSelectSearch
+              label="State"
+              placeholder="Select State"
+              options={stateData}
+              value={selectedState}
+              onChange={handleStateChange}
+            />
+          </Grid>
+          <Grid item xs={1.5}>
+            <CustomSelectSearch
+              label="Metro/Non-Metro"
+              placeholder="Select Metro/Non-Metro"
+              options={metroOrNonMetro}
+              value={selectedMetro}
+              onChange={handleMetroChange}
+            />
+          </Grid>
+          <Grid item xs={1.5}>
+            <CustomSelectSearch
+              label="Metropolitan"
+              placeholder="Select Metropolitan"
+              options={[{ label: "Chennai", value: "Chennai" }]}
+              value={selectedMetropolitan}
+              onChange={handleMetropolitanChange}
+            />
+          </Grid>
+          <Grid item xs={1.5}>
+            <CustomSelectSearch
+              label="Taluk"
+              placeholder="Select Taluks"
+              options={taluk}
+              value={selectedTaluk}
+              onChange={handleTalukChange}
+            />
+          </Grid>
+          <Grid item xs={1.5}>
+            <CustomSelectSearch
+              label="Ward"
+              placeholder="Select Ward"
+              options={ward}
+              value={selectedWard}
+              onChange={handleWardChange}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CustomSelectSearch
+              label="Pincode"
+              placeholder="Select Pincode"
+              options={pincode}
+              value={selectedPincode}
+              onChange={handlePincodeChange}
+            />
+          </Grid>
+
+          <Grid item xs={12} sx={{ mt: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <CustomButton
+                buttonText="Clear All"
+                buttonStyles={buttonStyles}
+              />
+              <CustomButton
+                buttonText="Apply Filter"
+                buttonStyles={buttonStyles}
+                onClick={handleApplyFilter}
+              />
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-        <Grid container spacing={3} sx={{ width: "100%" }}>
-          <Grid item xs={6}>
-            <Box>
-              <Typography variant="h5">Overview</Typography>
+        <Box
+          sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+        >
+          <Grid container spacing={3} sx={{ width: "100%" }}>
+            <Grid item xs={6}>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  Overview
+                </Typography>
+                <Box sx={{ mt: 2.5 }}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    disableColumnMenu
+                    hideFooter
+                    // getRowClassName={() => "centered-row"}
+                    onCellClick={handleCellClick}
+                    sx={{
+                      "& .MuiDataGrid-columnSeparator": {
+                        display: "none",
+                      },
+                      "& .MuiDataGrid-cell": {
+                        display: "flex",
+                        alignItems: "center",
+                      },
+                    }}
+                  />
+                </Box>
+                <Box sx={{ mt: 2, height: "400px" }}>
+                  <NewTamilNaduMap wardData={wardDataForMap} />
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
               <Box sx={{ mt: 2 }}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  disableColumnMenu
-                  hideFooter
-                  onCellClick={handleCellClick}
-                  sx={{
-                    "& .MuiDataGrid-columnSeparator": {
-                      display: "none",
-                    },
-                  }}
-                />
+                {clicked && specificRangeData && (
+                  <AnotherDataGrid wardDatas={specificRangeData} />
+                )}
               </Box>
-              <Box sx={{ mt: 2, height: "400px" }}>
-                <NewTamilNaduMap wardData={wardDataForMap} />
-              </Box>
-            </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Box sx={{ mt: 2 }}>
-              {clicked && specificRangeData && (
-                <AnotherDataGrid wardDatas={specificRangeData} />
-              )}
-            </Box>
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

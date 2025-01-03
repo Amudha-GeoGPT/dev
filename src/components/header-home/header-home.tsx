@@ -119,7 +119,7 @@ const Headerhome: React.FC = () => {
               marginLeft: "-100px", // Adjust this value to move it left or right
             }}
           >
-            Map Outlet Tool
+            {/* Map Outlet Tool */}
           </Typography>
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
