@@ -80,7 +80,6 @@ const NewMap = () => {
         { district_name: selectedMetropolitan.value }
       );
 
-      console.log("API Response:", response.data);
 
       if (response.data.message === "success") {
         const { results } = response.data;
