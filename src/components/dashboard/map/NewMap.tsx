@@ -35,6 +35,8 @@ const NewMap = () => {
   const [selectedState, setSelectedState] = useState<Option | null>(null);
   const [selectedMetro, setSelectedMetro] = useState<Option | null>(null);
   const [clicked, setClicked] = useState<boolean>(false);
+  const [clickedOverview, setclickedOverview] = useState<boolean>(false);
+
   const [selectedMetropolitan, setSelectedMetropolitan] =
     useState<Option | null>(null);
   const [wardDataCache, setWardDataCache] = useState<any>(null);
@@ -125,6 +127,7 @@ const NewMap = () => {
       console.error("Error fetching data", error);
       alert("Failed to fetch data.");
     }
+    setclickedOverview(true);
   };
 
   const mapRangeKey = (range: string): keyof Ranges => {
@@ -723,48 +726,49 @@ const NewMap = () => {
             </Box>
           </Grid>
         </Grid>
-        <Box
-          sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
-        >
-          <Grid container spacing={3} sx={{ width: "100%" }}>
-            <Grid item xs={6}>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  Overview
-                </Typography>
-                <Box sx={{ mt: 2.5 }}>
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    disableColumnMenu
-                    hideFooter
-                    // getRowClassName={() => "centered-row"}
-                    onCellClick={handleCellClick}
-                    sx={{
-                      "& .MuiDataGrid-columnSeparator": {
-                        display: "none",
-                      },
-                      "& .MuiDataGrid-cell": {
-                        display: "flex",
-                        alignItems: "center",
-                      },
-                    }}
-                  />
+        {clickedOverview && (
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+          >
+            <Grid container spacing={3} sx={{ width: "100%" }}>
+              <Grid item xs={6}>
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Overview
+                  </Typography>
+                  <Box sx={{ mt: 2.5 }}>
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      disableColumnMenu
+                      hideFooter
+                      onCellClick={handleCellClick}
+                      sx={{
+                        "& .MuiDataGrid-columnSeparator": {
+                          display: "none",
+                        },
+                        "& .MuiDataGrid-cell": {
+                          display: "flex",
+                          alignItems: "center",
+                        },
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ mt: 2, height: "400px" }}>
+                    <NewTamilNaduMap wardData={wardDataForMap} />
+                  </Box>
                 </Box>
-                <Box sx={{ mt: 2, height: "400px" }}>
-                  <NewTamilNaduMap wardData={wardDataForMap} />
+              </Grid>
+              <Grid item xs={6}>
+                <Box sx={{ mt: 2 }}>
+                  {clicked && specificRangeData && (
+                    <AnotherDataGrid wardDatas={specificRangeData} />
+                  )}
                 </Box>
-              </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Box sx={{ mt: 2 }}>
-                {clicked && specificRangeData && (
-                  <AnotherDataGrid wardDatas={specificRangeData} />
-                )}
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        )}
       </Box>
     </>
   );

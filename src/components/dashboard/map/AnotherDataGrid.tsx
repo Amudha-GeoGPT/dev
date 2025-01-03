@@ -11,7 +11,7 @@ interface WardData {
   no_of_universal_outlet: number;
 }
 
-const AnotherDataGrid = ({ wardDatas }: { wardDatas: WardData[] }) => {
+const AnotherDataGrid = ({ wardDatas=[] }: { wardDatas?: WardData[] }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const columns = [
