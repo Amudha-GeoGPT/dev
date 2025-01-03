@@ -3,18 +3,20 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { LabelColor, SelectAutoCompleteBorderColor } from "../styles/color.const";
+import {
+  LabelColor,
+  SelectAutoCompleteBorderColor,
+} from "../styles/color.const";
 import { SecondayText } from "../styles/fontsize.const";
- 
 interface CustomSelectSearchProps {
-  options: Array<string>;
-  sx?: object;
+  options: any;
+  value?: any;
+  onChange?: (value: any | null) => void;
   placeholder?: string;
-  value?: string;
-  label?: string; // Added label prop
-  onChange?: (value: string) => void;
+  label?: string;
+  sx?: object;
 }
- 
+
 const CustomSelectSearch: React.FC<CustomSelectSearchProps> = ({
   options,
   sx,
@@ -67,7 +69,5 @@ const CustomSelectSearch: React.FC<CustomSelectSearchProps> = ({
     </FormControl>
   );
 };
- 
+
 export default CustomSelectSearch;
- 
- 
