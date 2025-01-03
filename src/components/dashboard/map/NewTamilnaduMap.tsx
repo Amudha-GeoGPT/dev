@@ -1,33 +1,22 @@
 import { MapContainer, TileLayer, Polygon, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import React, { useState } from "react";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 
-const NewTamilNaduMap = () => {
-  const ward1Coordinates = [
-    [13.159819, 80.30416],
-    [13.157562, 80.299955],
-    [13.154721, 80.303562],
-    [13.166756, 80.302704],
-    [13.169681, 80.305881],
-    [13.168762, 80.293083],
-    [13.175698, 80.302273],
-  ];
+interface WardData {
+  ward_name: string;
+  coordinates: number[][]; // Coordinates for the polygon
+  color_code: string; 
+  fillColor: string; 
+}
 
-  const ward2Coordinates = [
-    [13.121319, 80.087965],
-    [13.110284, 80.083499],
-    [13.109281, 80.097241],
-    [13.122656, 80.083499],
-    [13.110953, 80.062199],
-  ];
+interface NewTamilNaduMapProps {
+  wardData: WardData[]; 
+}
 
-  const ward3Coordinates = [
-    [12.989992, 80.143397],
-    [12.983524, 80.134695],
-    [12.982186, 80.143971],
-    [12.966796, 80.132291],
-    [12.954082, 80.132634],
-  ];
+const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({ wardData }) => {
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false); // Full-screen state
 
   const calculateCentroid = (coords: number[][]): [number, number] => {
     let x = 0,
@@ -39,10 +28,6 @@ const NewTamilNaduMap = () => {
     });
     return [x / n, y / n];
   };
-
-  const centroidWard1 = calculateCentroid(ward1Coordinates);
-  const centroidWard2 = calculateCentroid(ward2Coordinates);
-  const centroidWard3 = calculateCentroid(ward3Coordinates);
 
   const createCustomIcon = (wardName: string) =>
     L.divIcon({
@@ -64,11 +49,25 @@ const NewTamilNaduMap = () => {
       </div>
     `,
     });
-
+    const mapContainerStyles = {
+      width: isFullScreen ? "100vw" : "100%", // Full width when in full-screen mode
+      height: isFullScreen ? "100vh" : "400px", // Full height when in full-screen mode
+      position: isFullScreen ? "fixed" : "relative", // Fixed position in full-screen mode
+      top: isFullScreen ? 0 : "auto",
+      left: isFullScreen ? 0 : "auto",
+      zIndex: isFullScreen ? 9999 : "auto", // Bring to front in full-screen mode
+      transition: "all 0.3s ease", // Smooth transition for toggling
+    };
+  
+    // Toggle full-screen mode
+    const handleMapToggle = () => {
+      setIsFullScreen(!isFullScreen); // Toggle between full-screen and normal
+    };
   return (
+    <div style={mapContainerStyles}>
     <MapContainer
-      center={[13.0223, 80.2291]}
-      zoom={13}
+      center={[13.0843, 80.2705]} // Center of Tamil Nadu
+      zoom={13} // Default zoom level
       style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
@@ -76,36 +75,42 @@ const NewTamilNaduMap = () => {
         attribution="&copy; OpenStreetMap contributors"
       />
 
-      <Polygon
-        positions={ward1Coordinates}
-        pathOptions={{
-          color: "red",
-          fillColor: "lightblue",
-          fillOpacity: 0.5,
-        }}
-      />
-      <Marker position={centroidWard1} icon={createCustomIcon("Ward 1")} />
-
-      <Polygon
-        positions={ward2Coordinates}
-        pathOptions={{
-          color: "green",
-          fillColor: "lightgreen",
-          fillOpacity: 0.5,
-        }}
-      />
-      <Marker position={centroidWard2} icon={createCustomIcon("Ward 2")} />
-
-      <Polygon
-        positions={ward3Coordinates}
-        pathOptions={{
-          color: "blue",
-          fillColor: "lightblue",
-          fillOpacity: 0.5,
-        }}
-      />
-      <Marker position={centroidWard3} icon={createCustomIcon("Ward 3")} />
+      {wardData.map((ward) => {
+        const centroid = calculateCentroid(ward.coordinates); // Calculate centroid for marker position
+        return (
+          <React.Fragment key={ward.ward_name}>
+            <Polygon
+              positions={ward.coordinates}
+              color={ward.color_code}
+              fillColor={ward.fillColor}
+              fillOpacity={0.5}
+            />
+            <Marker position={centroid} icon={createCustomIcon(ward.ward_name)} />
+          </React.Fragment>
+        );
+      })}
     </MapContainer>
+{/* Full-screen toggle button */}
+<div
+        style={{
+          position: "absolute",
+          top: 16,
+          right: 16,
+          zIndex: 1000,
+        }}
+      >
+        <OpenInFullIcon
+          onClick={handleMapToggle}
+          style={{
+            cursor: "pointer",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "white",
+            borderRadius: "50%",
+            padding: "8px",
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

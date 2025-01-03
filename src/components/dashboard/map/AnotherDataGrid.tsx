@@ -1,164 +1,75 @@
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
- 
-const AnotherDataGrid = () => {
+
+interface WardData {
+  id: string;
+  ward_name: string;
+  // ward_no: string;
+  ck_outlet_count: number;
+  population_count: number;
+  no_of_universal_outlet:number;
+}
+
+const AnotherDataGrid = ({ wardDatas }: { wardDatas: WardData[] }) => {
+  console.log("Ward Data in AnotherDataGrid:", wardDatas);
+
   const columns = [
     { field: "sno", headerName: "Sno", width: 100, sortable: false },
-    { field: "wardName", headerName: "Ward Name", width: 200 },
-    { field: "ckOutlets", headerName: "CK Outlets", width: 150 },
-    { field: "opportunities", headerName: "Opportunities", width: 150 },
+    // { field: "ward_no", headerName: "Ward No", width: 200 },
+    { field: "ward_name", headerName: "Ward Name", width: 200 },
+    { field: "ck_outlet_count", headerName: "CK Outlets", width: 150 },
     {
-      field: "noOfPopulations",
+      field: "population_count",
       headerName: "No.of.Populations",
       width: 150,
       sortable: false,
     },
-  ];
- 
-  const rows = [
     {
-      id: 1,
-      sno: 1,
-      wardName: "Ward 1",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 2,
-      sno: 2,
-      wardName: "Ward 2",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 3,
-      sno: 3,
-      wardName: "Ward 3",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 4,
-      sno: 4,
-      wardName: "Ward 4",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 5,
-      sno: 5,
-      wardName: "Ward 5",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 6,
-      sno: 6,
-      wardName: "Ward 6",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 7,
-      sno: 7,
-      wardName: "Ward 7",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 8,
-      sno: 8,
-      wardName: "Ward 8",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 9,
-      sno: 9,
-      wardName: "Ward 9",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 10,
-      sno: 10,
-      wardName: "Ward 10",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 11,
-      sno: 11,
-      wardName: "Ward 11",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 12,
-      sno: 12,
-      wardName: "Ward 12",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 13,
-      sno: 13,
-      wardName: "Ward 13",
-      ckOutlets: "25",
-      opportunities: "25",
-      noOfPopulations: "25",
-    },
-    {
-      id: 14,
-      sno: 14,
-      wardName: "Ward 14",
-      ckOutlets: "30",
-      opportunities: "25",
-      noOfPopulations: "25",
+      field: "no_of_universal_outlet",
+      headerName: "Opportunities",
+      width: 150,
+      sortable: false,
     },
   ];
+
+  const rows = wardDatas.map((item: WardData, index: number) => ({
+    id: item.id || index + 1,
+    sno: index + 1,
+    // ward_no: item.ward_no || "N/A",
+    ward_name: item.ward_name || "N/A",
+    ck_outlet_count: item.ck_outlet_count || 0,
+    population_count: item.population_count || 0,
+    no_of_universal_outlet:item.no_of_universal_outlet || 0
+  }));
+
+  console.log("Rows data:", rows);
+
   return (
-    <>
-      <Box sx={{ width: "100%", height: "550px", overflow: "hidden" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          disableColumnMenu
-          hideFooter
-          sx={{
-            "& .MuiDataGrid-columnHeaders": {
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-              backgroundColor: "white",
-            },
-            "& .MuiDataGrid-columnSeparator": {
-              display: "none",
-            },
-            "& .MuiDataGrid-row": {
-              cursor: "pointer",
-            },
-            height: "100%",
-            overflow: "auto",
-          }}
-        />
-      </Box>
-    </>
+    <Box sx={{ width: "100%", height: "550px", overflow: "hidden" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        disableColumnMenu
+        hideFooter
+        sx={{
+          "& .MuiDataGrid-columnHeaders": {
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: "white",
+          },
+          "& .MuiDataGrid-columnSeparator": {
+            // display: "none",
+          },
+          "& .MuiDataGrid-row": {
+            cursor: "pointer",
+          },
+          height: "100%",
+          overflow: "auto",
+        }}
+      />
+    </Box>
   );
 };
- 
+
 export default AnotherDataGrid;
- 
- 
