@@ -1,12 +1,28 @@
 import { useState } from "react";
 import CustomSelectSearch from "../../common/CustomSelectSearch";
-import { Box, Grid, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import CustomButton from "../../common/CustomButton";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import AnotherDataGrid from "./AnotherDataGrid";
 import "leaflet/dist/leaflet.css";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import axios from "axios";
+import {
+  metroOrNonMetro,
+  pincode,
+  stateData,
+  taluk,
+  verticalData,
+  ward,
+} from "./WardList";
+import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 
 interface RowData {
   id: number;
@@ -63,7 +79,9 @@ const NewMap = () => {
     },
   ]);
   const [selectedTaluk, setSelectedTaluk] = useState<Option | null>(null);
-  const [selectedWard, setSelectedWard] = useState<Option | null>(null);
+  const [selectedWard, setSelectedWard] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
   const [selectedPincode, setSelectedPincode] = useState<Option | null>(null);
   const handleMetropolitanChange = (value: Option | null) =>
     setSelectedMetropolitan(value);
@@ -75,11 +93,15 @@ const NewMap = () => {
     }
 
     try {
+      const payload: any = { district_name: selectedMetropolitan.value };
+
+      if (selectedWard.length > 0) {
+        payload.ward_list = selectedWard.map((ward) => ward.value);
+      }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/getwardData",
-        { district_name: selectedMetropolitan.value }
+        payload
       );
-
 
       if (response.data.message === "success") {
         const { results } = response.data;
@@ -207,338 +229,6 @@ const NewMap = () => {
       backgroundColor: "#0A330A",
     },
   };
-  const verticalData = [
-    "S&D",
-    "Marketing",
-    "IT & Support",
-    "Human Resource",
-    "CRM",
-    "Inventory",
-    "Logistics",
-  ];
-  const stateData = ["Tamil Nadu"];
-  const metroOrNonMetro = ["Metro", "Non-Metro"];
-  const taluk = [
-    "Taluk 1",
-    "Taluk 2",
-    "Taluk 3",
-    "Taluk 4",
-    "Taluk 5",
-    "Taluk 6",
-    "Taluk 7",
-  ];
-  const ward = [
-    "0001",
-
-    "0002",
-
-    "0003",
-
-    "0004",
-
-    "0005",
-
-    "0006",
-
-    "0007",
-
-    "0008",
-
-    "0009",
-
-    "0010",
-
-    "0011",
-
-    "0012",
-
-    "0013",
-
-    "0014",
-
-    "0015",
-
-    "0016",
-
-    "0017",
-
-    "0018",
-
-    "0019",
-
-    "0020",
-
-    "0021",
-
-    "0022",
-
-    "0023",
-
-    "0024",
-
-    "0025",
-
-    "0026",
-
-    "0027",
-
-    "0028",
-
-    "0029",
-
-    "0030",
-
-    "0031",
-
-    "0032",
-
-    "0033",
-
-    "0034",
-
-    "0035",
-
-    "0036",
-
-    "0037",
-
-    "0038",
-
-    "0039",
-
-    "0040",
-
-    "0041",
-
-    "0042",
-
-    "0043",
-
-    "0044",
-
-    "0045",
-
-    "0046",
-
-    "0047",
-
-    "0048",
-
-    "0049",
-
-    "0050",
-
-    "0051",
-
-    "0052",
-
-    "0053",
-
-    "0054",
-
-    "0055",
-
-    "0056",
-
-    "0057",
-
-    "0058",
-
-    "0059",
-
-    "0060",
-
-    "0061",
-
-    "0062",
-
-    "0063",
-
-    "0064",
-
-    "0065",
-
-    "0066",
-
-    "0067",
-
-    "0068",
-
-    "0069",
-
-    "0070",
-
-    "0071",
-
-    "0072",
-
-    "0073",
-
-    "0074",
-
-    "0075",
-
-    "0076",
-
-    "0077",
-
-    "0078",
-
-    "0079",
-
-    "0080",
-
-    "0081",
-
-    "0082",
-
-    "0083",
-
-    "0084",
-
-    "0085",
-
-    "0086",
-
-    "0087",
-
-    "0088",
-
-    "0089",
-
-    "0090",
-
-    "0091",
-
-    "0092",
-
-    "0093",
-
-    "0094",
-
-    "0095",
-
-    "0096",
-
-    "0097",
-
-    "0098",
-
-    "0099",
-
-    "0100",
-
-    "0101",
-
-    "0102",
-
-    "0103",
-
-    "0104",
-
-    "0105",
-
-    "0106",
-
-    "0107",
-
-    "0108",
-
-    "0109",
-
-    "0110",
-
-    "0111",
-
-    "0112",
-
-    "0113",
-
-    "0114",
-
-    "0115",
-
-    "0116",
-
-    "0117",
-
-    "0118",
-
-    "0119",
-
-    "0120",
-
-    "0121",
-
-    "0122",
-
-    "0123",
-
-    "0124",
-
-    "0125",
-
-    "0126",
-
-    "0127",
-
-    "0128",
-
-    "0129",
-
-    "0130",
-
-    "0131",
-
-    "0132",
-
-    "0133",
-
-    "0134",
-
-    "0135",
-
-    "0136",
-
-    "0137",
-
-    "0138",
-
-    "0139",
-
-    "0140",
-
-    "0141",
-
-    "0142",
-
-    "0143",
-
-    "0144",
-
-    "0145",
-
-    "0146",
-
-    "0147",
-
-    "0148",
-
-    "0149",
-
-    "0150",
-
-    "0151",
-
-    "0152",
-
-    "0153",
-
-    "0154",
-
-    "0155",
-  ];
-  const pincode = [6005007];
 
   const columns: GridColDef[] = [
     {
@@ -640,7 +330,13 @@ const NewMap = () => {
   const handleStateChange = (value: Option | null) => setSelectedState(value);
   const handleMetroChange = (value: Option | null) => setSelectedMetro(value);
   const handleTalukChange = (value: Option | null) => setSelectedTaluk(value);
-  const handleWardChange = (value: Option | null) => setSelectedWard(value);
+  const handleWardChange = (
+    _event: any,
+    newValue: Array<{ label: string; value: string }>
+  ) => {
+    setSelectedWard(newValue);
+  };
+
   const handlePincodeChange = (value: Option | null) =>
     setSelectedPincode(value);
   return (
@@ -692,16 +388,54 @@ const NewMap = () => {
               onChange={handleTalukChange}
             />
           </Grid>
-          <Grid item xs={1.5}>
-            <CustomSelectSearch
-              label="Ward"
-              placeholder="Select Ward"
+          <Grid item xs={2}>
+            <Typography sx={{ fontSize: "12px", mt: "2px" }}>Wards</Typography>
+            <Autocomplete
+              multiple
               options={ward}
               value={selectedWard}
               onChange={handleWardChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  padding: "0px",
+                  borderRadius: "8px",
+                  border: `1.8px solid ${SelectAutoCompleteBorderColor}`,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    border: `none`,
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: `none`,
+                  },
+                },
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="Select wards"
+                />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    label={option.label}
+                    {...getTagProps({ index })}
+                    sx={{
+                      width: "auto",
+                      whiteSpace: "nowrap",
+                      overflow: "visible",
+                      textOverflow: "clip",
+                      margin: "2px",
+                    }}
+                  />
+                ))
+              }
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1.5}>
             <CustomSelectSearch
               label="Pincode"
               placeholder="Select Pincode"
