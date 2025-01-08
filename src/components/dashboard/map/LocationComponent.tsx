@@ -2,7 +2,6 @@ import CustomSelectSearch from "../../common/CustomSelectSearch";
 import {
   Autocomplete,
   Box,
-  Button,
   Chip,
   Grid,
   TextField,
@@ -24,7 +23,8 @@ import {
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useState } from "react";
-import { ListboxComponent } from "../../styles/CustomAutoComplete.styles";
+import CustomSelect from "../../common/CustomSelect";
+import { Height } from "@mui/icons-material";
 
 const LocationComponent = () => {
   const {
@@ -59,11 +59,7 @@ const LocationComponent = () => {
   ) => {
     setSelectedTaluk(newValue);
   };
-  const handleClear = () => {
-    setSelectedTaluk([]);
-  };
 
-  const handleOk = () => {};
   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
@@ -166,12 +162,13 @@ const LocationComponent = () => {
       <Box sx={{ width: "100%" }}>
         <Grid container spacing={1} sx={{ p: 2 }}>
           <Grid item xs={1.5}>
-            <CustomSelectSearch
+            <CustomSelect
               label="Verticals"
               placeholder="Select Verticals"
               options={verticalData}
               value={selectedVertical}
               onChange={handleVerticalChange}
+              sx={{height:'40px'} }
             />
           </Grid>
 
@@ -505,7 +502,7 @@ const LocationComponent = () => {
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px" }}>
-                    <NewTamilNaduMap wardData={wardDataForMap} />
+                    <NewTamilNaduMap wardData={wardDataForMap}  />
                   </Box>
                 </Box>
               </Grid>

@@ -1,17 +1,17 @@
-import Headerlayout from "../layouts/dashboard-layout/Headerlayout";
 import NewMap from "../components/dashboard/map/LocationComponent";
 import AnotherDataGrid from "../components/dashboard/map/AnotherDataGrid";
-import Index from "../components/dashboard/map";
+import Index from "../components/dashboard/map/Index";
+import Headerlayout from "../layouts/dashboard-layout/Headerlayout";
+import LocationComponent from "../components/dashboard/map/LocationComponent";
+import MainLayout from "../layouts/MainLayout";
 
 const Router = [
   {
     path: "/",
-    element: <Index />,
+    element: <MainLayout />,
     children: [
-      // { path: "/", element: <NewMap /> },
-      // { path: "/sample", element: <NewMap /> },
-      // { path: "/anotherdatagrid", element: <AnotherDataGrid /> },
-      { path: "/index", element: <Index /> },
+      { path: "/", element: <MainLayout /> },
+      { path: "/anotherdatagrid", element: <AnotherDataGrid /> },
 
     ],
   },

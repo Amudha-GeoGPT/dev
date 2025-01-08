@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import axios from "axios";
 interface WardData {
   id: string;
   ward_name: string;
@@ -17,12 +18,10 @@ interface WardData {
 }
 
 const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
-  console.log();
+  const [mapData, setMapData] = useState<WardData[]>([]);
+  const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedWardData, setSelectedWardData] = useState<WardData | null>(
-    null
-  );
 
   const columns = [
     {
@@ -90,21 +89,64 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
       no_of_universal_outlet: item.no_of_universal_outlet || 0,
       population_count: item.population_count || 0,
       insights: null,
+      ward_no: item.ward_no || "N/A",
     }));
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleWardNameCellClick = (params: any) => {
-    const selectedWard = wardDatas.find(
-      (item) => item.ward_name === params.row.ward_name
-    );
-    if (selectedWard) {
-      setSelectedWardData(selectedWard);
+  const handleWardNameCellClick = async (params: any) => {
+    try {
+      const { ward_no } = params.row;
+
+      if (!ward_no) {
+        alert("Ward number is not available for this entry.");
+        return;
+      }
+
+      const outletTagged = "Universal Outlet";
+      const payload = {
+        district_name: "Chennai",
+        ward_no: [ward_no],
+        outletTagged,
+      };
+
+      const response = await axios.post(
+        "https://geogptdev.ckdigital.in/api/filterByWard",
+        payload
+      );
+
+      console.log("API Response:", response.data);
+
+      if (response.data.message === "success") {
+        const coordinates = response.data.results;
+        console.log("Fetched coordinates:", coordinates);
+
+        if (coordinates.length > 0) {
+          const updatedWardData = {
+            ...params.row,
+            coordinates,
+          };
+
+          console.log("Updated Ward Data:", updatedWardData);
+          setMapData((prevData) => [...prevData, updatedWardData]);
+          setLatLongPoints(coordinates);
+        } else {
+          console.warn("No valid coordinates found.");
+          alert("No coordinates found for this ward.");
+        }
+      } else {
+        alert("Failed to fetch filtered data.");
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      alert("Failed to process the click.");
     }
   };
+
+
   return (
-    <Box sx={{ width: "100%", height: "600px", mt: 2 }}>
+    <Box sx={{ width: "100%", height: "725px", mt: 2 }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <TextField
           variant="outlined"
@@ -154,15 +196,10 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
             backgroundColor: "transparent",
           },
           height: "100%",
-          overflow: "auto",
+          overflow: "hidden",
         }}
       />
-      {selectedWardData && (
-        <NewTamilNaduMap
-          key={selectedWardData.id}
-          wardData={[selectedWardData]}
-        />
-      )}
+      <NewTamilNaduMap wardData={mapData} latLongPoints={latLongPoints} />
     </Box>
   );
 };

@@ -23,9 +23,9 @@ type Ranges = {
   };
 };
 export const useNewMapPages = () => {
-  const [selectedVertical, setselectedVertical] = useState<Option | null>(null);
+  const [selectedVertical, setselectedVertical] = useState<any>("");
   const [selectedSearch, setselectedSearch] = useState<string>("");
-  const [selectedState, setSelectedState] = useState<Option | null>(null);
+  const [selectedState, setSelectedState] = useState<any>(null);
   const [selectedMetro, setSelectedMetro] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
   const [clickedOverview, setclickedOverview] = useState<boolean>(false);
@@ -219,11 +219,10 @@ export const useNewMapPages = () => {
     mt: 2.5,
   };
 
-  const handleVerticalChange = (value: Option | null) =>
-    setselectedVertical(value);
+  const handleVerticalChange = (value: any) => setselectedVertical(value);
   const handleSearchChange = (value: string) => setselectedSearch(value);
-  const handleStateChange = (value: Option | null) => setSelectedState(value);
-  const handleMetroChange = (value: string) => {
+  const handleStateChange = (value: any) => setSelectedState(value);
+  const handleMetroChange = (value: any) => {
     setSelectedMetro(value);
   };
   const handleWardChange = (

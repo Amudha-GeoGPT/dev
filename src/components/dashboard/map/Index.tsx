@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import CustomButton from "../../common/CustomButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
@@ -43,7 +43,7 @@ const Index = () => {
   );
 
   return (
-    <Box sx={{ width: "100%", height: "100vh", p: 2 }}>
+    <Box sx={{ width: "100%", height: "100vh" }}>
       <Box
         sx={{
           display: "flex",
