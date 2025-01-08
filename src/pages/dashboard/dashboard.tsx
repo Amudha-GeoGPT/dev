@@ -1,4 +1,4 @@
-import React from 'react';
+dimport React from 'react';
 import { useMediaQuery, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DefaultImagebg from '../../assets/images/svg/DefaultLoadingimgbg.svg';
