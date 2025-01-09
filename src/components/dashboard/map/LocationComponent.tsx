@@ -24,7 +24,6 @@ import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
-import { Height } from "@mui/icons-material";
 
 const LocationComponent = () => {
   const {
@@ -501,8 +500,9 @@ const LocationComponent = () => {
                       }}
                     />
                   </Box>
-                  <Box sx={{ mt: 2, height: "400px" }}>
-                    <NewTamilNaduMap wardData={wardDataForMap}  />
+                  <Box sx={{ mt: 2, height: "400px" ,width:"100%"}}>
+                    <NewTamilNaduMap wardData={wardDataForMap} latLongPoints={[]} simplifiedWardData={[]}  />
+                    
                   </Box>
                 </Box>
               </Grid>
