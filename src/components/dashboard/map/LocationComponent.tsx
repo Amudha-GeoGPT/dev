@@ -1,3 +1,5 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomSelectSearch from "../../common/CustomSelectSearch";
 import {
@@ -25,7 +27,6 @@ import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useEffect, useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
-import MyMap from "./MyMap";
 
 const LocationComponent = () => {
   const {
@@ -38,23 +39,24 @@ const LocationComponent = () => {
     specificRangeData,
     wardDataForMap,
     rows,
-    // selectedTaluk,
-    selectedWard,
+    selectedWard, // Ensure this is the correct variable
+    // selectedWardNo, // Add selectedWardNo here
     handleMetropolitanChange,
     handleApplyFilter,
     handleCellClick,
     ApplyFilterButtonStyles,
     ClearAllButtonStyles,
-    // handleTalukChange,
     handleWardChange,
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
   } = useNewMapPages();
+
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
   >([]);
-  const [wardDataPoint, setWardDataPoint] = useState([])
+  const [wardDataPoint, setWardDataPoint] = useState([]);
+
   const handleTalukChange = (
     _event: any,
     newValue: Array<{ label: string; value: string }>
@@ -62,18 +64,12 @@ const LocationComponent = () => {
     setSelectedTaluk(newValue);
   };
 
-  // useEffect(() => {
-
-  //   alert("specificRangeData changes")
-  // }, [specificRangeData])
-  console.log("specificRangeData", specificRangeData)
-
   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
       headerName: "CK Outlets",
       flex: 2.5,
-      renderCell: (params) => <Typography sx={{}}>{params.value}</Typography>,
+      renderCell: (params) => <Typography>{params.value}</Typography>,
       headerClassName: "headerCell",
       sortable: false,
     },
@@ -99,12 +95,10 @@ const LocationComponent = () => {
       flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "orange" }}>51 to 100</span>,
-
       renderCell: (params) => (
         <Typography
           sx={{
-            color:
-              params.row.CKOutlets === "No.of.wards" ? "orange" : "inherit",
+            color: params.row.CKOutlets === "No.of.wards" ? "orange" : "inherit",
           }}
         >
           {params.value}
@@ -117,12 +111,10 @@ const LocationComponent = () => {
       flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "#9370db" }}>101 to 200</span>,
-
       renderCell: (params) => (
         <Typography
           sx={{
-            color:
-              params.row.CKOutlets === "No.of.wards" ? "#9370db" : "inherit",
+            color: params.row.CKOutlets === "No.of.wards" ? "#9370db" : "inherit",
           }}
         >
           {params.value}
@@ -135,12 +127,10 @@ const LocationComponent = () => {
       flex: 1.5,
       sortable: false,
       renderHeader: () => <span style={{ color: "#20b2aa" }}>201 to 300</span>,
-
       renderCell: (params) => (
         <Typography
           sx={{
-            color:
-              params.row.CKOutlets === "No.of.wards" ? "#20b2aa" : "inherit",
+            color: params.row.CKOutlets === "No.of.wards" ? "#20b2aa" : "inherit",
           }}
         >
           {params.value}
@@ -153,7 +143,6 @@ const LocationComponent = () => {
       flex: 1.2,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>&gt;300</span>,
-
       renderCell: (params) => (
         <Typography
           sx={{
@@ -165,6 +154,7 @@ const LocationComponent = () => {
       ),
     },
   ];
+
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -179,7 +169,6 @@ const LocationComponent = () => {
               sx={{ height: "40px" }}
             />
           </Grid>
-
           <Grid item xs={1.5}>
             <CustomSelectSearch
               label="State"
@@ -207,132 +196,105 @@ const LocationComponent = () => {
               onChange={handleMetropolitanChange}
             />
           </Grid>
-
           {selectedMetro === "Non-Metro" && (
-            <>
-              <Grid item xs={2.4}>
-                <Typography sx={{ fontSize: "12px", mt: "2px" }}>
-                  Taluk
-                </Typography>
-                <Autocomplete
-                  multiple
-                  limitTags={1}
-                  options={taluk}
-                  value={selectedTaluk}
-                  onChange={handleTalukChange}
-                  disableCloseOnSelect
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      padding: "0px",
-                      borderRadius: "8px",
-                      border: `1.8px solid ${SelectAutoCompleteBorderColor}`,
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        border: `none`,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        border: `none`,
-                      },
+            <Grid item xs={2.4}>
+              <Typography sx={{ fontSize: "12px", mt: "2px" }}>
+                Taluk
+              </Typography>
+              <Autocomplete
+                multiple
+                limitTags={1}
+                options={taluk}
+                value={selectedTaluk}
+                onChange={handleTalukChange}
+                disableCloseOnSelect
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    padding: "0px",
+                    borderRadius: "8px",
+                    border: `1.8px solid ${SelectAutoCompleteBorderColor}`,
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "none",
                     },
-                  }}
-                  // ListboxComponent={(props) => (
-                  //   <>
-                  //     <ListboxComponent {...props}>
-                  //       {props.children}
-
-                  //       <Box sx={{display:'flex',justifyContent:'space-around',p:0.3,borderTop:'1px solid black'}}>
-                  //         <Button
-                  //           variant="outlined"
-                  //           sx={{ backgroundColor: "white", color: "black",border:'none' }}
-                  //         >
-                  //           Clear
-                  //         </Button>
-                  //         <Button
-                  //           variant="outlined"
-                  //           sx={{ backgroundColor: "black", color: "white",borderRadius:'10px' }}
-                  //         >
-                  //           Ok
-                  //         </Button>
-                  //       </Box>
-                  //     </ListboxComponent>
-                  //   </>
-                  // )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="Select Taluk"
-                    />
-                  )}
-                  renderTags={(value, getTagProps) => {
-                    const visibleTag = value.slice(0, 1);
-                    const additionalCount = value.length - 1;
-
-                    return (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexWrap: "nowrap",
-                          gap: "4px",
-                        }}
-                      >
-                        {visibleTag.map((option, index) => (
-                          <Chip
-                            label={option.label}
-                            {...getTagProps({ index })}
-                            sx={{
-                              fontSize: "10px",
-
-                              borderRadius: "12px",
-                              whiteSpace: "nowrap",
-                              overflow: "visible",
-                              textOverflow: "clip",
-                              backgroundColor: "#E2F2E5",
-                            }}
-                          />
-                        ))}
-                        {additionalCount > 0 && (
-                          <Chip
-                            label={`+${additionalCount}`}
-                            onClick={() => { }}
-                            sx={{
-                              whiteSpace: "nowrap",
-                              background: "#E2F2E5",
-                              color: "#000",
-                              cursor: "pointer",
-                            }}
-                          />
-                        )}
-                      </Box>
-                    );
-                  }}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "100%",
-                        }}
-                      >
-                        <Typography>{option.label}</Typography>
-                        {selected && (
-                          <CheckIcon
-                            sx={{
-                              color: "green",
-                            }}
-                          />
-                        )}
-                      </Box>
-                    </li>
-                  )}
-                />
-              </Grid>
-            </>
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      border: `none`,
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      border: `none`,
+                    },
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    placeholder="Select Taluk"
+                  />
+                )}
+                renderTags={(value, getTagProps) => {
+                  const visibleTag = value.slice(0, 1);
+                  const additionalCount = value.length - 1;
+                  return (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexWrap: "nowrap",
+                        gap: "4px",
+                      }}
+                    >
+                      {visibleTag.map((option, index) => (
+                        <Chip
+                          label={option.label}
+                          {...getTagProps({ index })}
+                          sx={{
+                            fontSize: "10px",
+                            borderRadius: "12px",
+                            whiteSpace: "nowrap",
+                            overflow: "visible",
+                            textOverflow: "clip",
+                            backgroundColor: "#E2F2E5",
+                          }}
+                        />
+                      ))}
+                      {additionalCount > 0 && (
+                        <Chip
+                          label={`+${additionalCount}`}
+                          onClick={() => {}}
+                          sx={{
+                            whiteSpace: "nowrap",
+                            background: "#E2F2E5",
+                            color: "#000",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </Box>
+                  );
+                }}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography>{option.label}</Typography>
+                      {selected && (
+                        <CheckIcon
+                          sx={{
+                            color: "green",
+                          }}
+                        />
+                      )}
+                    </Box>
+                  </li>
+                )}
+              />
+            </Grid>
           )}
           {selectedMetro === "Metro" && (
             <Grid item xs={2.4}>
@@ -361,9 +323,6 @@ const LocationComponent = () => {
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                       border: `none`,
                     },
-                    // "& .MuiInputBase-input": {
-                    //   fontSize: "12px", // Placeholder font size
-                    // },
                   },
                 }}
                 renderInput={(params) => (
@@ -371,18 +330,11 @@ const LocationComponent = () => {
                     {...params}
                     variant="outlined"
                     placeholder="Select wards"
-                  // InputProps={{
-                  //   ...params.InputProps,
-                  //   style: {
-                  //     fontSize: "14px", // Placeholder font size
-                  //   },
-                  // }}
                   />
                 )}
                 renderTags={(value, getTagProps) => {
                   const visibleTag = value.slice(0, 1);
                   const additionalCount = value.length - 1;
-
                   return (
                     <Box
                       sx={{
@@ -409,13 +361,12 @@ const LocationComponent = () => {
                       {additionalCount > 0 && (
                         <Chip
                           label={`+${additionalCount}`}
-                          onClick={() => { }}
+                          onClick={() => {}}
                           sx={{
                             whiteSpace: "nowrap",
-                            backgroundColor: "#f0f0f0",
+                            backgroundColor: "#E2F2E5",
                             color: "#000",
                             cursor: "pointer",
-                            background: "#E2F2E5",
                           }}
                         />
                       )}
@@ -510,26 +461,23 @@ const LocationComponent = () => {
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px", width: "100%" }}>
-                    {/* <MyMap
-                      latLongPoints={wardDataPoint}
-                    /> */}
-                    <NewTamilNaduMap
-                      wardData={wardDataForMap || []}
-                      latLongPoints={wardDataPoint}
-                      simplifiedWardData={
-                        wardDataForMap
-                          ? [
-                            {
-                              color_code:
-                                wardDataForMap[0]?.color_code || "#000000",
-                              ward_no: wardDataForMap[0]?.ward_no || "0",
-                              boundaries:
-                                wardDataForMap[0]?.coordinates || [],
-                            },
-                          ]
-                          : []
-                      }
-                    />
+            <NewTamilNaduMap 
+                      wardData={wardDataForMap || []} 
+                      latLongPoints={wardDataPoint} 
+                      simplifiedWardData={ 
+                        wardDataForMap 
+                          ? [ 
+                            { 
+                              color_code: 
+                                wardDataForMap[0]?.color_code || "#000000", 
+                              ward_no: wardDataForMap[0]?.ward_no || "0", 
+                              boundaries: 
+                                wardDataForMap[0]?.coordinates || [], 
+                            }, 
+                          ] 
+                          : [] 
+                      } 
+                    /> 
                   </Box>
                 </Box>
               </Grid>
