@@ -23,8 +23,9 @@ import {
 } from "./WardList";
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
+import MyMap from "./MyMap";
 
 const LocationComponent = () => {
   const {
@@ -53,12 +54,19 @@ const LocationComponent = () => {
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
   >([]);
+  const [wardDataPoint, setWardDataPoint] = useState([])
   const handleTalukChange = (
     _event: any,
     newValue: Array<{ label: string; value: string }>
   ) => {
     setSelectedTaluk(newValue);
   };
+
+  // useEffect(() => {
+
+  //   alert("specificRangeData changes")
+  // }, [specificRangeData])
+  console.log("specificRangeData", specificRangeData)
 
   const columns: GridColDef[] = [
     {
@@ -289,7 +297,7 @@ const LocationComponent = () => {
                         {additionalCount > 0 && (
                           <Chip
                             label={`+${additionalCount}`}
-                            onClick={() => {}}
+                            onClick={() => { }}
                             sx={{
                               whiteSpace: "nowrap",
                               background: "#E2F2E5",
@@ -363,12 +371,12 @@ const LocationComponent = () => {
                     {...params}
                     variant="outlined"
                     placeholder="Select wards"
-                    // InputProps={{
-                    //   ...params.InputProps,
-                    //   style: {
-                    //     fontSize: "14px", // Placeholder font size
-                    //   },
-                    // }}
+                  // InputProps={{
+                  //   ...params.InputProps,
+                  //   style: {
+                  //     fontSize: "14px", // Placeholder font size
+                  //   },
+                  // }}
                   />
                 )}
                 renderTags={(value, getTagProps) => {
@@ -401,7 +409,7 @@ const LocationComponent = () => {
                       {additionalCount > 0 && (
                         <Chip
                           label={`+${additionalCount}`}
-                          onClick={() => {}}
+                          onClick={() => { }}
                           sx={{
                             whiteSpace: "nowrap",
                             backgroundColor: "#f0f0f0",
@@ -502,29 +510,23 @@ const LocationComponent = () => {
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px", width: "100%" }}>
+                    {/* <MyMap
+                      latLongPoints={wardDataPoint}
+                    /> */}
                     <NewTamilNaduMap
                       wardData={wardDataForMap || []}
-                      latLongPoints={
-                        specificRangeData
-                          ? specificRangeData.map(
-                              (point: { latitude: any; longitude: any }) => ({
-                                latitude: Number(point?.latitude || 0),
-                                longitude: Number(point?.longitude || 0),
-                              })
-                            )
-                          : []
-                      }
+                      latLongPoints={wardDataPoint}
                       simplifiedWardData={
                         wardDataForMap
                           ? [
-                              {
-                                color_code:
-                                  wardDataForMap[0]?.color_code || "#000000",
-                                ward_no: wardDataForMap[0]?.ward_no || "0",
-                                boundaries:
-                                  wardDataForMap[0]?.coordinates || [],
-                              },
-                            ]
+                            {
+                              color_code:
+                                wardDataForMap[0]?.color_code || "#000000",
+                              ward_no: wardDataForMap[0]?.ward_no || "0",
+                              boundaries:
+                                wardDataForMap[0]?.coordinates || [],
+                            },
+                          ]
                           : []
                       }
                     />
@@ -534,7 +536,7 @@ const LocationComponent = () => {
               <Grid item xs={6}>
                 <Box sx={{ mt: 2 }}>
                   {clicked && specificRangeData && (
-                    <AnotherDataGrid wardDatas={specificRangeData} />
+                    <AnotherDataGrid setWardPoints={setWardDataPoint} wardDatas={specificRangeData} />
                   )}
                 </Box>
               </Grid>

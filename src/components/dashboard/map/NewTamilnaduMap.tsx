@@ -13,7 +13,6 @@ import "leaflet/dist/leaflet.css";
 import { Box, IconButton, Modal } from "@mui/material";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import Markers from "./Markers";
 interface WardData {
   ward_name: string;
   coordinates: number[][];
@@ -76,7 +75,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
       return [latSum / coords.length, lngSum / coords.length];
     }
 
-    return [13.0843, 80.2705]; 
+    return [13.0843, 80.2705];
   };
 
   const createCustomIcon = useCallback(
@@ -144,15 +143,6 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             attribution="&copy; OpenStreetMap contributors"
           />
 
-          <Markers latLongPoints={latLongPoints} />
-
-          {/* <Marker position={[13.0378419, 80.1927755]} />
-          <Marker position={[13.0708518, 80.19316]} />
-
-          <Marker position={[13.0707831, 80.1934385]} />
-
-          <Marker position={[13.0707596, 80.1934336]} />
-          <Marker position={[13.0709833, 80.20337]} /> */}
           {wardData.map((ward) => {
             const coordinates = Array.isArray(ward.coordinates)
               ? ward.coordinates
@@ -204,30 +194,15 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             );
           })}
 
-          {/* {console.log("finally lat long", latLongPoints)} */}
-          {latLongPoints.map((cord, i) => {
-            console.table(cord);
-            return (
-              <Marker
-                key={`MARKER_${i}`}
-                position={[cord?.latitude, cord?.longitude]}
-              />
-            );
-          })}
 
-          {/* {latLongPoints.map((point, index) => {
+          {latLongPoints.map((point, index) => {
             return (
               <Marker
                 key={`marker-${index}`}
                 position={[point.latitude, point.longitude]}
-                // icon={L.divIcon({
-                //   className: "custom-marker",
-                //   html: `<div style="background-color: #ff4444; width: 8px; height: 8px; border-radius: 50%; border: 2px solid white;"></div>`,
-                //   iconSize: [12, 12],
-                // })}
               />
             );
-          })} */}
+          })}
 
           {simplifiedWardData.map((ward) => (
             <React.Fragment key={ward.ward_no}>
@@ -254,6 +229,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             backgroundColor: "white",
           }}
         >
+          {/* Close Button Inside Modal */}
           <IconButton
             sx={{
               position: "absolute",

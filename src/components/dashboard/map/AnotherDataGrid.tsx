@@ -20,7 +20,7 @@ interface WardData {
   ward_no: string;
 }
 
-const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
+const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardData[], setWardPoints: any }) => {
   const [mapData, setMapData] = useState<WardData[]>([]);
   const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
@@ -173,7 +173,6 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
           setMapData((prevData) => [...prevData, updatedWardData]);
           setLatLongPoints(coordinates);
         } else {
-          console.warn("No valid coordinates found.");
           alert("No coordinates found for this ward.");
         }
       } else {
@@ -198,6 +197,8 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
 
       if (response.data.message === "success") {
         const coordinates = response.data.results;
+        console.log("response", coordinates)
+        setWardPoints(coordinates)
         setMapState((prevState) => ({
           ...prevState,
           latLongPoints: coordinates,
@@ -281,11 +282,11 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
         }}
       />
       <Box sx={{ display: "none", mt: 2 }}>
-        <NewTamilNaduMap
+        {/* <NewTamilNaduMap
           wardData={mapState.wardData}
           latLongPoints={mapState.latLongPoints}
           simplifiedWardData={mapState.simplifiedWardData}
-        />
+        /> */}
       </Box>
     </Box>
   );

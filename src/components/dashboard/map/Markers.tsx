@@ -14,12 +14,11 @@ interface MarkersProps {
 const Markers: React.FC<MarkersProps> = ({ latLongPoints }) => {
   return (
     <>
-      {latLongPoints.map((cord, i) => {
-        console.table(cord);
+      {latLongPoints.map((point, index) => {
         return (
           <Marker
-            key={`MARKER_${i}`}
-            position={[cord.latitude, cord.longitude]}
+            key={`marker-${index}`}
+            position={[point.latitude, point.longitude]}
           />
         );
       })}
