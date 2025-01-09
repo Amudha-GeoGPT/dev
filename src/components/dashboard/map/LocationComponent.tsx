@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomSelectSearch from "../../common/CustomSelectSearch";
 import {
   Autocomplete,
@@ -500,10 +501,23 @@ const LocationComponent = () => {
                       }}
                     />
                   </Box>
-                  <Box sx={{ mt: 2, height: "400px" ,width:"100%"}}>
-                    <NewTamilNaduMap wardData={wardDataForMap} latLongPoints={[]} simplifiedWardData={[]}  />
-                    
-                  </Box>
+                  <Box sx={{ mt: 2, height: "400px", width: "100%" }}>
+  <NewTamilNaduMap 
+    wardData={wardDataForMap || []}
+    latLongPoints={specificRangeData ? specificRangeData.map((point: { latitude: any; longitude: any; }) => ({
+      latitude: Number(point?.latitude || 0),
+      longitude: Number(point?.longitude || 0)
+    })) : []}
+    simplifiedWardData={wardDataForMap ? [{
+      color_code: wardDataForMap[0]?.color_code || '#000000',
+      ward_no: wardDataForMap[0]?.ward_no || '0',
+      boundaries: wardDataForMap[0]?.coordinates || []
+    }] : []}
+  />
+</Box>
+
+
+
                 </Box>
               </Grid>
               <Grid item xs={6}>

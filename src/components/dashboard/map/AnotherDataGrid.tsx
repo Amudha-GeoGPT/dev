@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, InputAdornment, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
@@ -26,6 +28,11 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
   const [simplifiedWardData, setSimplifiedWardData] = useState<
     { color_code: string; ward_no: string; boundaries: any }[]
   >([]);
+  const [mapState, setMapState] = useState({
+    wardData: [] as WardData[],
+    latLongPoints: [] as any[],
+    simplifiedWardData: [] as { color_code: string; ward_no: string; boundaries: any }[]
+  });
 
   const columns = [
     {
@@ -180,59 +187,41 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-
-      if (!ward_no) {
-        alert("Ward number is not available for this entry.");
-        return;
-      }
-
-      const outletTagged = "CK Outlet";
-      const payload = {
-        district_name: "CHENNAI",
-        ward_no: [ward_no],
-        outletTagged,
-      };
-
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        payload
+        {
+          district_name: "CHENNAI",
+          ward_no: [ward_no],
+          outletTagged: "CK Outlet",
+        }
       );
-
-      // console.log("API Response:", response.data);
-
+  
       if (response.data.message === "success") {
         const coordinates = response.data.results;
-        // console.log("Fetched coordinates:", coordinates);
-
-        if (coordinates.length > 0) {
-          const updatedWardData = {
-            ...params.row,
-            coordinates,
-          };
-
-          // console.log("Updated Ward Data:", updatedWardData);
-          setMapData((prevData) => [...prevData, updatedWardData]);
-          setLatLongPoints(coordinates);
-        } else {
-          console.warn("No valid coordinates found.");
-          alert("No coordinates found for this ward.");
-        }
-      } else {
-        alert("Failed to fetch filtered data.");
+        setMapState(prevState => ({
+          ...prevState,
+          latLongPoints: coordinates,
+          wardData: prevState.wardData // Preserve existing ward data
+        }));
       }
     } catch (error) {
       console.error("Error occurred:", error);
-      alert("Failed to process the click.");
     }
   };
+  
   const handleWardNameCellClick = async (params: any) => {
-    try {
-      const { color_code, ward_no, boundaries } = params.row;
-
-      setSimplifiedWardData([{ color_code, ward_no, boundaries }]); // Reset state and add the new data
-    } catch (error) {
-      console.error("Error in handleWardNameCellClick:", error);
-    }
+    const { color_code, ward_no, boundaries, ward_name } = params.row;
+    
+    setMapState(prevState => ({
+      ...prevState,
+      simplifiedWardData: [{
+        color_code,
+        ward_no,
+        boundaries,
+        ward_name // Include ward_name in the data
+      }],
+      latLongPoints: prevState.latLongPoints
+    }));
   };
 
   return (
@@ -289,18 +278,13 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
           overflow: "hidden",
         }}
       />
-      <Box sx={{ display: "none" }}>
-        <NewTamilNaduMap
-          wardData={mapData}
-          latLongPoints={latLongPoints}
-          simplifiedWardData={[]}
-        />
-        <NewTamilNaduMap
-          simplifiedWardData={simplifiedWardData}
-          wardData={[]}
-          latLongPoints={[]}
-        />
-      </Box>
+    <Box sx={{ display: 'none', mt: 2 }}> {/* Changed from display: none */}
+      <NewTamilNaduMap
+        wardData={mapState.wardData}
+        latLongPoints={mapState.latLongPoints}
+        simplifiedWardData={mapState.simplifiedWardData}
+      />
+    </Box>
     </Box>
   );
 };

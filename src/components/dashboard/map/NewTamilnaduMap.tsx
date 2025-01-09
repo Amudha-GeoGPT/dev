@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useState } from "react";
 import {
   MapContainer,
@@ -24,6 +26,11 @@ interface LatLongPoint {
   longitude: number;
 }
 
+interface Coordinate {
+  lat: number;
+  lng: number;
+}
+
 interface SimplifiedWardData {
   color_code: string;
   ward_no: string;
@@ -43,29 +50,34 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   const [zoomLevel, setZoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const calculateCentroid = (coords: number[][]): [number, number] => {
-    if (
-      !Array.isArray(coords) ||
-      coords.length === 0 ||
-      !coords.every(
-        (coord) =>
-          Array.isArray(coord) &&
-          coord.length === 2 &&
-          coord.every(Number.isFinite)
-      )
-    ) {
-      console.warn("Invalid coordinates for centroid calculation:", coords);
-      return [0, 0];
-    }
+// Update the calculateCentroid function to handle the correct data structure
+const calculateCentroid = (coords: any[]): [number, number] => {
+  if (!Array.isArray(coords) || coords.length === 0) {
+    return [13.0843, 80.2705]; // Default Chennai coordinates
+  }
 
-    let latSum = 0,
-      lngSum = 0;
+  // Handle array of objects with latitude/longitude
+  if (typeof coords[0] === 'object' && 'latitude' in coords[0]) {
+    let latSum = 0, lngSum = 0;
+    coords.forEach(point => {
+      latSum += point.latitude;
+      lngSum += point.longitude;
+    });
+    return [latSum / coords.length, lngSum / coords.length];
+  }
+
+  // Handle array of coordinate pairs
+  if (Array.isArray(coords[0])) {
+    let latSum = 0, lngSum = 0;
     coords.forEach(([lat, lng]) => {
       latSum += lat;
       lngSum += lng;
     });
     return [latSum / coords.length, lngSum / coords.length];
-  };
+  }
+
+  return [13.0843, 80.2705]; // Fallback to default
+};
 
   const createCustomIcon = useCallback(
     (wardName: string) => {
@@ -84,9 +96,13 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
     return null;
   };
 
-  // useEffect(() => {
-  //   console.log("Ward data or lat/long points changed, refreshing map.");
-  // }, [wardData, latLongPoints]);
+  useEffect(() => {
+    console.log('Map data updated:', {
+      wardData: wardData.length,
+      latLongPoints: latLongPoints.length,
+      simplifiedWardData: simplifiedWardData.length
+    });
+  }, [wardData, latLongPoints, simplifiedWardData]);
   const resetKey = `${JSON.stringify(wardData)}-${JSON.stringify(
     latLongPoints
   )}`;
@@ -128,34 +144,23 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             attribution="&copy; OpenStreetMap contributors"
           />
 
-          {wardData.map((ward) => {
-            const { coordinates, ward_no, color_code, fillColor } = ward;
-
-            if (
-              !Array.isArray(coordinates) ||
-              coordinates.length === 0 ||
-              !coordinates.every(
-                (coord) => Array.isArray(coord) && coord.length === 2
-              )
-            ) {
-              console.warn(`Invalid coordinates for ward: ${ward_no}`);
-              return null;
-            }
-
-            const centroid = calculateCentroid(coordinates);
-
-            return (
-              <React.Fragment key={ward_no}>
-                <Polygon
-                  positions={coordinates as L.LatLngExpression[]}
-                  color={color_code}
-                  fillColor={fillColor}
-                  fillOpacity={0.5}
-                />
-                <Marker position={centroid} icon={createCustomIcon(ward_no)} />
-              </React.Fragment>
-            );
-          })}
+{wardData.map((ward) => {
+  const coordinates = Array.isArray(ward.coordinates) ? ward.coordinates : [];
+  const centroid = calculateCentroid(coordinates);
+  return (
+    <React.Fragment key={ward.ward_no}>
+      {coordinates.length > 0 && (
+        <Polygon
+          positions={coordinates as L.LatLngExpression[]}
+          color={ward.color_code}
+          fillColor={ward.fillColor}
+          fillOpacity={0.5}
+        />
+      )}
+      <Marker position={centroid} icon={createCustomIcon(ward.ward_no)} />
+    </React.Fragment>
+  );
+})}
           {simplifiedWardData.map((ward) => {
             const { boundaries, ward_no, color_code } = ward;
 
@@ -185,14 +190,30 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             );
           })}
 
-          {latLongPoints.map((point, index) => (
-            <>
-              <Marker
-                key={index}
-                position={[point.latitude, point.longitude]}
-              />
-            </>
-          ))}
+
+{latLongPoints.map((point, index) => (
+        <Marker
+          key={`marker-${index}`}
+          position={[point.latitude, point.longitude]}
+          icon={L.divIcon({
+            className: 'custom-marker',
+            html: `<div style="background-color: #ff4444; width: 8px; height: 8px; border-radius: 50%; border: 2px solid white;"></div>`,
+            iconSize: [12, 12]
+          })}
+        />
+      ))}
+
+
+{simplifiedWardData.map((ward) => (
+        <React.Fragment key={ward.ward_no}>
+          <Polygon
+            positions={ward.boundaries as L.LatLngExpression[]}
+            color={ward.color_code}
+            fillColor={ward.color_code}
+            fillOpacity={0.3}
+          />
+        </React.Fragment>
+      ))}
         </MapContainer>
       </Box>
       <Modal
