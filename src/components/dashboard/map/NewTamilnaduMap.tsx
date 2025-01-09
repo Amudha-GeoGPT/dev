@@ -22,6 +22,13 @@ interface WardData {
   fillColor: string;
   ward_no: string;
 }
+interface SetWardNoo {
+  ward_name: string;
+  coordinates: number[][];
+  color_code: string;
+  fillColor: string;
+  ward_no: string;
+}
 interface LatLongPoint {
   latitude: number;
   longitude: number;
@@ -29,8 +36,8 @@ interface LatLongPoint {
   outletName: any;
   distributorCode: any;
   distributorName: any;
-  color:any;
-  fillColor:any;
+  color: any;
+  fillColor: any;
 }
 interface Coordinate {
   lat: number;
@@ -45,11 +52,13 @@ interface NewTamilNaduMapProps {
   wardData: WardData[];
   latLongPoints: LatLongPoint[];
   simplifiedWardData: SimplifiedWardData[];
+  setWardNoo: SetWardNoo[];
 }
 const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   wardData,
   latLongPoints,
   simplifiedWardData,
+  setWardNoo,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -101,8 +110,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   const resetKey = `${JSON.stringify(wardData)}-${JSON.stringify(
     latLongPoints
   )}`;
-  console.log("Ward Name:", simplifiedWardData);
-  console.log("CK outlet r universal lat long ", latLongPoints);
+  console.log("asdfghjklsdfghj", setWardNoo);
 
   const MapContent: React.FC = () => (
     <MapContainer
@@ -135,6 +143,30 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
           </React.Fragment>
         );
       })}
+    {Array.isArray(setWardNoo) &&
+  setWardNoo.map((ward) => {
+    const coordinates = Array.isArray(ward.coordinates)
+      ? ward.coordinates
+      : [];
+    const centroid = calculateCentroid(coordinates);
+    return (
+      <React.Fragment key={ward.ward_no}>
+        {coordinates.length > 0 && (
+          <Polygon
+            positions={coordinates as L.LatLngExpression[]}
+            color={ward.color_code}
+            fillColor={ward.fillColor}
+            fillOpacity={0.5}
+          />
+        )}
+        <Marker
+          position={centroid}
+          icon={createCustomIcon(ward.ward_no)}
+        />
+      </React.Fragment>
+    );
+  })}
+
       {simplifiedWardData.map((ward) => {
         const { boundaries, ward_no, color_code } = ward;
         if (
@@ -166,9 +198,9 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
           center={[point.latitude, point.longitude]}
           radius={4} // Adjust the size of the circle
           pathOptions={{
-            color: point.color, 
-            fillColor: point.fillColor, 
-            fillOpacity: 0.8, 
+            color: point.color,
+            fillColor: point.fillColor,
+            fillOpacity: 0.8,
           }}
         >
           <Popup>

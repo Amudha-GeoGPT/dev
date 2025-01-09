@@ -20,12 +20,15 @@ interface WardData {
   ward_no: string;
 }
 
+
 const AnotherDataGrid = ({
   wardDatas = [],
   setWardPoints,
+  setWardNo,
 }: {
   wardDatas?: WardData[];
   setWardPoints: any;
+  setWardNo:any
 }) => {
   const [mapData, setMapData] = useState<WardData[]>([]);
   const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
@@ -61,7 +64,7 @@ const AnotherDataGrid = ({
       renderHeader: () => <strong style={{ fontSize: "12px" }}>Ward No</strong>,
       renderCell: (params: any) => (
         <Box
-          onClick={() => handleWardNameCellClick(params)}
+          onClick={() => handleWardNoCellClick(params)}
           sx={{ cursor: "pointer" }}
         >
           {params.value}
@@ -181,7 +184,6 @@ const AnotherDataGrid = ({
           color,
           fillColor,
         }));
-        console.log("Updated Coordinates with all fields:", updatedCoordinates);
 
         setWardPoints(updatedCoordinates);
         setMapState((prevState) => ({
@@ -197,8 +199,6 @@ const AnotherDataGrid = ({
             ward_list: [ward_no], // Pass the ward_no dynamically
           }
         );
-
-        console.log("Ward Data Response:", wardDataResponse.data);
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -241,32 +241,56 @@ const AnotherDataGrid = ({
           "https://geogptdev.ckdigital.in/api/getwardData",
           {
             district_name: "Chennai",
-            ward_list: [ward_no], // Pass the ward_no dynamically
+            ward_list: [ward_no], 
           }
         );
-        console.log("Ward Data Response:", wardDataResponse.data);
       }
     } catch (error) {
       console.error("Error occurred:", error);
     }
   };
 
-  const handleWardNameCellClick = async (params: any) => {
-    const { color_code, ward_no, boundaries, ward_name } = params.row;
+  const handleWardNoCellClick = async (params: any) => {
+    
+    const { color_code, ward_no, boundaries } = params.row;
     setSelectedWardNo(ward_no); // Set the selected ward number
-    setMapState((prevState) => ({
-      ...prevState,
-      simplifiedWardData: [
-        {
-          color_code,
-          ward_no,
-          boundaries,
-          ward_name,
-        },
-      ],
-      latLongPoints: prevState.latLongPoints,
-    }));
+    
+    // Check if the ward data already exists in wardDatas
+    const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
+  
+    if (existingWardData) {
+      setMapState((prevState) => ({
+        ...prevState,
+        simplifiedWardData: [
+          {
+            color_code,
+            ward_no,
+            boundaries,
+          },
+        ],
+        latLongPoints: prevState.latLongPoints, // Assuming you don't need to update latLongPoints
+        wardData: [...prevState.wardData, existingWardData], // Optionally add the ward data
+      }));
+      setWardNo(existingWardData)
+
+    } else {
+      setMapState((prevState) => ({
+        ...prevState,
+        simplifiedWardData: [
+          {
+            color_code,
+            ward_no,
+            boundaries,
+          },
+        ],
+        latLongPoints: prevState.latLongPoints,
+        wardData: prevState.wardData, // No new data to add
+      }));
+    }
+    console.log("may be",existingWardData);
+    
   };
+  
 
   return (
     <Box sx={{ width: "100%", height: "600px", mt: 2 }}>
@@ -293,7 +317,7 @@ const AnotherDataGrid = ({
         rows={filteredRows}
         columns={columns}
         disableColumnMenu
-        // onCellClick={handleWardNameCellClick}
+        // onCellClick={handleWardNoCellClick}
         hideFooter
         sx={{
           mt: 1,

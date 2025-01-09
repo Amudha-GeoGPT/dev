@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomSelectSearch from "../../common/CustomSelectSearch";
@@ -25,7 +24,7 @@ import {
 } from "./WardList";
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
 
 const LocationComponent = () => {
@@ -56,6 +55,7 @@ const LocationComponent = () => {
     Array<{ label: string; value: string }>
   >([]);
   const [wardDataPoint, setWardDataPoint] = useState([]);
+  const [wardDataNo, setWardDataNo] = useState([]);
 
   const handleTalukChange = (
     _event: any,
@@ -98,7 +98,8 @@ const LocationComponent = () => {
       renderCell: (params) => (
         <Typography
           sx={{
-            color: params.row.CKOutlets === "No.of.wards" ? "orange" : "inherit",
+            color:
+              params.row.CKOutlets === "No.of.wards" ? "orange" : "inherit",
           }}
         >
           {params.value}
@@ -114,7 +115,8 @@ const LocationComponent = () => {
       renderCell: (params) => (
         <Typography
           sx={{
-            color: params.row.CKOutlets === "No.of.wards" ? "#9370db" : "inherit",
+            color:
+              params.row.CKOutlets === "No.of.wards" ? "#9370db" : "inherit",
           }}
         >
           {params.value}
@@ -130,7 +132,8 @@ const LocationComponent = () => {
       renderCell: (params) => (
         <Typography
           sx={{
-            color: params.row.CKOutlets === "No.of.wards" ? "#20b2aa" : "inherit",
+            color:
+              params.row.CKOutlets === "No.of.wards" ? "#20b2aa" : "inherit",
           }}
         >
           {params.value}
@@ -154,7 +157,6 @@ const LocationComponent = () => {
       ),
     },
   ];
-console.log("j chi tom ma paru",wardDataPoint);
 
   return (
     <>
@@ -462,30 +464,35 @@ console.log("j chi tom ma paru",wardDataPoint);
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px", width: "100%" }}>
-            <NewTamilNaduMap 
-                      wardData={wardDataForMap || []} 
-                      latLongPoints={wardDataPoint} 
-                      simplifiedWardData={ 
-                        wardDataForMap 
-                          ? [ 
-                            { 
-                              color_code: 
-                                wardDataForMap[0]?.color_code || "#000000", 
-                              ward_no: wardDataForMap[0]?.ward_no || "0", 
-                              boundaries: 
-                                wardDataForMap[0]?.coordinates || [], 
-                            }, 
-                          ] 
-                          : [] 
-                      } 
-                    /> 
+                    <NewTamilNaduMap
+                      wardData={wardDataForMap || []}
+                      latLongPoints={wardDataPoint}
+                      simplifiedWardData={
+                        wardDataForMap
+                          ? [
+                              {
+                                color_code:
+                                  wardDataForMap[0]?.color_code || "#000000",
+                                ward_no: wardDataForMap[0]?.ward_no || "0",
+                                boundaries:
+                                  wardDataForMap[0]?.coordinates || [],
+                              },
+                            ]
+                          : []
+                      }
+                      setWardNoo={wardDataNo}
+                    />
                   </Box>
                 </Box>
               </Grid>
               <Grid item xs={6}>
                 <Box sx={{ mt: 2 }}>
                   {clicked && specificRangeData && (
-                    <AnotherDataGrid setWardPoints={setWardDataPoint} wardDatas={specificRangeData} />
+                    <AnotherDataGrid
+                      setWardPoints={setWardDataPoint}
+                      wardDatas={specificRangeData}
+                      setWardNo={setWardDataNo}
+                    />
                   )}
                 </Box>
               </Grid>
