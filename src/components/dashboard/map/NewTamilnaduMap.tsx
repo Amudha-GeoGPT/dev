@@ -25,6 +25,12 @@ interface WardData {
 interface LatLongPoint {
   latitude: number;
   longitude: number;
+  pid: any;
+  outletName: any;
+  distributorCode: any;
+  distributorName: any;
+  color:any;
+  fillColor:any;
 }
 interface Coordinate {
   lat: number;
@@ -97,13 +103,117 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   )}`;
   console.log("Ward Name:", simplifiedWardData);
   console.log("CK outlet r universal lat long ", latLongPoints);
+
+  const MapContent: React.FC = () => (
+    <MapContainer
+      // key={resetKey} // Force re-render on state change
+      center={[13.0843, 80.2705]}
+      zoom={13}
+      style={{ height: "100%", width: "100%" }}
+    >
+      <ZoomHandler />
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="© OpenStreetMap contributors"
+      />
+      {wardData.map((ward) => {
+        const coordinates = Array.isArray(ward.coordinates)
+          ? ward.coordinates
+          : [];
+        const centroid = calculateCentroid(coordinates);
+        return (
+          <React.Fragment key={ward.ward_no}>
+            {coordinates.length > 0 && (
+              <Polygon
+                positions={coordinates as L.LatLngExpression[]}
+                color={ward.color_code}
+                fillColor={ward.fillColor}
+                fillOpacity={0.5}
+              />
+            )}
+            <Marker position={centroid} icon={createCustomIcon(ward.ward_no)} />
+          </React.Fragment>
+        );
+      })}
+      {simplifiedWardData.map((ward) => {
+        const { boundaries, ward_no, color_code } = ward;
+        if (
+          !Array.isArray(boundaries) ||
+          boundaries.length === 0 ||
+          !boundaries.every(
+            (coord) => Array.isArray(coord) && coord.length === 2
+          )
+        ) {
+          console.warn(`Invalid boundaries for ward: ${ward_no}`);
+          return null;
+        }
+        const centroid = calculateCentroid(boundaries);
+        return (
+          <React.Fragment key={ward_no}>
+            <Polygon
+              positions={boundaries as L.LatLngExpression[]}
+              color={color_code}
+              fillColor={color_code}
+              fillOpacity={0.5}
+            />
+            <Marker position={centroid} icon={createCustomIcon(ward_no)} />
+          </React.Fragment>
+        );
+      })}
+      {latLongPoints.map((point, index) => (
+        <CircleMarker
+          key={`circle-${index}`}
+          center={[point.latitude, point.longitude]}
+          radius={4} // Adjust the size of the circle
+          pathOptions={{
+            color: point.color, 
+            fillColor: point.fillColor, 
+            fillOpacity: 0.8, 
+          }}
+        >
+          <Popup>
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "10px",
+                  lineHeight: "0.5",
+                }}
+              >
+                Outlet Name: {point.outletName}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "10px",
+                  lineHeight: "0.5",
+                }}
+              >
+                Distributor Name:{" "}
+                {point.distributorName ? point.distributorName : "not found"}
+              </Typography>
+            </Box>
+          </Popup>
+        </CircleMarker>
+      ))}
+
+      {simplifiedWardData.map((ward) => (
+        <React.Fragment key={ward.ward_no}>
+          <Polygon
+            positions={ward.boundaries as L.LatLngExpression[]}
+            color={ward.color_code}
+            fillColor={ward.color_code}
+            fillOpacity={0.3}
+          />
+        </React.Fragment>
+      ))}
+    </MapContainer>
+  );
   return (
     <>
       <Box
         sx={{
           position: "relative",
-          height: isFullScreen ? "100vh" : "500px",
-          width: isFullScreen ? "100vw" : "100%",
+          height: "500px",
+          width: "100%",
           transition: "all 0.3s ease",
           overflow: "hidden",
         }}
@@ -116,114 +226,13 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             zIndex: 1000,
             backgroundColor: "white",
           }}
-          onClick={() => setIsFullScreen(!isFullScreen)}
+          onClick={() => setIsFullScreen(true)}
         >
-          {isFullScreen ? <CloseFullscreenIcon /> : <OpenInFullIcon />}
+          <OpenInFullIcon />
         </IconButton>
-        <MapContainer
-          // key={resetKey} // Force re-render on state change
-          center={[13.0843, 80.2705]}
-          zoom={13}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <ZoomHandler />
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="© OpenStreetMap contributors"
-          />
-          {wardData.map((ward) => {
-            const coordinates = Array.isArray(ward.coordinates)
-              ? ward.coordinates
-              : [];
-            const centroid = calculateCentroid(coordinates);
-            return (
-              <React.Fragment key={ward.ward_no}>
-                {coordinates.length > 0 && (
-                  <Polygon
-                    positions={coordinates as L.LatLngExpression[]}
-                    color={ward.color_code}
-                    fillColor={ward.fillColor}
-                    fillOpacity={0.5}
-                  />
-                )}
-                <Marker
-                  position={centroid}
-                  icon={createCustomIcon(ward.ward_no)}
-                />
-              </React.Fragment>
-            );
-          })}
-          {simplifiedWardData.map((ward) => {
-            const { boundaries, ward_no, color_code } = ward;
-            if (
-              !Array.isArray(boundaries) ||
-              boundaries.length === 0 ||
-              !boundaries.every(
-                (coord) => Array.isArray(coord) && coord.length === 2
-              )
-            ) {
-              console.warn(`Invalid boundaries for ward: ${ward_no}`);
-              return null;
-            }
-            const centroid = calculateCentroid(boundaries);
-            return (
-              <React.Fragment key={ward_no}>
-                <Polygon
-                  positions={boundaries as L.LatLngExpression[]}
-                  color={color_code}
-                  fillColor={color_code}
-                  fillOpacity={0.5}
-                />
-                <Marker position={centroid} icon={createCustomIcon(ward_no)} />
-              </React.Fragment>
-            );
-          })}
-          {latLongPoints.map((point, index) => (
-            <CircleMarker
-              key={`circle-${index}`}
-              center={[point.latitude, point.longitude]}
-              radius={4} // Adjust the size of the circle
-              pathOptions={{
-                color: "blue", // Outline color
-                fillColor: "yellow", // Fill color
-                fillOpacity: 0.8, // Opacity of the fill
-              }}
-            >
-              <Popup>
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: "10px", // Font size for the text
-                      lineHeight: "0.5", // Adjust line height for compactness
-                    }}
-                  >
-                    Latitude: {point.latitude}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "10px", // Font size for the text
-                      lineHeight: "0.5", // Adjust line height for compactness
-                    }}
-                  >
-                    Longitude: {point.longitude}
-                  </Typography>
-                </Box>
-              </Popup>
-            </CircleMarker>
-          ))}
-
-          {simplifiedWardData.map((ward) => (
-            <React.Fragment key={ward.ward_no}>
-              <Polygon
-                positions={ward.boundaries as L.LatLngExpression[]}
-                color={ward.color_code}
-                fillColor={ward.color_code}
-                fillOpacity={0.3}
-              />
-            </React.Fragment>
-          ))}
-        </MapContainer>
+        {!isFullScreen && <MapContent />}
       </Box>
+
       <Modal
         open={isFullScreen}
         onClose={() => setIsFullScreen(false)}
@@ -237,7 +246,6 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             backgroundColor: "white",
           }}
         >
-          {/* Close Button Inside Modal */}
           <IconButton
             sx={{
               position: "absolute",
@@ -250,64 +258,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
           >
             <CloseFullscreenIcon />
           </IconButton>
-          <MapContainer
-            center={[13.0843, 80.2705]}
-            zoom={13}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {wardData.map((ward) => {
-              const { coordinates, ward_no, color_code, fillColor } = ward;
-              const centroid = calculateCentroid(coordinates);
-              return (
-                <React.Fragment key={ward_no}>
-                  <Polygon
-                    positions={coordinates as L.LatLngExpression[]}
-                    color={color_code}
-                    fillColor={fillColor}
-                    fillOpacity={0.5}
-                  />
-                  <Marker
-                    position={centroid}
-                    icon={createCustomIcon(ward_no)}
-                  />
-                </React.Fragment>
-              );
-            })}
-            {latLongPoints.map((point, index) => (
-              <CircleMarker
-                key={`circle-${index}`}
-                center={[point.latitude, point.longitude]}
-                radius={4} // Adjust the size of the circle
-                pathOptions={{
-                  color: "blue", // Outline color
-                  fillColor: "yellow", // Fill color
-                  fillOpacity: 0.8, // Opacity of the fill
-                }}
-              >
-                <Popup>
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontSize: "10px", // Font size for the text
-                        lineHeight: "0.5", // Adjust line height for compactness
-                      }}
-                    >
-                      Latitude: {point.latitude}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "10px", // Font size for the text
-                        lineHeight: "0.5", // Adjust line height for compactness
-                      }}
-                    >
-                      Longitude: {point.longitude}
-                    </Typography>
-                  </Box>
-                </Popup>
-              </CircleMarker>
-            ))}
-          </MapContainer>
+          <MapContent />
         </Box>
       </Modal>
     </>

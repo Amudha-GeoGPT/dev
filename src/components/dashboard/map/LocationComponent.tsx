@@ -154,6 +154,7 @@ const LocationComponent = () => {
       ),
     },
   ];
+console.log("j chi tom ma paru",wardDataPoint);
 
   return (
     <>

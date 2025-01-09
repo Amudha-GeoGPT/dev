@@ -20,7 +20,13 @@ interface WardData {
   ward_no: string;
 }
 
-const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardData[], setWardPoints: any }) => {
+const AnotherDataGrid = ({
+  wardDatas = [],
+  setWardPoints,
+}: {
+  wardDatas?: WardData[];
+  setWardPoints: any;
+}) => {
   const [mapData, setMapData] = useState<WardData[]>([]);
   const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
@@ -68,7 +74,8 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
       width: 114,
       renderHeader: () => (
         <strong style={{ fontSize: "12px" }}>CK Outlets</strong>
-      ),      renderCell: (params: any) => (
+      ),
+      renderCell: (params: any) => (
         <Box
           onClick={() => handleCkOutletsCellClick(params)}
           sx={{ cursor: "pointer" }}
@@ -83,7 +90,8 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
       width: 134,
       renderHeader: () => (
         <strong style={{ fontSize: "12px" }}>Opportunities</strong>
-      ),      renderCell: (params: any) => (
+      ),
+      renderCell: (params: any) => (
         <Box
           onClick={() => handleOpportunitiesCellClick(params)} // Call the new click handler
           sx={{ cursor: "pointer" }}
@@ -98,7 +106,8 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
       width: 116,
       renderHeader: () => (
         <strong style={{ fontSize: "12px" }}>Population</strong>
-      ),    },
+      ),
+    },
     {
       field: "insights",
       headerName: "Insights",
@@ -106,7 +115,8 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
       sortable: false,
       renderHeader: () => (
         <strong style={{ fontSize: "12px" }}>Insights</strong>
-      ),      renderCell: () => (
+      ),
+      renderCell: () => (
         <Box
           sx={{
             display: "flex",
@@ -145,9 +155,11 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
     setSearchTerm(event.target.value);
   };
 
-  const handleOpportunitiesCellClick  = async (params: any) => {
+  const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const color = "pink";
+      const fillColor = "green";
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
@@ -156,16 +168,28 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           outletTagged: "Universal Outlet",
         }
       );
- 
+
       if (response.data.message === "success") {
         const coordinates = response.data.results;
-        console.log("response", coordinates)
-        setWardPoints(coordinates)
+        const updatedCoordinates = coordinates.map((coordinate: any) => ({
+          latitude: coordinate.latitude,
+          longitude: coordinate.longitude,
+          distributorCode: coordinate.distributorCode,
+          distributorName: coordinate.distributorName,
+          outletName: coordinate.outletName,
+          pid: coordinate.pid,
+          color,
+          fillColor,
+        }));
+        console.log("Updated Coordinates with all fields:", updatedCoordinates);
+
+        setWardPoints(updatedCoordinates);
         setMapState((prevState) => ({
           ...prevState,
-          latLongPoints: coordinates,
+          latLongPoints: updatedCoordinates,
           wardData: prevState.wardData,
         }));
+
         const wardDataResponse = await axios.post(
           "https://geogptdev.ckdigital.in/api/getwardData",
           {
@@ -173,17 +197,19 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
             ward_list: [ward_no], // Pass the ward_no dynamically
           }
         );
- 
+
         console.log("Ward Data Response:", wardDataResponse.data);
       }
     } catch (error) {
       console.error("Error occurred:", error);
     }
   };
- 
+
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const color = "red";
+      const fillColor = "black";
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
@@ -192,14 +218,23 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           outletTagged: "CK Outlet",
         }
       );
- 
+
       if (response.data.message === "success") {
         const coordinates = response.data.results;
-        console.log("response", coordinates)
-        setWardPoints(coordinates)
+        const updatedCoordinates = coordinates.map((coordinate: any) => ({
+          latitude: coordinate.latitude,
+          longitude: coordinate.longitude,
+          distributorCode: coordinate.distributorCode,
+          distributorName: coordinate.distributorName,
+          outletName: coordinate.outletName,
+          pid: coordinate.pid,
+          color,
+          fillColor,
+        }));
+        setWardPoints(updatedCoordinates);
         setMapState((prevState) => ({
           ...prevState,
-          latLongPoints: coordinates,
+          latLongPoints: updatedCoordinates,
           wardData: prevState.wardData,
         }));
         const wardDataResponse = await axios.post(
@@ -215,8 +250,6 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
       console.error("Error occurred:", error);
     }
   };
- 
- 
 
   const handleWardNameCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries, ward_name } = params.row;
