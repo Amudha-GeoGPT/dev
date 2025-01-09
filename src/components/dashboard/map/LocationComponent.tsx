@@ -168,7 +168,7 @@ const LocationComponent = () => {
               options={verticalData}
               value={selectedVertical}
               onChange={handleVerticalChange}
-              sx={{height:'40px'} }
+              sx={{ height: "40px" }}
             />
           </Grid>
 
@@ -259,7 +259,7 @@ const LocationComponent = () => {
                     />
                   )}
                   renderTags={(value, getTagProps) => {
-                    const visibleTag = value.slice(0, 1); // Show only the first tag
+                    const visibleTag = value.slice(0, 1);
                     const additionalCount = value.length - 1;
 
                     return (
@@ -372,7 +372,7 @@ const LocationComponent = () => {
                   />
                 )}
                 renderTags={(value, getTagProps) => {
-                  const visibleTag = value.slice(0, 1); // Show only the first tag
+                  const visibleTag = value.slice(0, 1);
                   const additionalCount = value.length - 1;
 
                   return (
@@ -502,22 +502,33 @@ const LocationComponent = () => {
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px", width: "100%" }}>
-  <NewTamilNaduMap 
-    wardData={wardDataForMap || []}
-    latLongPoints={specificRangeData ? specificRangeData.map((point: { latitude: any; longitude: any; }) => ({
-      latitude: Number(point?.latitude || 0),
-      longitude: Number(point?.longitude || 0)
-    })) : []}
-    simplifiedWardData={wardDataForMap ? [{
-      color_code: wardDataForMap[0]?.color_code || '#000000',
-      ward_no: wardDataForMap[0]?.ward_no || '0',
-      boundaries: wardDataForMap[0]?.coordinates || []
-    }] : []}
-  />
-</Box>
-
-
-
+                    <NewTamilNaduMap
+                      wardData={wardDataForMap || []}
+                      latLongPoints={
+                        specificRangeData
+                          ? specificRangeData.map(
+                              (point: { latitude: any; longitude: any }) => ({
+                                latitude: Number(point?.latitude || 0),
+                                longitude: Number(point?.longitude || 0),
+                              })
+                            )
+                          : []
+                      }
+                      simplifiedWardData={
+                        wardDataForMap
+                          ? [
+                              {
+                                color_code:
+                                  wardDataForMap[0]?.color_code || "#000000",
+                                ward_no: wardDataForMap[0]?.ward_no || "0",
+                                boundaries:
+                                  wardDataForMap[0]?.coordinates || [],
+                              },
+                            ]
+                          : []
+                      }
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={6}>

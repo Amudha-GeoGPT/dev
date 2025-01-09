@@ -13,6 +13,7 @@ import "leaflet/dist/leaflet.css";
 import { Box, IconButton, Modal } from "@mui/material";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import Markers from "./Markers";
 interface WardData {
   ward_name: string;
   coordinates: number[][];
@@ -50,34 +51,33 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   const [zoomLevel, setZoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-// Update the calculateCentroid function to handle the correct data structure
-const calculateCentroid = (coords: any[]): [number, number] => {
-  if (!Array.isArray(coords) || coords.length === 0) {
-    return [13.0843, 80.2705]; // Default Chennai coordinates
-  }
+  const calculateCentroid = (coords: any[]): [number, number] => {
+    if (!Array.isArray(coords) || coords.length === 0) {
+      return [13.0843, 80.2705];
+    }
 
-  // Handle array of objects with latitude/longitude
-  if (typeof coords[0] === 'object' && 'latitude' in coords[0]) {
-    let latSum = 0, lngSum = 0;
-    coords.forEach(point => {
-      latSum += point.latitude;
-      lngSum += point.longitude;
-    });
-    return [latSum / coords.length, lngSum / coords.length];
-  }
+    if (typeof coords[0] === "object" && "latitude" in coords[0]) {
+      let latSum = 0,
+        lngSum = 0;
+      coords.forEach((point) => {
+        latSum += point.latitude;
+        lngSum += point.longitude;
+      });
+      return [latSum / coords.length, lngSum / coords.length];
+    }
 
-  // Handle array of coordinate pairs
-  if (Array.isArray(coords[0])) {
-    let latSum = 0, lngSum = 0;
-    coords.forEach(([lat, lng]) => {
-      latSum += lat;
-      lngSum += lng;
-    });
-    return [latSum / coords.length, lngSum / coords.length];
-  }
+    if (Array.isArray(coords[0])) {
+      let latSum = 0,
+        lngSum = 0;
+      coords.forEach(([lat, lng]) => {
+        latSum += lat;
+        lngSum += lng;
+      });
+      return [latSum / coords.length, lngSum / coords.length];
+    }
 
-  return [13.0843, 80.2705]; // Fallback to default
-};
+    return [13.0843, 80.2705]; 
+  };
 
   const createCustomIcon = useCallback(
     (wardName: string) => {
@@ -97,10 +97,10 @@ const calculateCentroid = (coords: any[]): [number, number] => {
   };
 
   useEffect(() => {
-    console.log('Map data updated:', {
+    console.log("Map data updated:", {
       wardData: wardData.length,
       latLongPoints: latLongPoints.length,
-      simplifiedWardData: simplifiedWardData.length
+      simplifiedWardData: simplifiedWardData.length,
     });
   }, [wardData, latLongPoints, simplifiedWardData]);
   const resetKey = `${JSON.stringify(wardData)}-${JSON.stringify(
@@ -144,23 +144,37 @@ const calculateCentroid = (coords: any[]): [number, number] => {
             attribution="&copy; OpenStreetMap contributors"
           />
 
-{wardData.map((ward) => {
-  const coordinates = Array.isArray(ward.coordinates) ? ward.coordinates : [];
-  const centroid = calculateCentroid(coordinates);
-  return (
-    <React.Fragment key={ward.ward_no}>
-      {coordinates.length > 0 && (
-        <Polygon
-          positions={coordinates as L.LatLngExpression[]}
-          color={ward.color_code}
-          fillColor={ward.fillColor}
-          fillOpacity={0.5}
-        />
-      )}
-      <Marker position={centroid} icon={createCustomIcon(ward.ward_no)} />
-    </React.Fragment>
-  );
-})}
+          <Markers latLongPoints={latLongPoints} />
+
+          {/* <Marker position={[13.0378419, 80.1927755]} />
+          <Marker position={[13.0708518, 80.19316]} />
+
+          <Marker position={[13.0707831, 80.1934385]} />
+
+          <Marker position={[13.0707596, 80.1934336]} />
+          <Marker position={[13.0709833, 80.20337]} /> */}
+          {wardData.map((ward) => {
+            const coordinates = Array.isArray(ward.coordinates)
+              ? ward.coordinates
+              : [];
+            const centroid = calculateCentroid(coordinates);
+            return (
+              <React.Fragment key={ward.ward_no}>
+                {coordinates.length > 0 && (
+                  <Polygon
+                    positions={coordinates as L.LatLngExpression[]}
+                    color={ward.color_code}
+                    fillColor={ward.fillColor}
+                    fillOpacity={0.5}
+                  />
+                )}
+                <Marker
+                  position={centroid}
+                  icon={createCustomIcon(ward.ward_no)}
+                />
+              </React.Fragment>
+            );
+          })}
           {simplifiedWardData.map((ward) => {
             const { boundaries, ward_no, color_code } = ward;
 
@@ -190,30 +204,41 @@ const calculateCentroid = (coords: any[]): [number, number] => {
             );
           })}
 
-
-{latLongPoints.map((point, index) => (
-        <Marker
-          key={`marker-${index}`}
-          position={[point.latitude, point.longitude]}
-          icon={L.divIcon({
-            className: 'custom-marker',
-            html: `<div style="background-color: #ff4444; width: 8px; height: 8px; border-radius: 50%; border: 2px solid white;"></div>`,
-            iconSize: [12, 12]
+          {/* {console.log("finally lat long", latLongPoints)} */}
+          {latLongPoints.map((cord, i) => {
+            console.table(cord);
+            return (
+              <Marker
+                key={`MARKER_${i}`}
+                position={[cord?.latitude, cord?.longitude]}
+              />
+            );
           })}
-        />
-      ))}
 
+          {/* {latLongPoints.map((point, index) => {
+            return (
+              <Marker
+                key={`marker-${index}`}
+                position={[point.latitude, point.longitude]}
+                // icon={L.divIcon({
+                //   className: "custom-marker",
+                //   html: `<div style="background-color: #ff4444; width: 8px; height: 8px; border-radius: 50%; border: 2px solid white;"></div>`,
+                //   iconSize: [12, 12],
+                // })}
+              />
+            );
+          })} */}
 
-{simplifiedWardData.map((ward) => (
-        <React.Fragment key={ward.ward_no}>
-          <Polygon
-            positions={ward.boundaries as L.LatLngExpression[]}
-            color={ward.color_code}
-            fillColor={ward.color_code}
-            fillOpacity={0.3}
-          />
-        </React.Fragment>
-      ))}
+          {simplifiedWardData.map((ward) => (
+            <React.Fragment key={ward.ward_no}>
+              <Polygon
+                positions={ward.boundaries as L.LatLngExpression[]}
+                color={ward.color_code}
+                fillColor={ward.color_code}
+                fillOpacity={0.3}
+              />
+            </React.Fragment>
+          ))}
         </MapContainer>
       </Box>
       <Modal
@@ -229,7 +254,6 @@ const calculateCentroid = (coords: any[]): [number, number] => {
             backgroundColor: "white",
           }}
         >
-          {/* Close Button Inside Modal */}
           <IconButton
             sx={{
               position: "absolute",

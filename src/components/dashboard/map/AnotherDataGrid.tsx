@@ -31,7 +31,11 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
   const [mapState, setMapState] = useState({
     wardData: [] as WardData[],
     latLongPoints: [] as any[],
-    simplifiedWardData: [] as { color_code: string; ward_no: string; boundaries: any }[]
+    simplifiedWardData: [] as {
+      color_code: string;
+      ward_no: string;
+      boundaries: any;
+    }[],
   });
 
   const columns = [
@@ -157,11 +161,8 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
         payload
       );
 
-      // console.log("API Response:", response.data);
-
       if (response.data.message === "success") {
         const coordinates = response.data.results;
-        // console.log("Fetched coordinates:", coordinates);
 
         if (coordinates.length > 0) {
           const updatedWardData = {
@@ -169,7 +170,6 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
             coordinates,
           };
 
-          // console.log("Updated Ward Data:", updatedWardData);
           setMapData((prevData) => [...prevData, updatedWardData]);
           setLatLongPoints(coordinates);
         } else {
@@ -195,32 +195,34 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
           outletTagged: "CK Outlet",
         }
       );
-  
+
       if (response.data.message === "success") {
         const coordinates = response.data.results;
-        setMapState(prevState => ({
+        setMapState((prevState) => ({
           ...prevState,
           latLongPoints: coordinates,
-          wardData: prevState.wardData // Preserve existing ward data
+          wardData: prevState.wardData,
         }));
       }
     } catch (error) {
       console.error("Error occurred:", error);
     }
   };
-  
+
   const handleWardNameCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries, ward_name } = params.row;
-    
-    setMapState(prevState => ({
+
+    setMapState((prevState) => ({
       ...prevState,
-      simplifiedWardData: [{
-        color_code,
-        ward_no,
-        boundaries,
-        ward_name // Include ward_name in the data
-      }],
-      latLongPoints: prevState.latLongPoints
+      simplifiedWardData: [
+        {
+          color_code,
+          ward_no,
+          boundaries,
+          ward_name,
+        },
+      ],
+      latLongPoints: prevState.latLongPoints,
     }));
   };
 
@@ -278,13 +280,13 @@ const AnotherDataGrid = ({ wardDatas = [] }: { wardDatas?: WardData[] }) => {
           overflow: "hidden",
         }}
       />
-    <Box sx={{ display: 'none', mt: 2 }}> {/* Changed from display: none */}
-      <NewTamilNaduMap
-        wardData={mapState.wardData}
-        latLongPoints={mapState.latLongPoints}
-        simplifiedWardData={mapState.simplifiedWardData}
-      />
-    </Box>
+      <Box sx={{ display: "none", mt: 2 }}>
+        <NewTamilNaduMap
+          wardData={mapState.wardData}
+          latLongPoints={mapState.latLongPoints}
+          simplifiedWardData={mapState.simplifiedWardData}
+        />
+      </Box>
     </Box>
   );
 };
