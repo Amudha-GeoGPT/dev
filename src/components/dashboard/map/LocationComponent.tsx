@@ -161,8 +161,8 @@ const LocationComponent = () => {
         <Grid container spacing={1} sx={{ p: 2 }}>
           <Grid item xs={1.5}>
             <CustomSelect
-              label="Verticals"
-              placeholder="Select Verticals"
+              label="Vertical"
+              placeholder="Select Vertical"
               options={verticalData}
               value={selectedVertical}
               onChange={handleVerticalChange}

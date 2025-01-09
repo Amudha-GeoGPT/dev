@@ -47,7 +47,7 @@ export const useNewMapPages = () => {
     },
     {
       id: 2,
-      CKOutlets: "Populations",
+      CKOutlets: "Population",
       col1: "",
       col2: "",
       col3: "",
@@ -114,7 +114,7 @@ export const useNewMapPages = () => {
           },
           {
             id: 2,
-            CKOutlets: "Populations",
+            CKOutlets: "Population",
             col1: ranges.lt50.population,
             col2: ranges["51to100"].population,
             col3: ranges["100to200"].population,

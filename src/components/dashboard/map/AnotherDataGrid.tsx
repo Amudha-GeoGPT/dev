@@ -43,16 +43,16 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
     {
       field: "sno",
       headerName: "S.No",
-      width: 80,
+      width: 55,
       sortable: false,
-      renderHeader: () => <strong>S.No</strong>,
+      renderHeader: () => <strong style={{ fontSize: "12px" }}>S.No</strong>,
     },
     {
-      field: "ward_name",
+      field: "ward_no",
       headerName: "Ward Name",
-      width: 280,
+      width: 85,
       sortable: false,
-      renderHeader: () => <strong>Ward Name</strong>,
+      renderHeader: () => <strong style={{ fontSize: "12px" }}>Ward No</strong>,
       renderCell: (params: any) => (
         <Box
           onClick={() => handleWardNameCellClick(params)}
@@ -65,9 +65,10 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
     {
       field: "ck_outlet_count",
       headerName: "CK Outlets",
-      width: 150,
-      renderHeader: () => <strong>CK Outlets</strong>,
-      renderCell: (params: any) => (
+      width: 114,
+      renderHeader: () => (
+        <strong style={{ fontSize: "12px" }}>CK Outlets</strong>
+      ),      renderCell: (params: any) => (
         <Box
           onClick={() => handleCkOutletsCellClick(params)}
           sx={{ cursor: "pointer" }}
@@ -79,9 +80,10 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
     {
       field: "no_of_universal_outlet",
       headerName: "Opportunities",
-      width: 150,
-      renderHeader: () => <strong>Opportunities</strong>,
-      renderCell: (params: any) => (
+      width: 134,
+      renderHeader: () => (
+        <strong style={{ fontSize: "12px" }}>Opportunities</strong>
+      ),      renderCell: (params: any) => (
         <Box
           onClick={() => handleOpportunitiesCellClick(params)} // Call the new click handler
           sx={{ cursor: "pointer" }}
@@ -93,16 +95,18 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
     {
       field: "population_count",
       headerName: "Populations",
-      width: 150,
-      renderHeader: () => <strong>Populations</strong>,
-    },
+      width: 116,
+      renderHeader: () => (
+        <strong style={{ fontSize: "12px" }}>Population</strong>
+      ),    },
     {
       field: "insights",
       headerName: "Insights",
-      width: 75,
+      width: 68,
       sortable: false,
-      renderHeader: () => <strong>Insights</strong>,
-      renderCell: () => (
+      renderHeader: () => (
+        <strong style={{ fontSize: "12px" }}>Insights</strong>
+      ),      renderCell: () => (
         <Box
           sx={{
             display: "flex",
@@ -152,7 +156,7 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           outletTagged: "Universal Outlet",
         }
       );
-
+ 
       if (response.data.message === "success") {
         const coordinates = response.data.results;
         console.log("response", coordinates)
@@ -162,12 +166,21 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           latLongPoints: coordinates,
           wardData: prevState.wardData,
         }));
+        const wardDataResponse = await axios.post(
+          "https://geogptdev.ckdigital.in/api/getwardData",
+          {
+            district_name: "Chennai",
+            ward_list: [ward_no], // Pass the ward_no dynamically
+          }
+        );
+ 
+        console.log("Ward Data Response:", wardDataResponse.data);
       }
     } catch (error) {
       console.error("Error occurred:", error);
     }
   };
-  
+ 
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
@@ -179,7 +192,7 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           outletTagged: "CK Outlet",
         }
       );
-
+ 
       if (response.data.message === "success") {
         const coordinates = response.data.results;
         console.log("response", coordinates)
@@ -189,11 +202,21 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
           latLongPoints: coordinates,
           wardData: prevState.wardData,
         }));
+        const wardDataResponse = await axios.post(
+          "https://geogptdev.ckdigital.in/api/getwardData",
+          {
+            district_name: "Chennai",
+            ward_list: [ward_no], // Pass the ward_no dynamically
+          }
+        );
+        console.log("Ward Data Response:", wardDataResponse.data);
       }
     } catch (error) {
       console.error("Error occurred:", error);
     }
   };
+ 
+ 
 
   const handleWardNameCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries, ward_name } = params.row;
@@ -248,7 +271,10 @@ const AnotherDataGrid = ({ wardDatas = [], setWardPoints }: { wardDatas?: WardDa
             backgroundColor: "white",
           },
           "& .MuiDataGrid-columnSeparator": {
-            // display: "none",
+            display: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            fontSize: "12px", // Set font size for all cells in the row
           },
           // "& .MuiDataGrid-row": {
           //   cursor: "pointer",
