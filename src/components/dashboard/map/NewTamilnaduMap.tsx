@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   MapContainer,
   TileLayer,
   Polygon,
   Marker,
-  useMap,
+  
   Popup,
   CircleMarker,
 } from "react-leaflet";
@@ -63,37 +63,36 @@ interface NewTamilNaduMapProps {
 const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   wardData,
   latLongPoints,
-  simplifiedWardData,
   setWardNoo,
 }) => {
-  const [zoomLevel, setZoomLevel] = useState<number>(13);
+  const [zoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const calculateCentroid = (coords: any[]): [number, number] => {
     if (!Array.isArray(coords) || coords.length === 0) {
-      return [13.0843, 80.2705];
+        return [13.0843, 80.2705]; // Default coordinates as tuple
     }
+    
     if (typeof coords[0] === "object" && "latitude" in coords[0]) {
-      let latSum = 0,
-        lngSum = 0;
-      coords.forEach((point) => {
-        latSum += point.latitude;
-        lngSum += point.longitude;
-      });
-      return [latSum / coords.length, lngSum / coords.length];
+        let latSum = 0, lngSum = 0;
+        coords.forEach((point) => {
+            latSum += point.latitude;
+            lngSum += point.longitude;
+        });
+        return [latSum / coords.length, lngSum / coords.length] as [number, number];
     }
+    
     if (Array.isArray(coords[0])) {
-      let latSum = 0,
-        lngSum = 0;
-      coords.forEach(([lat, lng]) => {
-        latSum += lat;
-        lngSum += lng;
-      });
-      return [latSum / coords.length, lngSum / coords.length];
+        let latSum = 0, lngSum = 0;
+        coords.forEach(([lat, lng]) => {
+            latSum += lat;
+            lngSum += lng;
+        });
+        return [latSum / coords.length, lngSum / coords.length] as [number, number];
     }
+    
     return [13.0843, 80.2705];
-  };
-
+};
   const createCustomIcon = useCallback(
     (wardName: string) => {
       const fontSize = 6 + zoomLevel * 0.2;
@@ -146,9 +145,9 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
                 weight={2}
               >
                 <Marker
-                  position={mapCenter}
-                  icon={createCustomIcon(selectedWard.ward_no)}
-                />
+    position={mapCenter as L.LatLngExpression}
+    icon={createCustomIcon(selectedWard.ward_no)}
+/>
               </Polygon>
             )}
           </React.Fragment>

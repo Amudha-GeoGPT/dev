@@ -40,14 +40,19 @@ const AnotherDataGrid = ({
   setWardPoints: any;
   setWardNo: (data: SetWardNoo[]) => void; // Update the type here
 }) => {
-  const [mapData, setMapData] = useState<WardData[]>([]);
-  const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
+  // const [mapData, setMapData] = useState<WardData[]>([]);
+  // const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [simplifiedWardData, setSimplifiedWardData] = useState<
-    { color_code: string; ward_no: string; boundaries: any }[]
-  >([]);
-  const [selectedWardNo, setSelectedWardNo] = useState<string | null>(null);
+  // const [simplifiedWardData, setSimplifiedWardData] = useState<
+  //   { color_code: string; ward_no: string; boundaries: any }[]
+  // >([]);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const [selectedWardNo, setSelectedWardNo] = useState<any>(null);
+//  selectedWardNo = "123";
+console.log(selectedWardNo);
+
+
   const [mapState, setMapState] = useState({
     wardData: [] as WardData[],
     latLongPoints: [] as any[],
@@ -149,7 +154,8 @@ const AnotherDataGrid = ({
       ),
     },
   ];
-
+  // Now the variable is being used
+  
   const filteredRows = wardDatas
     .filter((item) =>
       item.ward_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -267,13 +273,6 @@ const AnotherDataGrid = ({
           wardData: prevState.wardData,
         }));
 
-        const wardDataResponse = await axios.post(
-          "https://geogptdev.ckdigital.in/api/getwardData",
-          {
-            district_name: "Chennai",
-            ward_list: [ward_no],
-          }
-        );
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -282,7 +281,7 @@ const AnotherDataGrid = ({
 
   const handleWardNoCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries } = params.row;
-    setSelectedWardNo(ward_no);
+    setSelectedWardNo(ward_no); 
 
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
 

@@ -23,7 +23,11 @@ type Ranges = {
     population: number;
   };
 };
-export const useNewMapPages = (setWardDataNo: (value: any) => void) => {
+export const useNewMapPages = (
+  setWardDataNo: (value: any) => void,
+  setWardDataPoint: (value: any[]) => void
+
+) => {
   const [selectedVertical, setselectedVertical] = useState<any>("");
   const [selectedSearch, setselectedSearch] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
@@ -171,7 +175,7 @@ export const useNewMapPages = (setWardDataNo: (value: any) => void) => {
   const handleCellClick = async (params: any) => {
     const clickedRange = params.field;
     setWardDataNo(null);
-    // setWardDataPoint(null);
+    setWardDataPoint([]);
 
     if (!wardDataCache) {
       console.error("No ward data available. Please apply filter first.");

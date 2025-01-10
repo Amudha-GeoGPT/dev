@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import CustomSelectSearch from "../../common/CustomSelectSearch";
 import { Box, Grid, Typography } from "@mui/material";
 import CustomButton from "../../common/CustomButton";
@@ -7,6 +8,18 @@ import "leaflet/dist/leaflet.css";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import { pincode, verticalData } from "./WardList";
 import { useNewMapPages } from "./NewMapPages";
+// Add this interface at the top of your file with the other imports
+interface SetWardNoo {
+  Universal_Outlet_Count: number;
+  boundaries: Array<{ latitude: number; longitude: number }>;
+  ck_outlet_count: number;
+  color_code: string;
+  district_name: string;
+  ward_no: string;
+  fillColor: string;
+  ward_name: string;
+  population_count: number;
+}
 
 const PincodeComponent = () => {
   const {
@@ -22,10 +35,16 @@ const PincodeComponent = () => {
     handleCellClick,
     ApplyFilterButtonStyles,
     ClearAllButtonStyles,
-
     handleVerticalChange,
-  } = useNewMapPages();
-  const columns: GridColDef[] = [
+  } = useNewMapPages(
+    (value) => {
+      console.log(value);
+    },
+    (wardDataPoint) => {
+      // Handle ward data points here
+      console.log(wardDataPoint);
+    }
+  );   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
       headerName: "CK Outlets",
@@ -208,14 +227,16 @@ const PincodeComponent = () => {
                     />
                   </Box>
                   <Box sx={{ mt: 2, height: "400px" }}>
-                    <NewTamilNaduMap wardData={wardDataForMap} />
+                    <NewTamilNaduMap wardData={wardDataForMap} latLongPoints={[]} simplifiedWardData={[]} setWardNoo={[]} />
                   </Box>
                 </Box>
               </Grid>
               <Grid item xs={6}>
                 <Box sx={{ mt: 2 }}>
                   {clicked && specificRangeData && (
-                    <AnotherDataGrid wardDatas={specificRangeData} />
+                    <AnotherDataGrid wardDatas={specificRangeData} setWardPoints={undefined} setWardNo={function (_data: SetWardNoo[]): void {
+                      throw new Error("Function not implemented.");
+                    } } />
                   )}
                 </Box>
               </Grid>

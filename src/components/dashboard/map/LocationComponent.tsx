@@ -30,6 +30,8 @@ import React from "react";
 
 const LocationComponent = () => {
   const [wardDataNo, setWardDataNo] = React.useState<any>(null);
+  const [wardDataPoint, setWardDataPoint] = useState<any[]>([]);
+ 
 
   const {
     selectedVertical,
@@ -52,12 +54,11 @@ const LocationComponent = () => {
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
-  } = useNewMapPages(setWardDataNo);
+  } = useNewMapPages(setWardDataNo,setWardDataPoint);
 
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
   >([]);
-  const [wardDataPoint, setWardDataPoint] = useState([]);
 
   const handleTalukChange = (
     _event: any,
