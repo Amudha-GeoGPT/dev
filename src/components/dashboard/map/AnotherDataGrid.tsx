@@ -19,7 +19,17 @@ interface WardData {
   fillColor: string;
   ward_no: string;
 }
-
+interface SetWardNoo {
+  Universal_Outlet_Count: number;
+  boundaries: Array<{ latitude: number; longitude: number }>;
+  ck_outlet_count: number;
+  color_code: string;
+  district_name: string;
+  ward_no: string;
+  fillColor: string;
+  ward_name: string;
+  population_count: number;
+}
 
 const AnotherDataGrid = ({
   wardDatas = [],
@@ -28,8 +38,8 @@ const AnotherDataGrid = ({
 }: {
   wardDatas?: WardData[];
   setWardPoints: any;
-  setWardNo:any
-}) => {
+  setWardNo: (data: SetWardNoo[]) => void; // Update the type here
+})  => {
   const [mapData, setMapData] = useState<WardData[]>([]);
   const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
@@ -161,8 +171,8 @@ const AnotherDataGrid = ({
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const color = "pink";
-      const fillColor = "green";
+      const color = "green ";
+      const fillColor = "yellow";
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
@@ -251,31 +261,27 @@ const AnotherDataGrid = ({
   };
 
   const handleWardNoCellClick = async (params: any) => {
-    
     const { color_code, ward_no, boundaries } = params.row;
-    setSelectedWardNo(ward_no); // Set the selected ward number
-    
-    // Check if the ward data already exists in wardDatas
-    const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
-  
-    if (existingWardData) {
-      setMapState((prevState) => ({
-        ...prevState,
-        simplifiedWardData: [
-          {
-            color_code,
-            ward_no,
-            boundaries,
-          },
-        ],
-        latLongPoints: prevState.latLongPoints, // Assuming you don't need to update latLongPoints
-        wardData: [...prevState.wardData, existingWardData], // Optionally add the ward data
-      }));
-      setWardNo(existingWardData)
+    setSelectedWardNo(ward_no);
 
-    } else {
-      setMapState((prevState) => ({
-        ...prevState,
+    const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
+
+    if (existingWardData) {
+      const transformedData: SetWardNoo = {
+        Universal_Outlet_Count: existingWardData.no_of_universal_outlet || 0,
+        boundaries: existingWardData.boundaries || [],
+        ck_outlet_count: existingWardData.ck_outlet_count || 0,
+        color_code: existingWardData.color_code,
+        district_name: "Chennai",
+        ward_no: existingWardData.ward_no,
+        fillColor: existingWardData.fillColor || "#000000",
+        ward_name: existingWardData.ward_name,
+        population_count: existingWardData.population_count || 0,
+      };
+
+      setMapState({
+        wardData: [existingWardData],
+        latLongPoints: [],
         simplifiedWardData: [
           {
             color_code,
@@ -283,13 +289,23 @@ const AnotherDataGrid = ({
             boundaries,
           },
         ],
-        latLongPoints: prevState.latLongPoints,
-        wardData: prevState.wardData, // No new data to add
-      }));
+      });
+      setWardNo([transformedData]); // Pass as an array
+    } else {
+      setMapState({
+        wardData: [],
+        latLongPoints: [],
+        simplifiedWardData: [
+          {
+            color_code,
+            ward_no,
+            boundaries,
+          },
+        ],
+      });
     }
-    console.log("may be",existingWardData);
-    
   };
+
   
 
   return (
@@ -349,13 +365,24 @@ const AnotherDataGrid = ({
           overflow: "hidden",
         }}
       />
-      <Box sx={{ display: "none", mt: 2 }}>
-        {/* <NewTamilNaduMap
-          wardData={mapState.wardData}
-          latLongPoints={mapState.latLongPoints}
-          simplifiedWardData={mapState.simplifiedWardData}
-        /> */}
-      </Box>
+     <Box sx={{ display: "none", mt: 2 }}>
+     <NewTamilNaduMap
+    wardData={mapState.wardData}
+    latLongPoints={mapState.latLongPoints}
+    simplifiedWardData={mapState.simplifiedWardData}
+    setWardNoo={mapState.wardData.map((ward) => ({
+      Universal_Outlet_Count: ward.no_of_universal_outlet || 0,
+      boundaries: ward.boundaries || [],
+      ck_outlet_count: ward.ck_outlet_count || 0,
+      color_code: ward.color_code,
+      district_name: "Chennai", // Assuming district_name is constant or fetched elsewhere
+      ward_no: ward.ward_no,
+      fillColor: ward.fillColor || "#000000", // Default fillColor if not present
+      ward_name: ward.ward_name,
+      population_count: ward.population_count || 0,
+    }))} // Transform wardData to SetWardNoo
+  />
+</Box>
     </Box>
   );
 };
