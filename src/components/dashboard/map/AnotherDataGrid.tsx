@@ -74,7 +74,12 @@ const AnotherDataGrid = ({
       renderHeader: () => <strong style={{ fontSize: "12px" }}>Ward No</strong>,
       renderCell: (params: any) => (
         <Box
-          onClick={() => handleWardNoCellClick(params)}
+          onClick={async () => {
+            await handleWardNoCellClick(params);
+            await handleCkOutletsCellClick(params);
+           
+            
+          }}
           sx={{ cursor: "pointer" }}
         >
           {params.value}
@@ -106,7 +111,11 @@ const AnotherDataGrid = ({
       ),
       renderCell: (params: any) => (
         <Box
-          onClick={() => handleOpportunitiesCellClick(params)} // Call the new click handler
+          onClick={async () => {
+            await handleOpportunitiesCellClick(params);
+            await handleCkOutletsCellClick(params);
+           
+          }}
           sx={{ cursor: "pointer" }}
         >
           {params.value}
