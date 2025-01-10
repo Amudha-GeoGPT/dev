@@ -14,6 +14,9 @@ const MainLayout = () => {
           alignItems: "center",
         //   justifyContent: "space-between",  // Ensures space between text and icon
           px: 2, // Adds padding to the left and right
+          position:'sticky',
+          top: 0,  // Sticks at the top of its parent container
+          zIndex: 1000, 
         }}
       >
         <Typography sx={{ color: "white", fontWeight: "bold" }}>

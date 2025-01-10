@@ -74,7 +74,8 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
       return [13.0843, 80.2705];
     }
     if (typeof coords[0] === "object" && "latitude" in coords[0]) {
-      let latSum = 0, lngSum = 0;
+      let latSum = 0,
+        lngSum = 0;
       coords.forEach((point) => {
         latSum += point.latitude;
         lngSum += point.longitude;
@@ -82,7 +83,8 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
       return [latSum / coords.length, lngSum / coords.length];
     }
     if (Array.isArray(coords[0])) {
-      let latSum = 0, lngSum = 0;
+      let latSum = 0,
+        lngSum = 0;
       coords.forEach(([lat, lng]) => {
         latSum += lat;
         lngSum += lng;
@@ -92,22 +94,30 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
     return [13.0843, 80.2705];
   };
 
-  const createCustomIcon = useCallback((wardName: string) => {
-    const fontSize = 6 + zoomLevel * 0.2;
-    return L.divIcon({
-      className: "custom-icon",
-      html: `<div style="font-size: ${fontSize}px; color: black; text-align: center;">${wardName}</div>`,
-    });
-  }, [zoomLevel]);
-
-  
+  const createCustomIcon = useCallback(
+    (wardName: string) => {
+      const fontSize = 6 + zoomLevel * 0.2;
+      return L.divIcon({
+        className: "custom-icon",
+        html: `<div style="font-size: ${fontSize}px; color: black; text-align: center;">${wardName}</div>`,
+      });
+    },
+    [zoomLevel]
+  );
 
   const MapContent: React.FC = () => {
     const selectedWard = setWardNoo?.[0];
-    const mapCenter = selectedWard ? 
-      calculateCentroid(selectedWard.boundaries.map(coord => [coord.latitude, coord.longitude])) :
-      [13.0843, 80.2705];
-      const isValidBoundaries = Array.isArray(selectedWard?.boundaries) && selectedWard.boundaries.length > 0;
+    const mapCenter = selectedWard
+      ? calculateCentroid(
+          selectedWard.boundaries.map((coord) => [
+            coord.latitude,
+            coord.longitude,
+          ])
+        )
+      : [13.0843, 80.2705];
+    const isValidBoundaries =
+      Array.isArray(selectedWard?.boundaries) &&
+      selectedWard.boundaries.length > 0;
 
     return (
       <MapContainer
@@ -123,27 +133,30 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         {selectedWard ? (
           <React.Fragment key={selectedWard.ward_no}>
             {selectedWard && isValidBoundaries && (
-        <Polygon
-          positions={selectedWard.boundaries.map(coord => [coord.latitude, coord.longitude]) as L.LatLngExpression[]}
-          color={selectedWard.color_code}
-          fillColor={selectedWard.color_code}
-          fillOpacity={0.5}
-          weight={2}
-        >
-          <Popup>
-            <Box>
-              <Typography variant="subtitle2">Ward Details</Typography>
-              <Typography>Ward No: {selectedWard.ward_no}</Typography>
-              <Typography>Ward Name: {selectedWard.ward_name}</Typography>
-            </Box>
-          </Popup>
-          <Marker position={mapCenter} icon={createCustomIcon(selectedWard.ward_no)} />
-        </Polygon>
-      )}
+              <Polygon
+                positions={
+                  selectedWard.boundaries.map((coord) => [
+                    coord.latitude,
+                    coord.longitude,
+                  ]) as L.LatLngExpression[]
+                }
+                color={selectedWard.color_code}
+                fillColor={selectedWard.color_code}
+                fillOpacity={0.5}
+                weight={2}
+              >
+                <Marker
+                  position={mapCenter}
+                  icon={createCustomIcon(selectedWard.ward_no)}
+                />
+              </Polygon>
+            )}
           </React.Fragment>
         ) : (
           wardData.map((ward) => {
-            const coordinates = Array.isArray(ward.coordinates) ? ward.coordinates : [];
+            const coordinates = Array.isArray(ward.coordinates)
+              ? ward.coordinates
+              : [];
             const centroid = calculateCentroid(coordinates);
             return (
               <React.Fragment key={ward.ward_no}>
@@ -155,7 +168,10 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
                     fillOpacity={0.5}
                   />
                 )}
-                <Marker position={centroid} icon={createCustomIcon(ward.ward_no)} />
+                <Marker
+                  position={centroid}
+                  icon={createCustomIcon(ward.ward_no)}
+                />
               </React.Fragment>
             );
           })
@@ -169,13 +185,15 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
             pathOptions={{
               color: point.color,
               fillColor: point.fillColor,
-              fillOpacity: 0.8
+              fillOpacity: 0.8,
             }}
+            
           >
             <Popup>
               <Typography variant="body2">
-              Outlet Name:  {point.outletName}<br/>
-              Distributor Name:  {point.distributorName || 'No data'}
+                Outlet Name: {point.outletName}
+                <br />
+                Distributor Name: {point.distributorName || "No data"}
               </Typography>
             </Popup>
           </CircleMarker>
@@ -186,13 +204,15 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
 
   return (
     <>
-      <Box sx={{
-        position: "relative",
-        height: "500px",
-        width: "100%",
-        transition: "all 0.3s ease",
-        overflow: "hidden",
-      }}>
+      <Box
+        sx={{
+          position: "relative",
+          height: "500px",
+          width: "100%",
+          transition: "all 0.3s ease",
+          overflow: "hidden",
+        }}
+      >
         <IconButton
           sx={{
             position: "absolute",
@@ -213,12 +233,14 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         onClose={() => setIsFullScreen(false)}
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Box sx={{
-          height: "100vh",
-          width: "100vw",
-          position: "relative",
-          backgroundColor: "white",
-        }}>
+        <Box
+          sx={{
+            height: "100vh",
+            width: "100vw",
+            position: "relative",
+            backgroundColor: "white",
+          }}
+        >
           <IconButton
             sx={{
               position: "absolute",

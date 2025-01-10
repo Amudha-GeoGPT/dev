@@ -309,7 +309,7 @@ const AnotherDataGrid = ({
   
 
   return (
-    <Box sx={{ width: "100%", height: "600px", mt: 2 }}>
+    <Box sx={{ width: "100%", height: "600px", mt: 0.5 }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <TextField
           variant="outlined"

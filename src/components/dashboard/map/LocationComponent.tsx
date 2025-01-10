@@ -24,7 +24,7 @@ import {
 } from "./WardList";
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
 
 const LocationComponent = () => {
@@ -157,7 +157,12 @@ const LocationComponent = () => {
       ),
     },
   ];
-
+  useEffect(() => {
+    // Clear latLongPoints when wardDataNo changes
+    if (wardDataNo && wardDataNo.length > 0) {
+      setWardDataPoint([]);  // Clear latLongPoints here
+    }
+  }, [wardDataNo]);
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -486,7 +491,7 @@ const LocationComponent = () => {
                 </Box>
               </Grid>
               <Grid item xs={6}>
-                <Box sx={{ mt: 2 }}>
+                <Box >
                   {clicked && specificRangeData && (
                     <AnotherDataGrid
                       setWardPoints={setWardDataPoint}
