@@ -23,8 +23,7 @@ interface WardData {
   ward_no: string;
 }
 interface SetWardNoo {
-  ward_name: string;
-  coordinates: number[][];
+  boundaries: number[][];
   color_code: string;
   fillColor: string;
   ward_no: string;
@@ -58,7 +57,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   wardData,
   latLongPoints,
   simplifiedWardData,
-  setWardNoo,
+  setWardNoo ,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -110,7 +109,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
   const resetKey = `${JSON.stringify(wardData)}-${JSON.stringify(
     latLongPoints
   )}`;
-  console.log("asdfghjklsdfghj", setWardNoo);
+  console.log("", setWardNoo);
 
   const MapContent: React.FC = () => (
     <MapContainer
@@ -143,10 +142,10 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
           </React.Fragment>
         );
       })}
-    {Array.isArray(setWardNoo) &&
+    {Array.isArray(setWardNoo) ? (
   setWardNoo.map((ward) => {
-    const coordinates = Array.isArray(ward.coordinates)
-      ? ward.coordinates
+    const coordinates = Array.isArray(ward.boundaries)
+      ? ward.boundaries
       : [];
     const centroid = calculateCentroid(coordinates);
     return (
@@ -165,33 +164,11 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         />
       </React.Fragment>
     );
-  })}
+  })
+) : (
+  <div>No data available for setWardNoo</div>
+)}
 
-      {simplifiedWardData.map((ward) => {
-        const { boundaries, ward_no, color_code } = ward;
-        if (
-          !Array.isArray(boundaries) ||
-          boundaries.length === 0 ||
-          !boundaries.every(
-            (coord) => Array.isArray(coord) && coord.length === 2
-          )
-        ) {
-          console.warn(`Invalid boundaries for ward: ${ward_no}`);
-          return null;
-        }
-        const centroid = calculateCentroid(boundaries);
-        return (
-          <React.Fragment key={ward_no}>
-            <Polygon
-              positions={boundaries as L.LatLngExpression[]}
-              color={color_code}
-              fillColor={color_code}
-              fillOpacity={0.5}
-            />
-            <Marker position={centroid} icon={createCustomIcon(ward_no)} />
-          </React.Fragment>
-        );
-      })}
       {latLongPoints.map((point, index) => (
         <CircleMarker
           key={`circle-${index}`}

@@ -251,45 +251,45 @@ const AnotherDataGrid = ({
   };
 
   const handleWardNoCellClick = async (params: any) => {
-    
     const { color_code, ward_no, boundaries } = params.row;
-    setSelectedWardNo(ward_no); // Set the selected ward number
-    
+  
+    // Set the selected ward number
+    setSelectedWardNo(ward_no);
+  
     // Check if the ward data already exists in wardDatas
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
   
+    // Prepare the simplified data for the selected ward
+    const simplifiedData = {
+      color_code,
+      ward_no,
+      boundaries,
+    };
+  
     if (existingWardData) {
+      // If data exists, update only the relevant fields
       setMapState((prevState) => ({
         ...prevState,
-        simplifiedWardData: [
-          {
-            color_code,
-            ward_no,
-            boundaries,
-          },
-        ],
-        latLongPoints: prevState.latLongPoints, // Assuming you don't need to update latLongPoints
-        wardData: [...prevState.wardData, existingWardData], // Optionally add the ward data
+        simplifiedWardData: [simplifiedData],
+        latLongPoints: prevState.latLongPoints, // Assuming no changes to latLongPoints
+        wardData: [existingWardData], // Only include the existing ward data for the selected ward_no
       }));
-      setWardNo(existingWardData)
-
+  
+      setWardNo(existingWardData); // Optionally update state with the existing ward data
     } else {
+      // If no existing data, update simplifiedWardData with the current ward fields
       setMapState((prevState) => ({
         ...prevState,
-        simplifiedWardData: [
-          {
-            color_code,
-            ward_no,
-            boundaries,
-          },
-        ],
+        simplifiedWardData: [simplifiedData],
         latLongPoints: prevState.latLongPoints,
-        wardData: prevState.wardData, // No new data to add
+        wardData: [], // No additional ward data to include
       }));
     }
-    console.log("may be",existingWardData);
-    
+  
+    // Log the data for debugging
+    console.log("Existing Ward Data:", existingWardData || simplifiedData);
   };
+  
   
 
   return (
