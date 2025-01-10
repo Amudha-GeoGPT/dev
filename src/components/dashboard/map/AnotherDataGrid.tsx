@@ -262,7 +262,6 @@ const AnotherDataGrid = ({
 
   const handleWardNoCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries } = params.row;
-<<<<<<< HEAD
     setSelectedWardNo(ward_no);
 
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
@@ -305,47 +304,8 @@ const AnotherDataGrid = ({
         ],
       });
     }
-=======
-  
-    // Set the selected ward number
-    setSelectedWardNo(ward_no);
-  
-    // Check if the ward data already exists in wardDatas
-    const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
-  
-    // Prepare the simplified data for the selected ward
-    const simplifiedData = {
-      color_code,
-      ward_no,
-      boundaries,
-    };
-  
-    if (existingWardData) {
-      // If data exists, update only the relevant fields
-      setMapState((prevState) => ({
-        ...prevState,
-        simplifiedWardData: [simplifiedData],
-        latLongPoints: prevState.latLongPoints, // Assuming no changes to latLongPoints
-        wardData: [existingWardData], // Only include the existing ward data for the selected ward_no
-      }));
-  
-      setWardNo(existingWardData); // Optionally update state with the existing ward data
-    } else {
-      // If no existing data, update simplifiedWardData with the current ward fields
-      setMapState((prevState) => ({
-        ...prevState,
-        simplifiedWardData: [simplifiedData],
-        latLongPoints: prevState.latLongPoints,
-        wardData: [], // No additional ward data to include
-      }));
-    }
-  
-    // Log the data for debugging
-    console.log("Existing Ward Data:", existingWardData || simplifiedData);
->>>>>>> bea1ab0a5f722d44c0862d10f3eda25bbabbf402
   };
 
-  
   
 
   return (

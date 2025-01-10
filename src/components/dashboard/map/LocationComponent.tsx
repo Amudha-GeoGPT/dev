@@ -480,7 +480,7 @@ const LocationComponent = () => {
                             ]
                           : []
                       }
-                      setWardNoo={wardDataNo || []}
+                      setWardNoo={wardDataNo}
                     />
                   </Box>
                 </Box>
