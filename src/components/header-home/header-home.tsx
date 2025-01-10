@@ -13,6 +13,7 @@ import {
 import { Search as SearchIcon, AccountCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import vectorheaderimg from "../../assets/images/svg/Vectorimg.svg";
+import Index from "../dashboard/map/Index";
 
 const Headerhome: React.FC = () => {
   const [] = useState(false);
@@ -24,7 +25,7 @@ const Headerhome: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/sample");
+    navigate("/");
   }, [navigate]);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
@@ -84,6 +85,7 @@ const Headerhome: React.FC = () => {
   );
 
   return (
+    <>
     <Box display="flex">
       <AppBar
         position="fixed"
@@ -142,6 +144,11 @@ const Headerhome: React.FC = () => {
       {renderMobileMenu}
       {renderMenu}
     </Box>
+    <Box>
+      <Index/>
+    </Box>
+   
+    </>
   );
 };
 
