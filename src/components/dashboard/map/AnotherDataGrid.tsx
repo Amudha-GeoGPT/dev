@@ -39,7 +39,7 @@ const AnotherDataGrid = ({
   wardDatas?: WardData[];
   setWardPoints: any;
   setWardNo: (data: SetWardNoo[]) => void; // Update the type here
-})  => {
+}) => {
   const [mapData, setMapData] = useState<WardData[]>([]);
   const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
@@ -74,7 +74,10 @@ const AnotherDataGrid = ({
       renderHeader: () => <strong style={{ fontSize: "12px" }}>Ward No</strong>,
       renderCell: (params: any) => (
         <Box
-          onClick={() => handleWardNoCellClick(params)}
+          onClick={async () => {
+            await handleWardNoCellClick(params);
+            await handleCkOutletsCellClick(params);
+          }}
           sx={{ cursor: "pointer" }}
         >
           {params.value}
@@ -106,7 +109,10 @@ const AnotherDataGrid = ({
       ),
       renderCell: (params: any) => (
         <Box
-          onClick={() => handleOpportunitiesCellClick(params)} // Call the new click handler
+          onClick={async () => {
+            await handleOpportunitiesCellClick(params);
+            await handleCkOutletsCellClick(params);
+          }}
           sx={{ cursor: "pointer" }}
         >
           {params.value}
@@ -173,6 +179,8 @@ const AnotherDataGrid = ({
       const { ward_no } = params.row;
       const color = "green ";
       const fillColor = "yellow";
+
+      // First API call
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
@@ -195,20 +203,22 @@ const AnotherDataGrid = ({
           fillColor,
         }));
 
-        setWardPoints(updatedCoordinates);
+        // Get the existing coordinates (if any)
+        setWardPoints((prevPoints: any) => {
+          const combinedCoordinates = [...prevPoints, ...updatedCoordinates]; // Merging new and existing data
+          return combinedCoordinates;
+        });
+
         setMapState((prevState) => ({
           ...prevState,
-          latLongPoints: updatedCoordinates,
+          latLongPoints: prevState.latLongPoints
+            ? [...prevState.latLongPoints, ...updatedCoordinates]
+            : updatedCoordinates, // Merge new data
           wardData: prevState.wardData,
         }));
 
-        const wardDataResponse = await axios.post(
-          "https://geogptdev.ckdigital.in/api/getwardData",
-          {
-            district_name: "Chennai",
-            ward_list: [ward_no], // Pass the ward_no dynamically
-          }
-        );
+        // Trigger the second function after the first API call is successful
+        await handleCkOutletsCellClick(params); // Pass `params` here, or modify as needed
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -220,6 +230,7 @@ const AnotherDataGrid = ({
       const { ward_no } = params.row;
       const color = "red";
       const fillColor = "black";
+
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
@@ -241,17 +252,26 @@ const AnotherDataGrid = ({
           color,
           fillColor,
         }));
-        setWardPoints(updatedCoordinates);
+
+        // Get the existing coordinates and combine with new data
+        setWardPoints((prevPoints: any) => {
+          const combinedCoordinates = [...prevPoints, ...updatedCoordinates];
+          return combinedCoordinates;
+        });
+
         setMapState((prevState) => ({
           ...prevState,
-          latLongPoints: updatedCoordinates,
+          latLongPoints: prevState.latLongPoints
+            ? [...prevState.latLongPoints, ...updatedCoordinates]
+            : updatedCoordinates, // Merge new data
           wardData: prevState.wardData,
         }));
+
         const wardDataResponse = await axios.post(
           "https://geogptdev.ckdigital.in/api/getwardData",
           {
             district_name: "Chennai",
-            ward_list: [ward_no], 
+            ward_list: [ward_no],
           }
         );
       }
@@ -305,8 +325,6 @@ const AnotherDataGrid = ({
       });
     }
   };
-
-  
 
   return (
     <Box sx={{ width: "100%", height: "600px", mt: 0.5 }}>
@@ -365,24 +383,24 @@ const AnotherDataGrid = ({
           overflow: "hidden",
         }}
       />
-     <Box sx={{ display: "none", mt: 2 }}>
-     <NewTamilNaduMap
-    wardData={mapState.wardData}
-    latLongPoints={mapState.latLongPoints}
-    simplifiedWardData={mapState.simplifiedWardData}
-    setWardNoo={mapState.wardData.map((ward) => ({
-      Universal_Outlet_Count: ward.no_of_universal_outlet || 0,
-      boundaries: ward.boundaries || [],
-      ck_outlet_count: ward.ck_outlet_count || 0,
-      color_code: ward.color_code,
-      district_name: "Chennai", // Assuming district_name is constant or fetched elsewhere
-      ward_no: ward.ward_no,
-      fillColor: ward.fillColor || "#000000", // Default fillColor if not present
-      ward_name: ward.ward_name,
-      population_count: ward.population_count || 0,
-    }))} // Transform wardData to SetWardNoo
-  />
-</Box>
+      <Box sx={{ display: "none", mt: 2 }}>
+        <NewTamilNaduMap
+          wardData={mapState.wardData}
+          latLongPoints={mapState.latLongPoints}
+          simplifiedWardData={mapState.simplifiedWardData}
+          setWardNoo={mapState.wardData.map((ward) => ({
+            Universal_Outlet_Count: ward.no_of_universal_outlet || 0,
+            boundaries: ward.boundaries || [],
+            ck_outlet_count: ward.ck_outlet_count || 0,
+            color_code: ward.color_code,
+            district_name: "Chennai", // Assuming district_name is constant or fetched elsewhere
+            ward_no: ward.ward_no,
+            fillColor: ward.fillColor || "#000000", // Default fillColor if not present
+            ward_name: ward.ward_name,
+            population_count: ward.population_count || 0,
+          }))} // Transform wardData to SetWardNoo
+        />
+      </Box>
     </Box>
   );
 };

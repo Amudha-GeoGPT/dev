@@ -26,8 +26,11 @@ import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useEffect, useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
+import React from "react";
 
 const LocationComponent = () => {
+  const [wardDataNo, setWardDataNo] = React.useState<any>(null);
+
   const {
     selectedVertical,
     selectedState,
@@ -49,13 +52,12 @@ const LocationComponent = () => {
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
-  } = useNewMapPages();
+  } = useNewMapPages(setWardDataNo);
 
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
   >([]);
   const [wardDataPoint, setWardDataPoint] = useState([]);
-  const [wardDataNo, setWardDataNo] = useState([]);
 
   const handleTalukChange = (
     _event: any,
@@ -158,9 +160,8 @@ const LocationComponent = () => {
     },
   ];
   useEffect(() => {
-    // Clear latLongPoints when wardDataNo changes
     if (wardDataNo && wardDataNo.length > 0) {
-      setWardDataPoint([]);  // Clear latLongPoints here
+      setWardDataPoint([]);
     }
   }, [wardDataNo]);
   return (
@@ -491,7 +492,7 @@ const LocationComponent = () => {
                 </Box>
               </Grid>
               <Grid item xs={6}>
-                <Box >
+                <Box>
                   {clicked && specificRangeData && (
                     <AnotherDataGrid
                       setWardPoints={setWardDataPoint}

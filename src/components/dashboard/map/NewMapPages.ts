@@ -23,7 +23,7 @@ type Ranges = {
     population: number;
   };
 };
-export const useNewMapPages = () => {
+export const useNewMapPages = (setWardDataNo: (value: any) => void) => {
   const [selectedVertical, setselectedVertical] = useState<any>("");
   const [selectedSearch, setselectedSearch] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
@@ -77,6 +77,7 @@ export const useNewMapPages = () => {
       if (selectedWard.length > 0) {
         payload.ward_list = selectedWard.map((ward) => ward.value);
       }
+
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/getwardData",
         payload
@@ -122,11 +123,31 @@ export const useNewMapPages = () => {
             col5: ranges.gt300.population,
           },
         ]);
+
+        // Plot all the ward data on the map after applying the filter
+        const allTransformedWards = Object.keys(results).flatMap((range) => {
+          const specificRange = results[range];
+          return specificRange.data.map((item: any) => ({
+            coordinates: item.boundaries.map((boundary: any) => [
+              boundary.latitude,
+              boundary.longitude,
+            ]),
+            color_code: item.color_code,
+            ward_name: item.ward_name,
+            ward_no: item.ward_no,
+          }));
+        });
+
+        setWardDataForMap(allTransformedWards);
+
+        // Set clicked state to true to indicate that the map data has been loaded
+        setClicked(true);
       }
     } catch (error) {
       console.error("Error fetching data", error);
       alert("Failed to fetch data.");
     }
+
     setclickedOverview(true);
   };
 
@@ -149,6 +170,8 @@ export const useNewMapPages = () => {
 
   const handleCellClick = async (params: any) => {
     const clickedRange = params.field;
+    setWardDataNo(null);
+    // setWardDataPoint(null);
 
     if (!wardDataCache) {
       console.error("No ward data available. Please apply filter first.");

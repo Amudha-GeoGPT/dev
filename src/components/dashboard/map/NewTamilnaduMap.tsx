@@ -39,12 +39,12 @@ interface SetWardNoo {
 interface LatLongPoint {
   latitude: number;
   longitude: number;
-  pid: any;
   outletName: any;
   distributorCode: any;
   distributorName: any;
   color: any;
   fillColor: any;
+  pid: any;
 }
 
 interface SimplifiedWardData {
@@ -187,13 +187,16 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
               fillColor: point.fillColor,
               fillOpacity: 0.8,
             }}
-            
           >
             <Popup>
               <Typography variant="body2">
+                Outlet Code: {point.pid || "No data"}
+                <br />
                 Outlet Name: {point.outletName}
                 <br />
                 Distributor Name: {point.distributorName || "No data"}
+                <br />
+                DistributorCode: {point.distributorCode || "No data"}
               </Typography>
             </Popup>
           </CircleMarker>
