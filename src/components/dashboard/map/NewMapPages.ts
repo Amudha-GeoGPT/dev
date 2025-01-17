@@ -225,12 +225,15 @@ export const useNewMapPages = (
   const ApplyFilterButtonStyles = {
     fontSize: "12px",
     height: "40px",
-    padding: "18px",
+    padding: "10px",
     backgroundColor: "#001B04",
     color: "#FFFFFF",
     textTransform: "none" as const,
     borderRadius: "8px",
-    mt: 2.5,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    mt: 2.3,
     "&:hover": {
       backgroundColor: "#0A330A",
     },
@@ -238,13 +241,15 @@ export const useNewMapPages = (
   const ClearAllButtonStyles = {
     fontSize: "12px",
     height: "40px",
-    padding: "18px",
+    padding: "10px",
     backgroundColor: "white",
     color: "black",
     textTransform: "none" as const,
     borderRadius: "8px",
     border: "1px solid black",
-    mt: 2.5,
+    mt: 2.3,
+    width:'100%',
+    
   };
 
   const handleVerticalChange = (value: any) => setselectedVertical(value);

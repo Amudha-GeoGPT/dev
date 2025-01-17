@@ -31,7 +31,6 @@ import React from "react";
 const LocationComponent = () => {
   const [wardDataNo, setWardDataNo] = React.useState<any>(null);
   const [wardDataPoint, setWardDataPoint] = useState<any[]>([]);
- 
 
   const {
     selectedVertical,
@@ -54,7 +53,7 @@ const LocationComponent = () => {
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
-  } = useNewMapPages(setWardDataNo,setWardDataPoint);
+  } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
@@ -168,8 +167,8 @@ const LocationComponent = () => {
   return (
     <>
       <Box sx={{ width: "100%" }}>
-        <Grid container spacing={1} sx={{ p: 2 }}>
-          <Grid item xs={1.5}>
+        <Grid container spacing={0.5} sx={{ p: 2 }}>
+          <Grid item xs={1.8}>
             <CustomSelect
               label="Vertical"
               placeholder="Select Vertical"
@@ -179,7 +178,7 @@ const LocationComponent = () => {
               sx={{ height: "40px" }}
             />
           </Grid>
-          <Grid item xs={1.5}>
+          <Grid item xs={1.8}>
             <CustomSelectSearch
               label="State"
               placeholder="Select State"
@@ -188,16 +187,16 @@ const LocationComponent = () => {
               onChange={handleStateChange}
             />
           </Grid>
-          <Grid item xs={1.5}>
+          <Grid item xs={1.8}>
             <CustomSelectSearch
-              label="Metro/Non-Metro"
+              label="Metro/NonMetro"
               placeholder="Select Metro/Non-Metro"
               options={metroOrNonMetro}
               value={selectedMetro}
               onChange={handleMetroChange}
             />
           </Grid>
-          <Grid item xs={1.5}>
+          <Grid item xs={1.8}>
             <CustomSelectSearch
               label="Metropolitan"
               placeholder="Select Metropolitan"
@@ -207,7 +206,7 @@ const LocationComponent = () => {
             />
           </Grid>
           {selectedMetro === "Non-Metro" && (
-            <Grid item xs={2.4}>
+            <Grid item xs={2}>
               <Typography sx={{ fontSize: "12px", mt: "2px" }}>
                 Taluk
               </Typography>
@@ -307,7 +306,7 @@ const LocationComponent = () => {
             </Grid>
           )}
           {selectedMetro === "Metro" && (
-            <Grid item xs={2.4}>
+            <Grid item xs={2}>
               <Typography sx={{ fontSize: "12px", mt: "2px" }}>
                 Wards
               </Typography>
@@ -407,18 +406,31 @@ const LocationComponent = () => {
               />
             </Grid>
           )}
-          <Grid item xs={1} sx={{ ml: 1 }}>
-            <CustomButton
-              buttonText="Clear All"
-              buttonStyles={ClearAllButtonStyles}
-            />
-          </Grid>
-          <Grid item xs={1.5}>
-            <CustomButton
-              buttonText="Apply Filter"
-              buttonStyles={ApplyFilterButtonStyles}
-              onClick={handleApplyFilter}
-            />
+
+          <Grid item xs={2} sx={{ ml: 1.4 }}>
+            <Box
+              display="flex"
+              gap={1}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ height: "100%" }}
+            >
+              <CustomButton
+                buttonText="Clear All"
+                buttonStyles={{
+                  ...ClearAllButtonStyles,
+                  width: "100%",
+                }}
+              />
+              <CustomButton
+                buttonText="Apply Filter"
+                buttonStyles={{
+                  ...ApplyFilterButtonStyles,
+                  width: "100%",
+                }}
+                onClick={handleApplyFilter}
+              />
+            </Box>
           </Grid>
         </Grid>
         {clickedOverview && (
