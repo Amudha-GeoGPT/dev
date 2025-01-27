@@ -4,15 +4,21 @@ import CustomSelectSearch from "../../common/CustomSelectSearch";
 import {
   Autocomplete,
   Box,
+  Button,
   Chip,
+  Drawer,
   Grid,
+  IconButton,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import CustomButton from "../../common/CustomButton";
+import DownloadIcon from "@mui/icons-material/Download";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import AnotherDataGrid from "./AnotherDataGrid";
 import "leaflet/dist/leaflet.css";
+import CloseIcon from "@mui/icons-material/Close";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import CheckIcon from "@mui/icons-material/Check";
 import { taluk, verticalData } from "./WardList";
@@ -25,7 +31,11 @@ import React from "react";
 const LocationComponent = () => {
   const [wardDataNo, setWardDataNo] = React.useState<any>(null);
   const [wardDataPoint, setWardDataPoint] = useState<any[]>([]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const toggleDrawer = (open: boolean) => (_event: React.MouseEvent) => {
+    setIsDrawerOpen(open);
+  };
   const {
     selectedVertical,
     selectedState,
@@ -433,14 +443,47 @@ const LocationComponent = () => {
         </Grid>
         {clickedOverview && (
           <Box
-            sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              width: "100%",
+              mt: 1,
+            }}
           >
             <Grid container spacing={3} sx={{ width: "100%" }}>
               <Grid item xs={6}>
                 <Box>
-                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                    Overview
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between", // Ensure proper spacing
+                      alignItems: "center", // Vertical alignment
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      Overview
+                    </Typography>
+                    <Button
+                      onClick={toggleDrawer(true)}
+                      variant="contained"
+                      sx={{
+                        fontSize: "12px",
+                        height: "40px",
+                        padding: "10px",
+                        backgroundColor: "white",
+                        color: "black",
+                        textTransform: "none",
+                        borderRadius: "8px",
+                        border: "1px solid black",
+                        "&:hover": {
+                          color: "white",
+                          backgroundColor: "black",
+                        },
+                      }}
+                    >
+                      View Summary
+                    </Button>
+                  </Box>
                   <Box sx={{ mt: 2.5 }}>
                     <DataGrid
                       rows={rows}
@@ -517,6 +560,110 @@ const LocationComponent = () => {
           </Box>
         )}
       </Box>
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={toggleDrawer(false)}
+        PaperProps={{
+          sx: { width: 400 }, // Set the width of the drawer
+        }}
+      >
+        {/* Drawer Content */}
+        <Box p={2} sx={{ position: "relative", height: "100%" }}>
+          {/* Header */}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Typography variant="h6" fontWeight="bold">
+              Summary
+            </Typography>
+            <Box>
+            <Tooltip title="Download" arrow>
+              <IconButton>
+                <DownloadIcon sx={{ color: "green" }} />
+              </IconButton>
+              </Tooltip>
+              <IconButton onClick={toggleDrawer(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Box>
+
+          <Typography variant="body1">
+            Region:{" "}
+            <Typography component="span" color="green">
+              Chennai
+            </Typography>
+          </Typography>
+
+          <Box mt={2}>
+            <Box
+              p={2}
+              mb={2}
+              borderRadius={2}
+              sx={{
+                background: "linear-gradient(to right, #00c6ff, #0072ff)",
+                color: "#fff",
+              }}
+            >
+              <Typography variant="subtitle2">Total No. of Wards</Typography>
+              <Typography variant="h4" fontWeight="bold">
+                155
+              </Typography>
+            </Box>
+
+            <Box
+              p={2}
+              mb={2}
+              borderRadius={2}
+              sx={{
+                background: "linear-gradient(to right, #7f00ff, #e100ff)",
+                color: "#fff",
+              }}
+            >
+              <Typography variant="subtitle2">
+                No. of Wards CK Outlets
+              </Typography>
+              <Typography variant="h4" fontWeight="bold">
+                12,400
+              </Typography>
+            </Box>
+
+            <Box
+              p={2}
+              mb={2}
+              borderRadius={2}
+              sx={{
+                background: "linear-gradient(to right, #ff512f, #f09819)",
+                color: "#fff",
+              }}
+            >
+              <Typography variant="subtitle2">
+                No. of Universal Outlets
+              </Typography>
+              <Typography variant="h4" fontWeight="bold">
+                12,400
+              </Typography>
+            </Box>
+            <Box
+              p={2}
+              borderRadius={2}
+              sx={{
+                background: "linear-gradient(to right, #ff512f, #f09819)",
+                color: "#fff",
+              }}
+            >
+              <Typography variant="subtitle2">Populations</Typography>
+              <Typography variant="h4" fontWeight="bold">
+                2,00,000
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Drawer>
     </>
   );
 };

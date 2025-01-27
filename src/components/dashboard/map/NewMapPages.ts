@@ -260,6 +260,7 @@ export const useNewMapPages = (
     mt: 2.3,
     width: "100%",
   };
+ 
 
   const handleVerticalChange = (value: any) => setselectedVertical(value);
   const handleSearchChange = (value: string) => setselectedSearch(value);
