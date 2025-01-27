@@ -15,13 +15,7 @@ import AnotherDataGrid from "./AnotherDataGrid";
 import "leaflet/dist/leaflet.css";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import CheckIcon from "@mui/icons-material/Check";
-import {
-  metroOrNonMetro,
-  stateData,
-  taluk,
-  verticalData,
-  ward,
-} from "./WardList";
+import { taluk, verticalData } from "./WardList";
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useEffect, useState } from "react";
@@ -36,6 +30,7 @@ const LocationComponent = () => {
     selectedVertical,
     selectedState,
     selectedMetro,
+    metropolitanOptions,
     clicked,
     clickedOverview,
     selectedMetropolitan,
@@ -53,6 +48,8 @@ const LocationComponent = () => {
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
+    metroOrNonMetro,
+    wardOptions,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
   const [selectedTaluk, setSelectedTaluk] = useState<
@@ -159,6 +156,7 @@ const LocationComponent = () => {
       ),
     },
   ];
+
   useEffect(() => {
     if (wardDataNo && wardDataNo.length > 0) {
       setWardDataPoint([]);
@@ -182,9 +180,9 @@ const LocationComponent = () => {
             <CustomSelectSearch
               label="State"
               placeholder="Select State"
-              options={stateData}
+              options={[{ label: "Tamilnadu", value: "Tamilnadu" }]}
               value={selectedState}
-              onChange={handleStateChange}
+              onChange={(value) => handleStateChange(value)}
             />
           </Grid>
           <Grid item xs={1.8}>
@@ -200,7 +198,7 @@ const LocationComponent = () => {
             <CustomSelectSearch
               label="Metropolitan"
               placeholder="Select Metropolitan"
-              options={[{ label: "Chennai", value: "Chennai" }]}
+              options={metropolitanOptions}
               value={selectedMetropolitan}
               onChange={handleMetropolitanChange}
             />
@@ -313,7 +311,7 @@ const LocationComponent = () => {
               <Autocomplete
                 multiple
                 limitTags={1}
-                options={ward}
+                options={wardOptions}
                 value={selectedWard}
                 onChange={handleWardChange}
                 disableCloseOnSelect

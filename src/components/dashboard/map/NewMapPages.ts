@@ -26,12 +26,14 @@ type Ranges = {
 export const useNewMapPages = (
   setWardDataNo: (value: any) => void,
   setWardDataPoint: (value: any[]) => void
-
 ) => {
   const [selectedVertical, setselectedVertical] = useState<any>("");
+  const [responseData, setResponseData] = useState<any>(null);
   const [selectedSearch, setselectedSearch] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
   const [selectedMetro, setSelectedMetro] = useState<string>("");
+  const [metropolitanOptions, setMetropolitanOptions] = useState<any[]>([]);
+
   const [clicked, setClicked] = useState<boolean>(false);
   const [clickedOverview, setclickedOverview] = useState<boolean>(false);
   const [selectedMetropolitan, setSelectedMetropolitan] =
@@ -62,21 +64,29 @@ export const useNewMapPages = (
   const [selectedTaluk, setSelectedTaluk] = useState<
     Array<{ label: string; value: string }>
   >([]);
-  const [selectedWard, setSelectedWard] = useState<
-    Array<{ label: string; value: string }>
-  >([]);
+
   const [selectedPincode, setSelectedPincode] = useState<Option | null>(null);
-  const handleMetropolitanChange = (value: Option | null) =>
-    setSelectedMetropolitan(value);
+  const metroOrNonMetro = [
+    { label: "Metro", value: "Metro" },
+    { label: "Non-Metro", value: "Non-Metro" },
+  ];
+  const [selectedWard, setSelectedWard] = useState<any[]>([]);
+  const [wardOptions, setWardOptions] = useState<any[]>([]);
 
   const handleApplyFilter = async () => {
-    if (selectedMetropolitan?.value !== "Chennai") {
-      alert("Please select Chennai to filter data.");
+    console.log("Selected Metropolitan:", selectedMetropolitan);
+
+    const districtName =
+      typeof selectedMetropolitan === "string"
+        ? selectedMetropolitan
+        : selectedMetropolitan;
+
+    if (!districtName) {
+      alert("Please select a metropolitan district.");
       return;
     }
-
     try {
-      const payload: any = { district_name: selectedMetropolitan.value };
+      const payload: any = { district_name: districtName };
 
       if (selectedWard.length > 0) {
         payload.ward_list = selectedWard.map((ward) => ward.value);
@@ -230,9 +240,9 @@ export const useNewMapPages = (
     color: "#FFFFFF",
     textTransform: "none" as const,
     borderRadius: "8px",
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     mt: 2.3,
     "&:hover": {
       backgroundColor: "#0A330A",
@@ -248,16 +258,13 @@ export const useNewMapPages = (
     borderRadius: "8px",
     border: "1px solid black",
     mt: 2.3,
-    width:'100%',
-    
+    width: "100%",
   };
 
   const handleVerticalChange = (value: any) => setselectedVertical(value);
   const handleSearchChange = (value: string) => setselectedSearch(value);
-  const handleStateChange = (value: any) => setSelectedState(value);
-  const handleMetroChange = (value: any) => {
-    setSelectedMetro(value);
-  };
+  // const handleStateChange = (value: any) => setSelectedState(value);
+
   const handleWardChange = (
     _event: any,
     newValue: Array<{ label: string; value: string }>
@@ -273,12 +280,82 @@ export const useNewMapPages = (
 
   const handlePincodeChange = (value: Option | null) =>
     setSelectedPincode(value);
+
+  const handleStateChange = async (selectedOption: any) => {
+    const stateName = selectedOption?.value;
+
+    setSelectedState(selectedOption);
+
+    try {
+      const response = await axios.post(
+        "https://geogptdev.ckdigital.in/api/filterMetro",
+        { stateName }
+      );
+
+      if (response.data.message === "success") {
+        setResponseData(response.data.results);
+        console.log("Response stored:", response.data.results);
+      }
+    } catch (err) {
+      console.error("POST call failed:", err);
+    }
+  };
+
+  const handleMetroChange = (selectedOption: any) => {
+    setSelectedMetro(selectedOption?.value);
+
+    const metroData = responseData?.Metro;
+    const nonMetroData = responseData?.["Non-Metro"];
+
+    let options = [];
+
+    if (selectedOption?.value === "Metro" && metroData) {
+      options = metroData[0]?.data.map((item: any) => ({
+        label: item.district_name,
+        value: item.district_name,
+        wards: item.wards,
+      }));
+    } else if (selectedOption?.value === "Non-Metro" && nonMetroData) {
+      options = nonMetroData[0]?.data.map((item: any) => ({
+        label: item.district_name,
+        value: item.district_name,
+        wards: item.wards,
+      }));
+    }
+    console.log("Options for Metro/Non-Metro:", options);
+
+    setMetropolitanOptions(options);
+  };
+
+  const handleMetropolitanChange = (selectedOption: any) => {
+    setSelectedMetropolitan(selectedOption?.value);
+
+    const selectedDistrict = metropolitanOptions.find(
+      (item: any) => item.value === selectedOption?.value
+    );
+
+    if (selectedDistrict) {
+      setWardOptions(
+        selectedDistrict.wards.map((ward: any) => ({
+          label: ward.ward_no,
+          value: ward.ward_no,
+        }))
+      );
+    }
+  };
+
+  // const handleWardChange = (event: any, value: any) => {
+  //   setSelectedWard(value);
+  // };
+
   return {
     selectedVertical,
     setselectedVertical,
     selectedSearch,
     setselectedSearch,
     selectedState,
+    wardOptions,
+    metroOrNonMetro,
     setSelectedState,
     selectedMetro,
     setSelectedMetro,
@@ -301,6 +378,7 @@ export const useNewMapPages = (
     setSelectedTaluk,
     selectedWard,
     setSelectedWard,
+    metropolitanOptions,
     selectedPincode,
     setSelectedPincode,
     handleMetropolitanChange,
