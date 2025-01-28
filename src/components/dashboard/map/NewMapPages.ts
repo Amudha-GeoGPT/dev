@@ -308,7 +308,7 @@ export const useNewMapPages = (
     setSelectedMetro(selectedOption?.value);
 
     const metroData = responseData?.Metro;
-    const nonMetroData = responseData?.["Non-Metro"];
+    const nonMetroData = responseData?.Non_Metro;
 
     let options = [];
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -67,32 +67,61 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
 }) => {
   const [zoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [districtName, setDistrictName] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (wardData?.[0]?.district_name) {
+      setDistrictName(wardData[0].district_name);
+    }
+  }, [wardData]);
+
   const districtCenterMapping: Record<string, [number, number]> = {
     Chennai: [13.0843, 80.2705],
     Madurai: [9.9252, 78.1198],
     Coimbatore: [11.0168, 76.9558],
     Tirunelveli: [8.715, 77.7656],
     Salem: [11.6643, 78.146],
-    Viruthunagar: [9.568, 77.9624],
+    Virudhunagar: [9.568, 77.9624],
     Dindigul: [10.3624, 77.9695],
     Karur: [10.9601, 78.0766],
     Erode: [11.341, 77.7172],
     Nagapattinam: [10.7672, 79.8449],
     Thiruchirappalli: [10.7905, 78.7047],
+    Sivaganga: [9.848, 78.4832],
     Tamilnadu: [11.127, 78.6569],
+    Thiruvarur: [10.7661, 79.6344],
+    Cuddalore: [11.748, 79.7714],
+    Viluppuram: [11.9401, 79.4861],
+    Thanjavur: [10.7877, 79.1384],
+    Kanniyakumari: [8.0844, 77.5495],
+    Thiruvallur: [13.1227, 79.9118],
+    Dharmapuri: [12.1211, 78.1582],
+    Ramanathapuram: [9.3639, 78.8395],
+    Ariyalur: [11.1404, 79.0745],
+    Krishnagiri: [12.5266, 78.215],
+    Kancheepuram: [12.8372, 79.7042],
+    // The Nilgiris:[11.4916,76.7337],
+    Tiruvannamalai: [12.2253, 79.0747],
+    Pudukkottai: [10.3833, 78.8001],
+    Vellore: [12.9236, 79.1331],
+    Theni: [10.0079, 77.4735],
+    Namakkal: [11.2194, 78.1678],
+    Thoothukkudi: [8.7642, 78.1348],
+    Perambalur: [11.2342, 78.8807],
   };
-  const getDistrictCenter = (
-    district_name: string | undefined
-  ): [number, number] => {
-    const district = district_name?.trim() || "Tamilnadu";
-    console.log("District for Center:", district);
+  const getDistrictCenter = (): [number, number] => {
+    const district = districtName?.trim() || "";
+    console.log("District for Center", district);
 
     for (let key in districtCenterMapping) {
       if (key === district) {
         return districtCenterMapping[key];
       }
     }
-    return districtCenterMapping["Tamilnadu"];
+    alert(`No data found for district: ${district}.`);
+    return districtCenterMapping[""];
   };
 
   const calculateCentroid = (
@@ -100,7 +129,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
     district_name?: string
   ): [number, number] => {
     if (!Array.isArray(coords) || coords.length === 0) {
-      return getDistrictCenter(district_name);
+      return getDistrictCenter();
     }
 
     if (typeof coords[0] === "object" && "latitude" in coords[0]) {
@@ -128,7 +157,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         number
       ];
     }
-    return getDistrictCenter(district_name);
+    return getDistrictCenter();
   };
   const createCustomIcon = useCallback(
     (wardName: string) => {
@@ -143,7 +172,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
 
   const MapContent: React.FC = () => {
     const selectedWard = setWardNoo?.[0];
-    const districtCenter = getDistrictCenter(selectedWard?.district_name);
+    const districtCenter = getDistrictCenter();
 
     const mapCenter = selectedWard
       ? calculateCentroid(
