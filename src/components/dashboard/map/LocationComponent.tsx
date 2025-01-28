@@ -60,6 +60,8 @@ const LocationComponent = () => {
     handleVerticalChange,
     metroOrNonMetro,
     wardOptions,
+    dynamicLabel,
+    dynamicPlaceholder,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
   const [selectedTaluk, setSelectedTaluk] = useState<
@@ -206,8 +208,8 @@ const LocationComponent = () => {
           </Grid>
           <Grid item xs={1.8}>
             <CustomSelectSearch
-              label="Metropolitan"
-              placeholder="Select Metropolitan"
+              label={dynamicLabel}
+              placeholder={dynamicPlaceholder}
               options={metropolitanOptions}
               value={selectedMetropolitan}
               onChange={handleMetropolitanChange}
@@ -581,10 +583,10 @@ const LocationComponent = () => {
               Summary
             </Typography>
             <Box>
-            <Tooltip title="Download" arrow>
-              <IconButton>
-                <DownloadIcon sx={{ color: "green" }} />
-              </IconButton>
+              <Tooltip title="Download" arrow>
+                <IconButton>
+                  <DownloadIcon sx={{ color: "green" }} />
+                </IconButton>
               </Tooltip>
               <IconButton onClick={toggleDrawer(false)}>
                 <CloseIcon />

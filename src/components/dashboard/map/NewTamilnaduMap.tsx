@@ -6,7 +6,6 @@ import {
   TileLayer,
   Polygon,
   Marker,
-  
   Popup,
   CircleMarker,
 } from "react-leaflet";
@@ -22,6 +21,7 @@ interface WardData {
   color_code: string;
   fillColor: string;
   ward_no: string;
+  district_name: string;
 }
 
 interface SetWardNoo {
@@ -67,32 +67,69 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
 }) => {
   const [zoomLevel] = useState<number>(13);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const districtCenterMapping: Record<string, [number, number]> = {
+    Chennai: [13.0843, 80.2705],
+    Madurai: [9.9252, 78.1198],
+    Coimbatore: [11.0168, 76.9558],
+    Tirunelveli: [8.715, 77.7656],
+    Salem: [11.6643, 78.146],
+    Viruthunagar: [9.568, 77.9624],
+    Dindigul: [10.3624, 77.9695],
+    Karur: [10.9601, 78.0766],
+    Erode: [11.341, 77.7172],
+    Nagapattinam: [10.7672, 79.8449],
+    Thiruchirappalli: [10.7905, 78.7047],
+    Tamilnadu: [11.127, 78.6569],
+  };
+  const getDistrictCenter = (
+    district_name: string | undefined
+  ): [number, number] => {
+    const district = district_name?.trim() || "Tamilnadu";
+    console.log("District for Center:", district);
 
-  const calculateCentroid = (coords: any[]): [number, number] => {
+    for (let key in districtCenterMapping) {
+      if (key === district) {
+        return districtCenterMapping[key];
+      }
+    }
+    return districtCenterMapping["Tamilnadu"];
+  };
+
+  const calculateCentroid = (
+    coords: any[],
+    district_name?: string
+  ): [number, number] => {
     if (!Array.isArray(coords) || coords.length === 0) {
-        return [13.0843, 80.2705]; // Default coordinates as tuple
+      return getDistrictCenter(district_name);
     }
-    
+
     if (typeof coords[0] === "object" && "latitude" in coords[0]) {
-        let latSum = 0, lngSum = 0;
-        coords.forEach((point) => {
-            latSum += point.latitude;
-            lngSum += point.longitude;
-        });
-        return [latSum / coords.length, lngSum / coords.length] as [number, number];
+      let latSum = 0,
+        lngSum = 0;
+      coords.forEach((point) => {
+        latSum += point.latitude;
+        lngSum += point.longitude;
+      });
+      return [latSum / coords.length, lngSum / coords.length] as [
+        number,
+        number
+      ];
     }
-    
+
     if (Array.isArray(coords[0])) {
-        let latSum = 0, lngSum = 0;
-        coords.forEach(([lat, lng]) => {
-            latSum += lat;
-            lngSum += lng;
-        });
-        return [latSum / coords.length, lngSum / coords.length] as [number, number];
+      let latSum = 0,
+        lngSum = 0;
+      coords.forEach(([lat, lng]) => {
+        latSum += lat;
+        lngSum += lng;
+      });
+      return [latSum / coords.length, lngSum / coords.length] as [
+        number,
+        number
+      ];
     }
-    
-    return [13.0843, 80.2705];
-};
+    return getDistrictCenter(district_name);
+  };
   const createCustomIcon = useCallback(
     (wardName: string) => {
       const fontSize = 6 + zoomLevel * 0.2;
@@ -106,14 +143,18 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
 
   const MapContent: React.FC = () => {
     const selectedWard = setWardNoo?.[0];
+    const districtCenter = getDistrictCenter(selectedWard?.district_name);
+
     const mapCenter = selectedWard
       ? calculateCentroid(
           selectedWard.boundaries.map((coord) => [
             coord.latitude,
             coord.longitude,
-          ])
+          ]),
+          selectedWard.district_name
         )
-      : [13.0843, 80.2705];
+      : districtCenter;
+
     const isValidBoundaries =
       Array.isArray(selectedWard?.boundaries) &&
       selectedWard.boundaries.length > 0;
@@ -145,18 +186,19 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
                 weight={2}
               >
                 <Marker
-    position={mapCenter as L.LatLngExpression}
-    icon={createCustomIcon(selectedWard.ward_no)}
-/>
+                  position={mapCenter as L.LatLngExpression}
+                  icon={createCustomIcon(selectedWard.ward_no)}
+                />
               </Polygon>
             )}
           </React.Fragment>
         ) : (
           wardData.map((ward) => {
+            console.log("District Name:", ward.district_name);
             const coordinates = Array.isArray(ward.coordinates)
               ? ward.coordinates
               : [];
-            const centroid = calculateCentroid(coordinates);
+            const centroid = calculateCentroid(coordinates, ward.district_name);
             return (
               <React.Fragment key={ward.ward_no}>
                 {coordinates.length > 0 && (

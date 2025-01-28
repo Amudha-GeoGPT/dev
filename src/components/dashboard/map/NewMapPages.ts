@@ -33,7 +33,8 @@ export const useNewMapPages = (
   const [selectedState, setSelectedState] = useState<any>(null);
   const [selectedMetro, setSelectedMetro] = useState<string>("");
   const [metropolitanOptions, setMetropolitanOptions] = useState<any[]>([]);
-
+  const [dynamicLabel, setDynamicLabel] = useState("Metropolitan");
+  const [dynamicPlaceholder, setDynamicPlaceholder] = useState("Select Metropolitan");
   const [clicked, setClicked] = useState<boolean>(false);
   const [clickedOverview, setclickedOverview] = useState<boolean>(false);
   const [selectedMetropolitan, setSelectedMetropolitan] =
@@ -149,6 +150,7 @@ export const useNewMapPages = (
             color_code: item.color_code,
             ward_name: item.ward_name,
             ward_no: item.ward_no,
+            district_name: item.district_name,
           }));
         });
 
@@ -221,6 +223,7 @@ export const useNewMapPages = (
         color_code: item.color_code,
         ward_name: item.ward_name,
         ward_no: item.ward_no,
+        district_name: item.district_name,
       }));
 
       setWardDataForMap(transformedWards);
@@ -260,7 +263,6 @@ export const useNewMapPages = (
     mt: 2.3,
     width: "100%",
   };
- 
 
   const handleVerticalChange = (value: any) => setselectedVertical(value);
   const handleSearchChange = (value: string) => setselectedSearch(value);
@@ -316,12 +318,16 @@ export const useNewMapPages = (
         value: item.district_name,
         wards: item.wards,
       }));
+      setDynamicLabel("Metropolitan");
+      setDynamicPlaceholder("Select Metropolitan");
     } else if (selectedOption?.value === "Non-Metro" && nonMetroData) {
       options = nonMetroData[0]?.data.map((item: any) => ({
         label: item.district_name,
         value: item.district_name,
         wards: item.wards,
       }));
+      setDynamicLabel("District");
+      setDynamicPlaceholder("Select District");
     }
     console.log("Options for Metro/Non-Metro:", options);
 
@@ -344,10 +350,6 @@ export const useNewMapPages = (
       );
     }
   };
-
-  // const handleWardChange = (event: any, value: any) => {
-  //   setSelectedWard(value);
-  // };
 
   return {
     selectedVertical,
@@ -393,5 +395,7 @@ export const useNewMapPages = (
     handleStateChange,
     handleSearchChange,
     handleVerticalChange,
+    dynamicLabel,
+    dynamicPlaceholder
   };
 };
