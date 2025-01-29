@@ -18,13 +18,14 @@ interface WardData {
   color_code: string;
   fillColor: string;
   ward_no: string;
+  district_name:any;
 }
 interface SetWardNoo {
   Universal_Outlet_Count: number;
   boundaries: Array<{ latitude: number; longitude: number }>;
   ck_outlet_count: number;
   color_code: string;
-  district_name: string;
+  district_name: any;
   ward_no: string;
   fillColor: string;
   ward_name: string;
@@ -60,6 +61,7 @@ console.log(selectedWardNo);
       color_code: string;
       ward_no: string;
       boundaries: any;
+      district_name:any;
     }[],
   });
 
@@ -170,6 +172,7 @@ console.log(selectedWardNo);
       insights: null,
       ward_no: item.ward_no || "N/A",
       color_code: item.color_code,
+      district_name:item.district_name,
       boundaries:
         item.boundaries?.map((boundary: any) => [
           boundary.latitude,
@@ -183,6 +186,7 @@ console.log(selectedWardNo);
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const {district_name}=params.row;
       const color = "green ";
       const fillColor = "yellow";
 
@@ -190,7 +194,7 @@ console.log(selectedWardNo);
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
-          district_name: "Chennai",
+          district_name: district_name,
           ward_no: [ward_no],
           outletTagged: "Universal Outlet",
         }
@@ -234,13 +238,14 @@ console.log(selectedWardNo);
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const {district_name}=params.row;
       const color = "red";
       const fillColor = "black";
 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         {
-          district_name: "CHENNAI",
+          district_name: district_name,
           ward_no: [ward_no],
           outletTagged: "CK Outlet",
         }
@@ -280,7 +285,7 @@ console.log(selectedWardNo);
   };
 
   const handleWardNoCellClick = async (params: any) => {
-    const { color_code, ward_no, boundaries } = params.row;
+    const { color_code, ward_no, boundaries, district_name } = params.row;
     setSelectedWardNo(ward_no); 
 
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
@@ -291,7 +296,7 @@ console.log(selectedWardNo);
         boundaries: existingWardData.boundaries || [],
         ck_outlet_count: existingWardData.ck_outlet_count || 0,
         color_code: existingWardData.color_code,
-        district_name: "Chennai",
+        district_name: existingWardData.district_name,
         ward_no: existingWardData.ward_no,
         fillColor: existingWardData.fillColor || "#000000",
         ward_name: existingWardData.ward_name,
@@ -306,6 +311,7 @@ console.log(selectedWardNo);
             color_code,
             ward_no,
             boundaries,
+            district_name,
           },
         ],
       });
@@ -319,6 +325,7 @@ console.log(selectedWardNo);
             color_code,
             ward_no,
             boundaries,
+            district_name,
           },
         ],
       });
@@ -366,6 +373,15 @@ console.log(selectedWardNo);
           "& .MuiDataGrid-cell": {
             fontSize: "12px", // Set font size for all cells in the row
           },
+          "& .MuiDataGrid-cell.Mui-focused": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell.Mui-selected": {
+            backgroundColor: "transparent",
+          },
           // "& .MuiDataGrid-row": {
           //   cursor: "pointer",
           // },
@@ -392,7 +408,7 @@ console.log(selectedWardNo);
             boundaries: ward.boundaries || [],
             ck_outlet_count: ward.ck_outlet_count || 0,
             color_code: ward.color_code,
-            district_name: "Chennai", // Assuming district_name is constant or fetched elsewhere
+            district_name: ward.district_name, // Assuming district_name is constant or fetched elsewhere
             ward_no: ward.ward_no,
             fillColor: ward.fillColor || "#000000", // Default fillColor if not present
             ward_name: ward.ward_name,

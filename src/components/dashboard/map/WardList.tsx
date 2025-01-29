@@ -162,10 +162,6 @@ export const verticalData = ["S&D"];
 export const searchData = ["Location", "Pincode"];
 export const stateData = ["TAMILNADU"];
 
-export const taluk = [
-  { label: "Taluk 1", value: "Taluk 1" },
-  { label: "Taluk 2", value: "Taluk 2" },
-  { label: "Taluk 3", value: "Taluk 3" },
-];
+
 
 export const pincode = [6005007];

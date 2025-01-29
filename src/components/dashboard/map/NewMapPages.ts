@@ -34,7 +34,9 @@ export const useNewMapPages = (
   const [selectedMetro, setSelectedMetro] = useState<string>("");
   const [metropolitanOptions, setMetropolitanOptions] = useState<any[]>([]);
   const [dynamicLabel, setDynamicLabel] = useState("Metropolitan");
-  const [dynamicPlaceholder, setDynamicPlaceholder] = useState("Select Metropolitan");
+  const [dynamicPlaceholder, setDynamicPlaceholder] = useState(
+    "Select Metropolitan"
+  );
   const [clicked, setClicked] = useState<boolean>(false);
   const [clickedOverview, setclickedOverview] = useState<boolean>(false);
   const [selectedMetropolitan, setSelectedMetropolitan] =
@@ -62,9 +64,6 @@ export const useNewMapPages = (
       col5: "",
     },
   ]);
-  const [selectedTaluk, setSelectedTaluk] = useState<
-    Array<{ label: string; value: string }>
-  >([]);
 
   const [selectedPincode, setSelectedPincode] = useState<Option | null>(null);
   const metroOrNonMetro = [
@@ -72,7 +71,10 @@ export const useNewMapPages = (
     { label: "Non-Metro", value: "Non-Metro" },
   ];
   const [selectedWard, setSelectedWard] = useState<any[]>([]);
+  const [selectedTaluk, setSelectedTaluk] = useState<any[]>([]);
+
   const [wardOptions, setWardOptions] = useState<any[]>([]);
+  const [talukOptions, setTalukOptions] = useState<any[]>([]);
 
   const handleApplyFilter = async () => {
     console.log("Selected Metropolitan:", selectedMetropolitan);
@@ -348,6 +350,12 @@ export const useNewMapPages = (
           value: ward.ward_no,
         }))
       );
+      setTalukOptions(
+        selectedDistrict.taluks.map((taluk: any) => ({
+          label: taluk.taluk_no,
+          value: taluk.taluk_no,
+        }))
+      );
     }
   };
 
@@ -366,6 +374,7 @@ export const useNewMapPages = (
     ClearAllButtonStyles,
     setClicked,
     clickedOverview,
+    handleTalukChange,
     setclickedOverview,
     selectedMetropolitan,
     setSelectedMetropolitan,
@@ -389,13 +398,14 @@ export const useNewMapPages = (
     handleCellClick,
     ApplyFilterButtonStyles,
     handlePincodeChange,
-    handleTalukChange,
+    // handleTalukChange,
     handleWardChange,
     handleMetroChange,
     handleStateChange,
     handleSearchChange,
     handleVerticalChange,
     dynamicLabel,
-    dynamicPlaceholder
+    dynamicPlaceholder,
+    talukOptions,
   };
 };

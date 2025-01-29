@@ -21,7 +21,7 @@ import "leaflet/dist/leaflet.css";
 import CloseIcon from "@mui/icons-material/Close";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import CheckIcon from "@mui/icons-material/Check";
-import { taluk, verticalData } from "./WardList";
+import { verticalData } from "./WardList";
 import { SelectAutoCompleteBorderColor } from "../../styles/color.const";
 import { useNewMapPages } from "./NewMapPages";
 import { useEffect, useState } from "react";
@@ -47,6 +47,8 @@ const LocationComponent = () => {
     specificRangeData,
     wardDataForMap,
     rows,
+    handleTalukChange,
+    talukOptions,
     selectedWard, // Ensure this is the correct variable
     // selectedWardNo, // Add selectedWardNo here
     handleMetropolitanChange,
@@ -62,24 +64,20 @@ const LocationComponent = () => {
     wardOptions,
     dynamicLabel,
     dynamicPlaceholder,
+    selectedTaluk,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
-  const [selectedTaluk, setSelectedTaluk] = useState<
-    Array<{ label: string; value: string }>
-  >([]);
+  // const [selectedTaluk, setSelectedTaluk] = useState<
+  //   Array<{ label: string; value: string }>
+  // >([]);
 
-  const handleTalukChange = (
-    _event: any,
-    newValue: Array<{ label: string; value: string }>
-  ) => {
-    setSelectedTaluk(newValue);
-  };
+
 
   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
       headerName: "CK Outlets",
-      flex: 2.5,
+      flex: 2.6,
       renderCell: (params) => <Typography>{params.value}</Typography>,
       headerClassName: "headerCell",
       sortable: false,
@@ -103,7 +101,7 @@ const LocationComponent = () => {
     {
       field: "col2",
       headerName: "51 to 100",
-      flex: 1.5,
+      flex: 1.8,
       sortable: false,
       renderHeader: () => <span style={{ color: "orange" }}>51 to 100</span>,
       renderCell: (params) => (
@@ -120,7 +118,7 @@ const LocationComponent = () => {
     {
       field: "col3",
       headerName: "101 to 200",
-      flex: 1.5,
+      flex: 1.8,
       sortable: false,
       renderHeader: () => <span style={{ color: "#9370db" }}>101 to 200</span>,
       renderCell: (params) => (
@@ -137,7 +135,7 @@ const LocationComponent = () => {
     {
       field: "col4",
       headerName: "201 to 300",
-      flex: 1.5,
+      flex: 1.9,
       sortable: false,
       renderHeader: () => <span style={{ color: "#20b2aa" }}>201 to 300</span>,
       renderCell: (params) => (
@@ -154,9 +152,9 @@ const LocationComponent = () => {
     {
       field: "col5",
       headerName: ">300",
-      flex: 1.2,
+      flex: 2.1,
       sortable: false,
-      renderHeader: () => <span style={{ color: "green" }}>&gt;300</span>,
+      renderHeader: () => <span style={{ color: "green" }}>300 & above</span>,
       renderCell: (params) => (
         <Typography
           sx={{
@@ -174,6 +172,9 @@ const LocationComponent = () => {
       setWardDataPoint([]);
     }
   }, [wardDataNo]);
+  console.log("talukOptions in Autocomplete:", talukOptions);
+  console.log("wardOptions in Autocomplete:", wardOptions);
+  
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -223,7 +224,7 @@ const LocationComponent = () => {
               <Autocomplete
                 multiple
                 limitTags={1}
-                options={taluk}
+                options={talukOptions}
                 value={selectedTaluk}
                 onChange={handleTalukChange}
                 disableCloseOnSelect
@@ -470,7 +471,7 @@ const LocationComponent = () => {
                       variant="contained"
                       sx={{
                         fontSize: "12px",
-                        height: "40px",
+                        height: "30px",
                         padding: "10px",
                         backgroundColor: "white",
                         color: "black",
@@ -479,7 +480,7 @@ const LocationComponent = () => {
                         border: "1px solid black",
                         "&:hover": {
                           color: "white",
-                          backgroundColor: "black",
+                          backgroundColor: "#003809",
                         },
                       }}
                     >
@@ -494,12 +495,16 @@ const LocationComponent = () => {
                       hideFooter
                       onCellClick={handleCellClick}
                       sx={{
+                        borderRadius:'10px',
                         "& .MuiDataGrid-columnSeparator": {
                           display: "none",
                         },
                         "& .MuiDataGrid-cell": {
                           display: "flex",
                           alignItems: "center",
+                          borderRight: "1px solid #cdd0d7 !important", // Force border visibility
+                          borderBottom: "1px solid #ddd",
+                          padding: "12px",
                         },
                         "& .MuiDataGrid-row": {
                           cursor: "pointer",
@@ -522,6 +527,16 @@ const LocationComponent = () => {
                         "& .MuiDataGrid-columnHeader.Mui-selected": {
                           backgroundColor: "transparent",
                         },
+                        "& .MuiDataGrid-cell:last-of-type": {
+                          borderRight: "none !important", // Ensure last cell has no right border
+                        },
+                        "& .MuiDataGrid-root": {
+                          border: "1px solid #ddd", // Ensures the grid itself has a border
+                          borderCollapse: "collapse",
+                        },
+                        "& .MuiDataGrid-virtualScroller": {
+                          borderTop: "1px solid #ddd", // Add top border for the scroller
+                        },
                       }}
                     />
                   </Box>
@@ -538,6 +553,8 @@ const LocationComponent = () => {
                                 ward_no: wardDataForMap[0]?.ward_no || "0",
                                 boundaries:
                                   wardDataForMap[0]?.coordinates || [],
+                                district_name:
+                                  wardDataForMap[0]?.district_name || "",
                               },
                             ]
                           : []
@@ -567,12 +584,10 @@ const LocationComponent = () => {
         open={isDrawerOpen}
         onClose={toggleDrawer(false)}
         PaperProps={{
-          sx: { width: 400 }, // Set the width of the drawer
+          sx: { width: 400 },
         }}
       >
-        {/* Drawer Content */}
         <Box p={2} sx={{ position: "relative", height: "100%" }}>
-          {/* Header */}
           <Box
             display="flex"
             justifyContent="space-between"
@@ -582,12 +597,16 @@ const LocationComponent = () => {
             <Typography variant="h6" fontWeight="bold">
               Summary
             </Typography>
-            <Box>
-              <Tooltip title="Download" arrow>
-                <IconButton>
-                  <DownloadIcon sx={{ color: "green" }} />
-                </IconButton>
-              </Tooltip>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ background: "#043b0d", borderRadius: "8px" }}>
+                <Tooltip title="Download" arrow>
+                  <IconButton>
+                    <DownloadIcon
+                      sx={{ color: "white", width: "15px", height: "15px" }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </Box>
               <IconButton onClick={toggleDrawer(false)}>
                 <CloseIcon />
               </IconButton>
@@ -596,7 +615,7 @@ const LocationComponent = () => {
 
           <Typography variant="body1">
             Region:{" "}
-            <Typography component="span" color="green">
+            <Typography component="span" color="#043b0d">
               Chennai
             </Typography>
           </Typography>
@@ -607,7 +626,7 @@ const LocationComponent = () => {
               mb={2}
               borderRadius={2}
               sx={{
-                background: "linear-gradient(to right, #00c6ff, #0072ff)",
+                background: "linear-gradient(to right, #11998e, #35e87e)",
                 color: "#fff",
               }}
             >
@@ -622,7 +641,7 @@ const LocationComponent = () => {
               mb={2}
               borderRadius={2}
               sx={{
-                background: "linear-gradient(to right, #7f00ff, #e100ff)",
+                background: "linear-gradient(to right, #4669dd, #b06ab3)",
                 color: "#fff",
               }}
             >
@@ -639,7 +658,7 @@ const LocationComponent = () => {
               mb={2}
               borderRadius={2}
               sx={{
-                background: "linear-gradient(to right, #ff512f, #f09819)",
+                background: "linear-gradient(to right, #ff8008, #ffc334)",
                 color: "#fff",
               }}
             >
@@ -654,7 +673,7 @@ const LocationComponent = () => {
               p={2}
               borderRadius={2}
               sx={{
-                background: "linear-gradient(to right, #ff512f, #f09819)",
+                background: "linear-gradient(to right, #834d9b, #cd4fd4)",
                 color: "#fff",
               }}
             >

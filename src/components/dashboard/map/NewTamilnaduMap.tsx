@@ -51,6 +51,7 @@ interface SimplifiedWardData {
   color_code: string;
   ward_no: string;
   boundaries: number[][];
+  district_name: any;
 }
 
 interface NewTamilNaduMapProps {
@@ -112,7 +113,7 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
     Perambalur: [11.2342, 78.8807],
   };
   const getDistrictCenter = (): [number, number] => {
-    const district = districtName?.trim() || "";
+    const district = districtName?.trim() || "Tamilnadu";
     console.log("District for Center", district);
 
     for (let key in districtCenterMapping) {
@@ -120,13 +121,13 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         return districtCenterMapping[key];
       }
     }
-    alert(`No data found for district: ${district}.`);
-    return districtCenterMapping[""];
+    // alert(`No data found for district: ${district}.`);
+    return districtCenterMapping["Tamilnadu"];
   };
 
   const calculateCentroid = (
     coords: any[],
-    district_name?: string
+    _district_name?: string
   ): [number, number] => {
     if (!Array.isArray(coords) || coords.length === 0) {
       return getDistrictCenter();
