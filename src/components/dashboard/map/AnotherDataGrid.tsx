@@ -18,7 +18,7 @@ interface WardData {
   color_code: string;
   fillColor: string;
   ward_no: string;
-  district_name:any;
+  district_name: any;
 }
 interface SetWardNoo {
   Universal_Outlet_Count: number;
@@ -48,11 +48,10 @@ const AnotherDataGrid = ({
   // const [simplifiedWardData, setSimplifiedWardData] = useState<
   //   { color_code: string; ward_no: string; boundaries: any }[]
   // >([]);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const [selectedWardNo, setSelectedWardNo] = useState<any>(null);
-//  selectedWardNo = "123";
-console.log(selectedWardNo);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedWardNo, setSelectedWardNo] = useState<any>(null);
+  //  selectedWardNo = "123";
+  console.log(selectedWardNo);
 
   const [mapState, setMapState] = useState({
     wardData: [] as WardData[],
@@ -61,7 +60,7 @@ console.log(selectedWardNo);
       color_code: string;
       ward_no: string;
       boundaries: any;
-      district_name:any;
+      district_name: any;
     }[],
   });
 
@@ -157,7 +156,7 @@ console.log(selectedWardNo);
     },
   ];
   // Now the variable is being used
-  
+
   const filteredRows = wardDatas
     .filter((item) =>
       item.ward_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -172,7 +171,7 @@ console.log(selectedWardNo);
       insights: null,
       ward_no: item.ward_no || "N/A",
       color_code: item.color_code,
-      district_name:item.district_name,
+      district_name: item.district_name,
       boundaries:
         item.boundaries?.map((boundary: any) => [
           boundary.latitude,
@@ -186,9 +185,9 @@ console.log(selectedWardNo);
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const {district_name}=params.row;
-      const color = "green ";
-      const fillColor = "yellow";
+      const { district_name } = params.row;
+      const color = "#0A98ED";
+      const fillColor = "#0068B3";
 
       // First API call
       const response = await axios.post(
@@ -238,9 +237,9 @@ console.log(selectedWardNo);
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const {district_name}=params.row;
-      const color = "red";
-      const fillColor = "black";
+      const { district_name } = params.row;
+      const color = "#1FFC2B";
+      const fillColor = "#003809";
 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
@@ -277,7 +276,6 @@ console.log(selectedWardNo);
             : updatedCoordinates, // Merge new data
           wardData: prevState.wardData,
         }));
-
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -286,7 +284,7 @@ console.log(selectedWardNo);
 
   const handleWardNoCellClick = async (params: any) => {
     const { color_code, ward_no, boundaries, district_name } = params.row;
-    setSelectedWardNo(ward_no); 
+    setSelectedWardNo(ward_no);
 
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
 
@@ -361,6 +359,8 @@ console.log(selectedWardNo);
         hideFooter
         sx={{
           mt: 1,
+          borderRadius: "12px",
+
           "& .MuiDataGrid-columnHeaders": {
             position: "sticky",
             top: 0,
@@ -381,6 +381,12 @@ console.log(selectedWardNo);
           },
           "& .MuiDataGrid-cell.Mui-selected": {
             backgroundColor: "transparent",
+          },
+          "& .MuiDataGrid-row:nth-of-type(odd)": {
+            backgroundColor: "#f5f5f5",
+            "&:hover": {
+              backgroundColor: "#d8d8d8", // Change to red on hover
+            },
           },
           // "& .MuiDataGrid-row": {
           //   cursor: "pointer",

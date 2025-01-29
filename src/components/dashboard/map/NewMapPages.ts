@@ -77,7 +77,7 @@ export const useNewMapPages = (
   const [talukOptions, setTalukOptions] = useState<any[]>([]);
 
   const handleApplyFilter = async () => {
-    console.log("Selected Metropolitan:", selectedMetropolitan);
+    // console.log("Selected Metropolitan:", selectedMetropolitan);
 
     const districtName =
       typeof selectedMetropolitan === "string"
@@ -141,7 +141,6 @@ export const useNewMapPages = (
           },
         ]);
 
-        // Plot all the ward data on the map after applying the filter
         const allTransformedWards = Object.keys(results).flatMap((range) => {
           const specificRange = results[range];
           return specificRange.data.map((item: any) => ({
@@ -158,7 +157,6 @@ export const useNewMapPages = (
 
         setWardDataForMap(allTransformedWards);
 
-        // Set clicked state to true to indicate that the map data has been loaded
         setClicked(true);
       }
     } catch (error) {
@@ -299,7 +297,6 @@ export const useNewMapPages = (
 
       if (response.data.message === "success") {
         setResponseData(response.data.results);
-        console.log("Response stored:", response.data.results);
       }
     } catch (err) {
       console.error("POST call failed:", err);
@@ -313,25 +310,37 @@ export const useNewMapPages = (
     const nonMetroData = responseData?.Non_Metro;
 
     let options = [];
-
+    if (
+      selectedOption?.value === "Non-Metro" ||
+      selectedOption?.value === "Metro"
+    ) {
+      setSelectedMetropolitan(null);
+      setSelectedWard([]);
+      setSelectedTaluk([]);
+      setclickedOverview(false);
+    }
     if (selectedOption?.value === "Metro" && metroData) {
-      options = metroData[0]?.data.map((item: any) => ({
-        label: item.district_name,
-        value: item.district_name,
-        wards: item.wards,
-      }));
+      options = metroData[0]?.data
+        .map((item: any) => ({
+          label: item.district_name,
+          value: item.district_name,
+          wards: item.wards,
+        }))
+        .sort((a: any, b: any) => a.label.localeCompare(b.label));
       setDynamicLabel("Metropolitan");
       setDynamicPlaceholder("Select Metropolitan");
     } else if (selectedOption?.value === "Non-Metro" && nonMetroData) {
-      options = nonMetroData[0]?.data.map((item: any) => ({
-        label: item.district_name,
-        value: item.district_name,
-        wards: item.wards,
-      }));
+      options = nonMetroData[0]?.data
+        .map((item: any) => ({
+          label: item.district_name,
+          value: item.district_name,
+          taluks: item.taluks,
+        }))
+
+        .sort((a: any, b: any) => a.label.localeCompare(b.label));
       setDynamicLabel("District");
       setDynamicPlaceholder("Select District");
     }
-    console.log("Options for Metro/Non-Metro:", options);
 
     setMetropolitanOptions(options);
   };
@@ -344,18 +353,28 @@ export const useNewMapPages = (
     );
 
     if (selectedDistrict) {
-      setWardOptions(
-        selectedDistrict.wards.map((ward: any) => ({
-          label: ward.ward_no,
-          value: ward.ward_no,
-        }))
-      );
-      setTalukOptions(
-        selectedDistrict.taluks.map((taluk: any) => ({
-          label: taluk.taluk_no,
-          value: taluk.taluk_no,
-        }))
-      );
+      if (selectedDistrict.wards && selectedDistrict.wards.length > 0) {
+        setWardOptions(
+          selectedDistrict.wards.map((ward: any) => ({
+            label: ward.ward_no,
+            value: ward.ward_no,
+          }))
+        );
+      } else {
+        setWardOptions([]);
+      }
+
+      if (selectedDistrict.taluks && selectedDistrict.taluks.length > 0) {
+        setTalukOptions(
+          selectedDistrict.taluks.map((taluk: any) => ({
+            label: taluk.taluk_no,
+            value: taluk.taluk_no,
+          }))
+        );
+      } else {
+        // alert("No Taluk data found")
+        setTalukOptions([]);
+      }
     }
   };
 

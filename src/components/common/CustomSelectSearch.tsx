@@ -62,6 +62,23 @@ const CustomSelectSearch: React.FC<CustomSelectSearchProps> = ({
             },
           },
         }}
+        renderOption={(props, option) => {
+          const { key, ...restProps } = props; // Destructure key out
+          return (
+            <li
+              key={option.value}
+              {...restProps}
+              style={{
+                backgroundColor: restProps["aria-selected"] ? "lightblue" : "white",
+                color: restProps["aria-selected"] ? "black" : "inherit",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e2f2e5")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = restProps["aria-selected"] ? "lightblue" : "white")}
+            >
+              {option.label}
+            </li>
+          );
+        }}
         renderInput={(params) => (
           <TextField {...params} placeholder={placeholder} />
         )}

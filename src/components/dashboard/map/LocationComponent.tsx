@@ -32,7 +32,7 @@ const LocationComponent = () => {
   const [wardDataNo, setWardDataNo] = React.useState<any>(null);
   const [wardDataPoint, setWardDataPoint] = useState<any[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const [_clickedItem, setClickedItem] = React.useState<string | null>(null);
   const toggleDrawer = (open: boolean) => (_event: React.MouseEvent) => {
     setIsDrawerOpen(open);
   };
@@ -49,8 +49,8 @@ const LocationComponent = () => {
     rows,
     handleTalukChange,
     talukOptions,
-    selectedWard, // Ensure this is the correct variable
-    // selectedWardNo, // Add selectedWardNo here
+    selectedWard,
+    // selectedWardNo,
     handleMetropolitanChange,
     handleApplyFilter,
     handleCellClick,
@@ -66,12 +66,6 @@ const LocationComponent = () => {
     dynamicPlaceholder,
     selectedTaluk,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
-
-  // const [selectedTaluk, setSelectedTaluk] = useState<
-  //   Array<{ label: string; value: string }>
-  // >([]);
-
-
 
   const columns: GridColDef[] = [
     {
@@ -118,7 +112,7 @@ const LocationComponent = () => {
     {
       field: "col3",
       headerName: "101 to 200",
-      flex: 1.8,
+      flex: 1.9,
       sortable: false,
       renderHeader: () => <span style={{ color: "#9370db" }}>101 to 200</span>,
       renderCell: (params) => (
@@ -135,7 +129,7 @@ const LocationComponent = () => {
     {
       field: "col4",
       headerName: "201 to 300",
-      flex: 1.9,
+      flex: 2,
       sortable: false,
       renderHeader: () => <span style={{ color: "#20b2aa" }}>201 to 300</span>,
       renderCell: (params) => (
@@ -152,7 +146,7 @@ const LocationComponent = () => {
     {
       field: "col5",
       headerName: ">300",
-      flex: 2.1,
+      flex: 2.3,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>300 & above</span>,
       renderCell: (params) => (
@@ -172,9 +166,7 @@ const LocationComponent = () => {
       setWardDataPoint([]);
     }
   }, [wardDataNo]);
-  console.log("talukOptions in Autocomplete:", talukOptions);
-  console.log("wardOptions in Autocomplete:", wardOptions);
-  
+
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -260,7 +252,7 @@ const LocationComponent = () => {
                         display: "flex",
                         alignItems: "center",
                         flexWrap: "nowrap",
-                        gap: "4px",
+                        gap: "1px",
                       }}
                     >
                       {visibleTag.map((option, index) => (
@@ -282,37 +274,70 @@ const LocationComponent = () => {
                           label={`+${additionalCount}`}
                           onClick={() => {}}
                           sx={{
+                            fontSize: "10px",
                             whiteSpace: "nowrap",
                             background: "#E2F2E5",
+                            // padding: "2px 6px",
                             color: "#000",
                             cursor: "pointer",
+                            "&:hover": {
+                              background: "#E2F2E5",
+                            },
                           }}
                         />
                       )}
                     </Box>
                   );
                 }}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "100%",
+                renderOption={(props, option) => {
+                  const isSelected = selectedTaluk.some(
+                    (item) => item.label === option.label
+                  );
+
+                  return (
+                    <li
+                      {...props}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor = "#e2f2e5";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }
+                      }}
+                      onClick={() => {
+                        const updatedSelection = isSelected
+                          ? selectedTaluk.filter(
+                              (item) => item.label !== option.label
+                            )
+                          : [...selectedTaluk, option];
+
+                        setClickedItem(isSelected ? null : option.label);
+                        handleTalukChange(null, updatedSelection);
+                      }}
+                      style={{
+                        backgroundColor: isSelected ? "#003809" : "transparent",
+                        color: isSelected ? "white" : "black",
+                        margin: "4px",
+                        borderRadius: "8px",
                       }}
                     >
-                      <Typography>{option.label}</Typography>
-                      {selected && (
-                        <CheckIcon
-                          sx={{
-                            color: "green",
-                          }}
-                        />
-                      )}
-                    </Box>
-                  </li>
-                )}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                        }}
+                      >
+                        <Typography>{option.label}</Typography>
+                        {isSelected && <CheckIcon sx={{ color: "white" }} />}
+                      </Box>
+                    </li>
+                  );
+                }}
               />
             </Grid>
           )}
@@ -387,33 +412,71 @@ const LocationComponent = () => {
                             backgroundColor: "#E2F2E5",
                             color: "#000",
                             cursor: "pointer",
+                            fontSize: "10px",
+                            "&:hover": {
+                              background: "#E2F2E5",
+                            },
                           }}
                         />
                       )}
                     </Box>
                   );
                 }}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "100%",
+                renderOption={(props, option) => {
+                  const isSelected = selectedWard.some(
+                    (item) => item.label === option.label
+                  );
+
+                  return (
+                    <li
+                      {...props}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor = "#e2f2e5";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }
+                      }}
+                      onClick={() => {
+                        const updatedSelection = isSelected
+                          ? selectedWard.filter(
+                              (item) => item.label !== option.label
+                            )
+                          : [...selectedWard, option];
+
+                        setClickedItem(isSelected ? null : option.label);
+                        handleWardChange(null, updatedSelection);
+                      }}
+                      style={{
+                        backgroundColor: isSelected ? "#003809" : "transparent",
+                        color: isSelected ? "white" : "black",
+                        // padding: "8px",
+                        borderRadius: "8px",
+                        // marginBottom: "1px",
+                        margin: "4px",
                       }}
                     >
-                      <Typography>{option.label}</Typography>
-                      {selected && (
-                        <CheckIcon
-                          sx={{
-                            color: "green",
-                          }}
-                        />
-                      )}
-                    </Box>
-                  </li>
-                )}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                        }}
+                      >
+                        <Typography>{option.label}</Typography>
+                        {isSelected && (
+                          <CheckIcon
+                            sx={{ color: "white", fontSize: "18px" }}
+                          />
+                        )}
+                      </Box>
+                    </li>
+                  );
+                }}
               />
             </Grid>
           )}
@@ -495,16 +558,25 @@ const LocationComponent = () => {
                       hideFooter
                       onCellClick={handleCellClick}
                       sx={{
-                        borderRadius:'10px',
+                        borderRadius: "12px",
                         "& .MuiDataGrid-columnSeparator": {
                           display: "none",
                         },
                         "& .MuiDataGrid-cell": {
                           display: "flex",
                           alignItems: "center",
-                          borderRight: "1px solid #cdd0d7 !important", // Force border visibility
-                          borderBottom: "1px solid #ddd",
+                          borderRight: "1px solid #cdd0d7 !important",
+                          // borderBottom: "1px solid #ddd",
                           padding: "12px",
+                        },
+                        "& .MuiDataGrid-columnHeader": {
+                          borderRight: "1px solid #cdd0d7 !important",
+                          // borderBottom: "1px solid #ddd",
+                          padding: "12px",
+                        },
+                        "& .MuiDataGrid-columnHeader:nth-child(7)": {
+                          /* Update the number based on the column count */
+                          borderRight: "none !important",
                         },
                         "& .MuiDataGrid-row": {
                           cursor: "pointer",
@@ -528,14 +600,21 @@ const LocationComponent = () => {
                           backgroundColor: "transparent",
                         },
                         "& .MuiDataGrid-cell:last-of-type": {
-                          borderRight: "none !important", // Ensure last cell has no right border
+                          borderRight: "none !important",
                         },
-                        "& .MuiDataGrid-root": {
-                          border: "1px solid #ddd", // Ensures the grid itself has a border
-                          borderCollapse: "collapse",
-                        },
+
+                        // "& .MuiDataGrid-root": {
+                        //   border: "1px solid #ddd",
+                        //   borderCollapse: "collapse",
+                        // },
                         "& .MuiDataGrid-virtualScroller": {
-                          borderTop: "1px solid #ddd", // Add top border for the scroller
+                          // borderTop: "1px solid #ddd",
+                        },
+                        "& .MuiDataGrid-row:nth-of-type(odd)": {
+                          backgroundColor: "#f5f5f5",
+                          "&:hover": {
+                            backgroundColor: "#d8d8d8",
+                          },
                         },
                       }}
                     />
@@ -645,9 +724,7 @@ const LocationComponent = () => {
                 color: "#fff",
               }}
             >
-              <Typography variant="subtitle2">
-                No. of Wards CK Outlets
-              </Typography>
+              <Typography variant="subtitle2">No. of CK Outlets</Typography>
               <Typography variant="h4" fontWeight="bold">
                 12,400
               </Typography>
@@ -677,7 +754,7 @@ const LocationComponent = () => {
                 color: "#fff",
               }}
             >
-              <Typography variant="subtitle2">Populations</Typography>
+              <Typography variant="subtitle2">Population</Typography>
               <Typography variant="h4" fontWeight="bold">
                 2,00,000
               </Typography>
