@@ -181,16 +181,19 @@ const AnotherDataGrid = ({
 
   const filteredRows = wardDatas
     .filter((item) => {
-      const searchValue = selectedMetroType === "Metro" 
-        ? (item.ward_no || "")
-        : (item.taluk_no || "");
+      const searchValue =
+        selectedMetroType === "Metro"
+          ? item.ward_no || ""
+          : item.taluk_no || "";
       return searchValue.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .map((item: WardData, index: number) => ({
       id: item.id || index + 1,
       sno: index + 1,
-      ward_no: selectedMetroType === "Metro" ? (item.ward_no || "N/A") : undefined,
-      taluk_no: selectedMetroType === "Non_Metro" ? (item.taluk_no || "N/A") : undefined,
+      ward_no:
+        selectedMetroType === "Metro" ? item.ward_no || "N/A" : undefined,
+      taluk_no:
+        selectedMetroType === "Non_Metro" ? item.taluk_no || "N/A" : undefined,
 
       ck_outlet_count: item.ck_outlet_count || 0,
       no_of_universal_outlet: item.no_of_universal_outlet || 0,
@@ -219,24 +222,24 @@ const AnotherDataGrid = ({
       const { district_name } = params.row;
       const color = "#0A98ED";
       const fillColor = "#0068B3";
+      const payload: Payload = {
+        district_name: district_name, // dynamic district name
+        outletTagged: "Universal Outlet", // static outletTagged
+      };
 
-      // const payload: Payload = {
-      //   district_name: district_name,
-      //   outletTagged: "Universal Outlet",
-      // };
-
-      // if (ward_no) {
-      //   payload.ward_no = [ward_no];
-      // } else if (taluk_no) {
-      //   payload.taluk_no = [taluk_no];
-      // }
+      if (ward_no) {
+        payload.ward_no = [ward_no];
+      } else if (taluk_no) {
+        payload.taluk_no = [taluk_no];
+      }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        {
-          district_name: district_name,
-          ward_no: [ward_no],
-          outletTagged: "Universal Outlet",
-        }
+        // {
+        //   district_name: district_name,
+        //   ward_no: [ward_no],
+        //   outletTagged: "Universal Outlet",
+        // }
+        payload
       );
 
       if (response.data.message === "success") {
@@ -292,15 +295,26 @@ const AnotherDataGrid = ({
       // } else if (taluk_no) {
       //   payload.taluk_no = [taluk_no];
       // }
+      const payload: Payload = {
+        district_name: district_name, // dynamic district name
+        outletTagged: "Universal Outlet", // static outletTagged
+      };
+
+      if (ward_no) {
+        payload.ward_no = [ward_no];
+      } else if (taluk_no) {
+        payload.taluk_no = [taluk_no];
+      }
 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         // payload
-        {
-          district_name: district_name,
-          ward_no: [ward_no],
-          outletTagged: "CK Outlet",
-        }
+        // {
+        //   district_name: district_name,
+        //   ward_no: [ward_no],
+        //   outletTagged: "CK Outlet",
+        // }
+        payload
       );
 
       if (response.data.message === "success") {

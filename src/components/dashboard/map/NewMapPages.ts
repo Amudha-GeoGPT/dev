@@ -350,6 +350,11 @@ export const useNewMapPages = (
 
     setclickedOverview(true);
     setClicked(false);
+    setClicked(false);
+    setWardDataPoint([]);
+    setWardDataNo([]);
+    setSpecificRangeData([]);
+    // setWardDataForMap([]);
   };
 
   const mapRangeKey = (range: string): keyof Ranges => {
