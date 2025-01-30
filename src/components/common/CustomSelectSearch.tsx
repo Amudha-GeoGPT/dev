@@ -32,6 +32,8 @@ const CustomSelectSearch: React.FC<CustomSelectSearchProps> = ({
           sx={{
             color: LabelColor,
             fontSize: SecondayText,
+            marginBottom: "4px",
+            marginLeft: "5px",
             "&.Mui-focused": {
               color: LabelColor,
             },
@@ -63,17 +65,27 @@ const CustomSelectSearch: React.FC<CustomSelectSearchProps> = ({
           },
         }}
         renderOption={(props, option) => {
-          const { key, ...restProps } = props; // Destructure key out
+          const { key, ...restProps } = props;
           return (
             <li
               key={option.value}
               {...restProps}
               style={{
-                backgroundColor: restProps["aria-selected"] ? "lightblue" : "white",
+                backgroundColor: restProps["aria-selected"]
+                  ? "lightblue"
+                  : "white",
                 color: restProps["aria-selected"] ? "black" : "inherit",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e2f2e5")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = restProps["aria-selected"] ? "lightblue" : "white")}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "#e2f2e5")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = restProps[
+                  "aria-selected"
+                ]
+                  ? "lightblue"
+                  : "white")
+              }
             >
               {option.label}
             </li>

@@ -7,6 +7,7 @@ import { useState } from "react";
 import NewTamilNaduMap from "./NewTamilnaduMap";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import axios from "axios";
+import { useNewMapPages } from "./NewMapPages";
 interface WardData {
   boundaries: any;
   id: string;
@@ -18,7 +19,15 @@ interface WardData {
   color_code: string;
   fillColor: string;
   ward_no: string;
+  taluk_no: string;
   district_name: any;
+  taluk_name: string;
+}
+interface Payload {
+  district_name: any;
+  outletTagged: string;
+  ward_no?: number[]; // Make ward_no optional
+  taluk_no?: number[]; // Make taluk_no optional
 }
 interface SetWardNoo {
   Universal_Outlet_Count: number;
@@ -27,9 +36,11 @@ interface SetWardNoo {
   color_code: string;
   district_name: any;
   ward_no: string;
+  taluk_no: string;
   fillColor: string;
   ward_name: string;
   population_count: number;
+  taluk_name: string;
 }
 
 const AnotherDataGrid = ({
@@ -50,8 +61,12 @@ const AnotherDataGrid = ({
   // >([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedWardNo, setSelectedWardNo] = useState<any>(null);
-  //  selectedWardNo = "123";
-  console.log(selectedWardNo);
+  const [selectedTalukNo, setSelectedTalukNo] = useState<any>(null);
+  const { fieldKey } = useNewMapPages();
+
+  console.log("Ward", selectedWardNo);
+  console.log("Taluk", selectedTalukNo);
+  console.log("finally eeeeee", fieldKey);
 
   const [mapState, setMapState] = useState({
     wardData: [] as WardData[],
@@ -59,6 +74,7 @@ const AnotherDataGrid = ({
     simplifiedWardData: [] as {
       color_code: string;
       ward_no: string;
+      taluk_no: string;
       boundaries: any;
       district_name: any;
     }[],
@@ -73,11 +89,16 @@ const AnotherDataGrid = ({
       renderHeader: () => <strong style={{ fontSize: "12px" }}>S.No</strong>,
     },
     {
-      field: "ward_no",
-      headerName: "Ward Name",
+      field: fieldKey,
+      headerName: fieldKey === "ward_no" ? "Ward No" : "Taluk No",
+
       width: 85,
       sortable: false,
-      renderHeader: () => <strong style={{ fontSize: "12px" }}>Ward No</strong>,
+      renderHeader: () => (
+        <strong style={{ fontSize: "12px" }}>
+          {fieldKey === "ward_no" ? "Ward No" : "Taluk No"}
+        </strong>
+      ),
       renderCell: (params: any) => (
         <Box
           onClick={async () => {
@@ -158,18 +179,31 @@ const AnotherDataGrid = ({
   // Now the variable is being used
 
   const filteredRows = wardDatas
-    .filter((item) =>
-      item.ward_name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter((item) => {
+      // Check if ward_name and taluk_name exist and are strings
+      const wardName = item.ward_name || "";
+      const talukName = item.taluk_name || "";
+      const searchTermLower = searchTerm.toLowerCase();
+
+      return (
+        wardName.toLowerCase().includes(searchTermLower) ||
+        talukName.toLowerCase().includes(searchTermLower)
+      );
+    })
     .map((item: WardData, index: number) => ({
       id: item.id || index + 1,
       sno: index + 1,
       ward_name: item.ward_name || "N/A",
+      taluk_name: item.taluk_name || "N/A",
+
       ck_outlet_count: item.ck_outlet_count || 0,
       no_of_universal_outlet: item.no_of_universal_outlet || 0,
       population_count: item.population_count || 0,
       insights: null,
       ward_no: item.ward_no || "N/A",
+      taluk_no: item.taluk_no || "N/A",
+
+      // taluk: item.taluk_no || "N/A",
       color_code: item.color_code,
       district_name: item.district_name,
       boundaries:
@@ -185,18 +219,26 @@ const AnotherDataGrid = ({
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const { taluk_no } = params.row;
       const { district_name } = params.row;
       const color = "#0A98ED";
       const fillColor = "#0068B3";
 
-      // First API call
+      const payload: Payload = {
+        district_name: district_name,
+        outletTagged: "Universal Outlet",
+      };
+
+      if (ward_no) {
+        payload.ward_no = [ward_no]; // Only add ward_no if it's selected
+      }
+
+      if (taluk_no) {
+        payload.taluk_no = [taluk_no]; // Only add taluk_no if it's selected
+      }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        {
-          district_name: district_name,
-          ward_no: [ward_no],
-          outletTagged: "Universal Outlet",
-        }
+        payload
       );
 
       if (response.data.message === "success") {
@@ -237,17 +279,26 @@ const AnotherDataGrid = ({
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
+      const { taluk_no } = params.row;
+
       const { district_name } = params.row;
       const color = "#1FFC2B";
       const fillColor = "#003809";
+      const payload: Payload = {
+        district_name: district_name,
+        outletTagged: "Universal Outlet",
+      };
 
+      if (ward_no) {
+        payload.ward_no = [ward_no]; // Only add ward_no if it's selected
+      }
+
+      if (taluk_no) {
+        payload.taluk_no = [taluk_no]; // Only add taluk_no if it's selected
+      }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        {
-          district_name: district_name,
-          ward_no: [ward_no],
-          outletTagged: "CK Outlet",
-        }
+        payload
       );
 
       if (response.data.message === "success") {
@@ -283,9 +334,10 @@ const AnotherDataGrid = ({
   };
 
   const handleWardNoCellClick = async (params: any) => {
-    const { color_code, ward_no, boundaries, district_name } = params.row;
+    const { color_code, ward_no, boundaries, district_name, taluk_no } =
+      params.row;
     setSelectedWardNo(ward_no);
-
+    setSelectedTalukNo(taluk_no);
     const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
 
     if (existingWardData) {
@@ -296,8 +348,11 @@ const AnotherDataGrid = ({
         color_code: existingWardData.color_code,
         district_name: existingWardData.district_name,
         ward_no: existingWardData.ward_no,
+        taluk_no: existingWardData.taluk_no,
         fillColor: existingWardData.fillColor || "#000000",
         ward_name: existingWardData.ward_name,
+        taluk_name: existingWardData.taluk_name,
+
         population_count: existingWardData.population_count || 0,
       };
 
@@ -308,6 +363,7 @@ const AnotherDataGrid = ({
           {
             color_code,
             ward_no,
+            taluk_no,
             boundaries,
             district_name,
           },
@@ -322,6 +378,7 @@ const AnotherDataGrid = ({
           {
             color_code,
             ward_no,
+            taluk_no,
             boundaries,
             district_name,
           },
@@ -419,6 +476,8 @@ const AnotherDataGrid = ({
             fillColor: ward.fillColor || "#000000", // Default fillColor if not present
             ward_name: ward.ward_name,
             population_count: ward.population_count || 0,
+            taluk_no: ward.taluk_no,
+            taluk_name: ward.taluk_name,
           }))} // Transform wardData to SetWardNoo
         />
       </Box>

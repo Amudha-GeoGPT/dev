@@ -21,6 +21,7 @@ interface WardData {
   color_code: string;
   fillColor: string;
   ward_no: string;
+  taluk_no: string;
   district_name: string;
 }
 
@@ -33,6 +34,8 @@ interface SetWardNoo {
   ward_no: string;
   fillColor: string;
   ward_name: string;
+  taluk_no: string;
+  taluk_name: string;
   population_count: number;
 }
 
@@ -50,6 +53,7 @@ interface LatLongPoint {
 interface SimplifiedWardData {
   color_code: string;
   ward_no: string;
+  taluk_no: string;
   boundaries: number[][];
   district_name: any;
 }
@@ -201,7 +205,8 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
         />
 
         {selectedWard ? (
-          <React.Fragment key={selectedWard.ward_no}>
+          // <React.Fragment key={selectedWard.ward_no}>
+          <React.Fragment key={selectedWard.ward_no || selectedWard.taluk_no}>
             {selectedWard && isValidBoundaries && (
               <Polygon
                 positions={
@@ -217,7 +222,10 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
               >
                 <Marker
                   position={mapCenter as L.LatLngExpression}
-                  icon={createCustomIcon(selectedWard.ward_no)}
+                  // icon={createCustomIcon(selectedWard.ward_no)}
+                  icon={createCustomIcon(
+                    selectedWard.ward_no || selectedWard.taluk_no
+                  )}
                 />
               </Polygon>
             )}
@@ -230,7 +238,8 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
               : [];
             const centroid = calculateCentroid(coordinates, ward.district_name);
             return (
-              <React.Fragment key={ward.ward_no}>
+              // <React.Fragment key={ward.ward_no}>
+              <React.Fragment key={ward.ward_no || ward.taluk_no}>
                 {coordinates.length > 0 && (
                   <Polygon
                     positions={coordinates as L.LatLngExpression[]}
@@ -241,7 +250,8 @@ const NewTamilNaduMap: React.FC<NewTamilNaduMapProps> = ({
                 )}
                 <Marker
                   position={centroid}
-                  icon={createCustomIcon(ward.ward_no)}
+                  // icon={createCustomIcon(ward.ward_no)}
+                  icon={createCustomIcon(ward.ward_no || ward.taluk_no)}
                 />
               </React.Fragment>
             );

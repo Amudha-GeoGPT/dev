@@ -46,7 +46,7 @@ const LocationComponent = () => {
     selectedMetropolitan,
     specificRangeData,
     wardDataForMap,
-    rows,
+    // rows,
     handleTalukChange,
     talukOptions,
     selectedWard,
@@ -60,18 +60,21 @@ const LocationComponent = () => {
     handleMetroChange,
     handleStateChange,
     handleVerticalChange,
+    filteredRows,
     metroOrNonMetro,
     wardOptions,
     dynamicLabel,
     dynamicPlaceholder,
     selectedTaluk,
+    setSelectedTaluk,
+    summaryData,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
   const columns: GridColDef[] = [
     {
       field: "CKOutlets",
       headerName: "CK Outlets",
-      flex: 2.6,
+      flex: 3,
       renderCell: (params) => <Typography>{params.value}</Typography>,
       headerClassName: "headerCell",
       sortable: false,
@@ -79,7 +82,7 @@ const LocationComponent = () => {
     {
       field: "col1",
       headerName: "<50",
-      flex: 1.5,
+      flex: 1.8,
       sortable: false,
       renderHeader: () => <span style={{ color: "red" }}>&lt;50</span>,
       renderCell: (params) => (
@@ -112,7 +115,7 @@ const LocationComponent = () => {
     {
       field: "col3",
       headerName: "101 to 200",
-      flex: 1.9,
+      flex: 2,
       sortable: false,
       renderHeader: () => <span style={{ color: "#9370db" }}>101 to 200</span>,
       renderCell: (params) => (
@@ -129,7 +132,7 @@ const LocationComponent = () => {
     {
       field: "col4",
       headerName: "201 to 300",
-      flex: 2,
+      flex: 2.1,
       sortable: false,
       renderHeader: () => <span style={{ color: "#20b2aa" }}>201 to 300</span>,
       renderCell: (params) => (
@@ -146,7 +149,7 @@ const LocationComponent = () => {
     {
       field: "col5",
       headerName: ">300",
-      flex: 2.3,
+      flex: 2.4,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>300 & above</span>,
       renderCell: (params) => (
@@ -160,6 +163,13 @@ const LocationComponent = () => {
       ),
     },
   ];
+  const handleClearSelection = () => {
+    setSelectedTaluk([]);
+  };
+
+  const handleConfirmSelection = () => {
+    console.log("ok kudutha varutha da", selectedTaluk);
+  };
 
   useEffect(() => {
     if (wardDataNo && wardDataNo.length > 0) {
@@ -208,9 +218,16 @@ const LocationComponent = () => {
               onChange={handleMetropolitanChange}
             />
           </Grid>
-          {selectedMetro === "Non-Metro" && (
+          {selectedMetro === "Non_Metro" && (
             <Grid item xs={2}>
-              <Typography sx={{ fontSize: "12px", mt: "2px" }}>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  mt: "2px",
+                  marginBottom: "4px",
+                  marginLeft: "5px",
+                }}
+              >
                 Taluk
               </Typography>
               <Autocomplete
@@ -220,6 +237,48 @@ const LocationComponent = () => {
                 value={selectedTaluk}
                 onChange={handleTalukChange}
                 disableCloseOnSelect
+                ListboxComponent={(props) => (
+                  <Box sx={{ position: "relative" }}>
+                    <ul {...props} style={{ paddingBottom: "40px" }} />{" "}
+                    {/* Add some padding for space */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "4px",
+                        backgroundColor: "white",
+                        boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
+                        zIndex: 1,
+                        borderTop: "1px solid black",
+                      }}
+                    >
+                      <Button
+                        // variant="outlined"
+                        sx={{
+                          fontSize: "10px",
+                          color: "black",
+                          textTransform: "none",
+                        }}
+                        onClick={() => handleClearSelection()}
+                      >
+                        Clear
+                      </Button>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          fontSize: "10px",
+                          backgroundColor: "black",
+                        }}
+                        onClick={() => handleConfirmSelection()}
+                      >
+                        OK
+                      </Button>
+                    </Box>
+                  </Box>
+                )}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     padding: "0px",
@@ -343,7 +402,14 @@ const LocationComponent = () => {
           )}
           {selectedMetro === "Metro" && (
             <Grid item xs={2}>
-              <Typography sx={{ fontSize: "12px", mt: "2px" }}>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  mt: "2px",
+                  marginBottom: "4px",
+                  marginLeft: "5px",
+                }}
+              >
                 Wards
               </Typography>
               <Autocomplete
@@ -552,7 +618,7 @@ const LocationComponent = () => {
                   </Box>
                   <Box sx={{ mt: 2.5 }}>
                     <DataGrid
-                      rows={rows}
+                      rows={filteredRows}
                       columns={columns}
                       disableColumnMenu
                       hideFooter
@@ -630,6 +696,8 @@ const LocationComponent = () => {
                                 color_code:
                                   wardDataForMap[0]?.color_code || "#000000",
                                 ward_no: wardDataForMap[0]?.ward_no || "0",
+                                taluk_no: wardDataForMap[0]?.taluk_no || "0",
+
                                 boundaries:
                                   wardDataForMap[0]?.coordinates || [],
                                 district_name:
@@ -695,7 +763,7 @@ const LocationComponent = () => {
           <Typography variant="body1">
             Region:{" "}
             <Typography component="span" color="#043b0d">
-              Chennai
+              {summaryData.district_name || "No Data"}
             </Typography>
           </Typography>
 
@@ -711,7 +779,7 @@ const LocationComponent = () => {
             >
               <Typography variant="subtitle2">Total No. of Wards</Typography>
               <Typography variant="h4" fontWeight="bold">
-                155
+                {summaryData.no_of_wards || "No Data"}
               </Typography>
             </Box>
 
@@ -726,7 +794,7 @@ const LocationComponent = () => {
             >
               <Typography variant="subtitle2">No. of CK Outlets</Typography>
               <Typography variant="h4" fontWeight="bold">
-                12,400
+                {summaryData.ck_outlet_count || "No Data"}
               </Typography>
             </Box>
 
@@ -743,7 +811,7 @@ const LocationComponent = () => {
                 No. of Universal Outlets
               </Typography>
               <Typography variant="h4" fontWeight="bold">
-                12,400
+                {summaryData.no_of_universal_outlet || "No Data"}
               </Typography>
             </Box>
             <Box
@@ -756,7 +824,7 @@ const LocationComponent = () => {
             >
               <Typography variant="subtitle2">Population</Typography>
               <Typography variant="h4" fontWeight="bold">
-                2,00,000
+                {summaryData.population_count || "No Data"}
               </Typography>
             </Box>
           </Box>
