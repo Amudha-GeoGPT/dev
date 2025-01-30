@@ -718,6 +718,7 @@ const LocationComponent = () => {
                       setWardPoints={setWardDataPoint}
                       wardDatas={specificRangeData}
                       setWardNo={setWardDataNo}
+                      selectedMetroType={selectedMetro} // Pass the selected metro type
                     />
                   )}
                 </Box>

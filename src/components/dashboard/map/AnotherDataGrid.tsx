@@ -42,16 +42,18 @@ interface SetWardNoo {
   population_count: number;
   taluk_name: string;
 }
-
+interface Props {
+  wardDatas?: WardData[];
+  setWardPoints: any;
+  setWardNo: (data: SetWardNoo[]) => void;
+  selectedMetroType?: string; // Add this new prop
+}
 const AnotherDataGrid = ({
   wardDatas = [],
   setWardPoints,
   setWardNo,
-}: {
-  wardDatas?: WardData[];
-  setWardPoints: any;
-  setWardNo: (data: SetWardNoo[]) => void; // Update the type here
-}) => {
+  selectedMetroType, // Add this prop
+}: Props) => {
   // const [mapData, setMapData] = useState<WardData[]>([]);
   // const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
 
@@ -89,14 +91,13 @@ const AnotherDataGrid = ({
       renderHeader: () => <strong style={{ fontSize: "12px" }}>S.No</strong>,
     },
     {
-      field: fieldKey,
-      headerName: fieldKey === "ward_no" ? "Ward No" : "Taluk No",
-
+      field: selectedMetroType === "Metro" ? "ward_no" : "taluk_no",
+      headerName: selectedMetroType === "Metro" ? "Ward No" : "Taluk No",
       width: 85,
       sortable: false,
       renderHeader: () => (
         <strong style={{ fontSize: "12px" }}>
-          {fieldKey === "ward_no" ? "Ward No" : "Taluk No"}
+          {selectedMetroType === "Metro" ? "Ward No" : "Taluk No"}
         </strong>
       ),
       renderCell: (params: any) => (
@@ -180,28 +181,23 @@ const AnotherDataGrid = ({
 
   const filteredRows = wardDatas
     .filter((item) => {
-      // Check if ward_name and taluk_name exist and are strings
-      const wardName = item.ward_name || "";
-      const talukName = item.taluk_name || "";
-      const searchTermLower = searchTerm.toLowerCase();
-
-      return (
-        wardName.toLowerCase().includes(searchTermLower) ||
-        talukName.toLowerCase().includes(searchTermLower)
-      );
+      const searchValue = selectedMetroType === "Metro" 
+        ? (item.ward_no || "")
+        : (item.taluk_no || "");
+      return searchValue.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .map((item: WardData, index: number) => ({
       id: item.id || index + 1,
       sno: index + 1,
-      ward_name: item.ward_name || "N/A",
-      taluk_name: item.taluk_name || "N/A",
+      ward_no: selectedMetroType === "Metro" ? (item.ward_no || "N/A") : undefined,
+      taluk_no: selectedMetroType === "Non_Metro" ? (item.taluk_no || "N/A") : undefined,
 
       ck_outlet_count: item.ck_outlet_count || 0,
       no_of_universal_outlet: item.no_of_universal_outlet || 0,
       population_count: item.population_count || 0,
       insights: null,
-      ward_no: item.ward_no || "N/A",
-      taluk_no: item.taluk_no || "N/A",
+      // ward_no: item.ward_no || "N/A",
+      // taluk_no: item.taluk_no || "N/A",
 
       // taluk: item.taluk_no || "N/A",
       color_code: item.color_code,
