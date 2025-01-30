@@ -224,21 +224,23 @@ const AnotherDataGrid = ({
       const color = "#0A98ED";
       const fillColor = "#0068B3";
 
-      const payload: Payload = {
-        district_name: district_name,
-        outletTagged: "Universal Outlet",
-      };
+      // const payload: Payload = {
+      //   district_name: district_name,
+      //   outletTagged: "Universal Outlet",
+      // };
 
-      if (ward_no) {
-        payload.ward_no = [ward_no]; // Only add ward_no if it's selected
-      }
-
-      if (taluk_no) {
-        payload.taluk_no = [taluk_no]; // Only add taluk_no if it's selected
-      }
+      // if (ward_no) {
+      //   payload.ward_no = [ward_no];
+      // } else if (taluk_no) {
+      //   payload.taluk_no = [taluk_no];
+      // }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        payload
+        {
+          district_name: district_name,
+          ward_no: [ward_no],
+          outletTagged: "Universal Outlet",
+        }
       );
 
       if (response.data.message === "success") {
@@ -284,21 +286,25 @@ const AnotherDataGrid = ({
       const { district_name } = params.row;
       const color = "#1FFC2B";
       const fillColor = "#003809";
-      const payload: Payload = {
-        district_name: district_name,
-        outletTagged: "Universal Outlet",
-      };
+      // const payload: Payload = {
+      //   district_name: district_name,
+      //   outletTagged: "Universal Outlet",
+      // };
 
-      if (ward_no) {
-        payload.ward_no = [ward_no]; // Only add ward_no if it's selected
-      }
+      // if (ward_no) {
+      //   payload.ward_no = [ward_no];
+      // } else if (taluk_no) {
+      //   payload.taluk_no = [taluk_no];
+      // }
 
-      if (taluk_no) {
-        payload.taluk_no = [taluk_no]; // Only add taluk_no if it's selected
-      }
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
-        payload
+        // payload
+        {
+          district_name: district_name,
+          ward_no: [ward_no],
+          outletTagged: "CK Outlet",
+        }
       );
 
       if (response.data.message === "success") {

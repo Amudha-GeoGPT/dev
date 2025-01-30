@@ -116,7 +116,7 @@ export const useNewMapPages = (
   ];
   const [selectedWard, setSelectedWard] = useState<any[]>([]);
   const [selectedTaluk, setSelectedTaluk] = useState<any[]>([]);
-  const [fieldKey, setFieldKey] = useState<"ward_no" | "taluk_no">("taluk_no");
+  const [fieldKey, setFieldKey] = useState<"ward_no" | "taluk_no">("ward_no");
   // const changeFieldKey = () => {
   //   setFieldKey(fieldKey === "ward_no" ? "taluk_no" : "ward_no");
   // };
@@ -349,6 +349,7 @@ export const useNewMapPages = (
     }
 
     setclickedOverview(true);
+    setClicked(false);
   };
 
   const mapRangeKey = (range: string): keyof Ranges => {
