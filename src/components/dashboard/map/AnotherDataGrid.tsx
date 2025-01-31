@@ -268,26 +268,7 @@ const AnotherDataGrid = ({
       const { district_name } = params.row;
       const color = "#1FFC2B";
       const fillColor = "#003809";
-      // const payload: Payload = {
-      //   district_name: district_name,
-      //   outletTagged: "Universal Outlet",
-      // };
 
-      // if (ward_no) {
-      //   payload.ward_no = [ward_no];
-      // } else if (taluk_no) {
-      //   payload.taluk_no = [taluk_no];
-      // }
-      // const payload: Payload = {
-      //   district_name: district_name, // dynamic district name
-      //   outletTagged: "Universal Outlet", // static outletTagge
-      // };
-
-      // if (ward_no) {
-      //   payload.ward_no = [ward_no];
-      // } else if (taluk_no) {
-      //   payload.taluk_no = [taluk_no];
-      // }
 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
