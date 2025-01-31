@@ -162,13 +162,7 @@ const LocationComponent = () => {
       ),
     },
   ];
-  // const handleClearSelection = () => {
-  //   setSelectedTaluk([]);
-  // };
-
-  // const handleConfirmSelection = () => {
-  //   console.log("ok kudutha varutha da", selectedTaluk);
-  // };
+ 
 
   useEffect(() => {
     if (wardDataNo && wardDataNo.length > 0) {
