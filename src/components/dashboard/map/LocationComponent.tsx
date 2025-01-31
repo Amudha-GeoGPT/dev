@@ -760,7 +760,7 @@ const LocationComponent = () => {
               {summaryData.district_name || "No Data"}
             </Typography>
           </Typography>
-
+{/* .. */}
           <Box mt={2}>
             <Box
               p={2}
