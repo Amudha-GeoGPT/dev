@@ -761,7 +761,9 @@ const LocationComponent = () => {
             </Typography>
           </Typography>
 
+
            <Box mt={2}>
+
   <Box
     p={2}
     mb={2}
