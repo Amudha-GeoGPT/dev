@@ -23,12 +23,6 @@ interface WardData {
   district_name: any;
   taluk_name: string;
 }
-interface Payload {
-  district_name: any;
-  outletTagged: string;
-  ward_no?: number[]; // Make ward_no optional
-  taluk_no?: number[]; // Make taluk_no optional
-}
 interface SetWardNoo {
   Universal_Outlet_Count: number;
   boundaries: Array<{ latitude: number; longitude: number }>;
@@ -218,7 +212,6 @@ const AnotherDataGrid = ({
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const { taluk_no } = params.row;
       const { district_name } = params.row;
       const color = "#0A98ED";
       const fillColor = "#0068B3";
@@ -280,24 +273,13 @@ const AnotherDataGrid = ({
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const { taluk_no } = params.row;
 
       const { district_name } = params.row;
       const color = "#1FFC2B";
       const fillColor = "#003809";
-      // const payload: Payload = {
-      //   district_name: district_name,
-      //   outletTagged: "Universal Outlet",
-      // };
-
-      // if (ward_no) {
-      //   payload.ward_no = [ward_no];
-      // } else if (taluk_no) {
-      //   payload.taluk_no = [taluk_no];
-      // }
       const payload: Payload = {
-        district_name: district_name, // dynamic district name
-        outletTagged: "Universal Outlet", // static outletTagged
+        district_name: district_name,
+        outletTagged: "Universal Outlet",
       };
 
       if (ward_no) {
@@ -305,6 +287,16 @@ const AnotherDataGrid = ({
       } else if (taluk_no) {
         payload.taluk_no = [taluk_no];
       }
+      // const payload: Payload = {
+      //   district_name: district_name, // dynamic district name
+      //   outletTagged: "Universal Outlet", // static outletTagge
+      // };
+
+      // if (ward_no) {
+      //   payload.ward_no = [ward_no];
+      // } else if (taluk_no) {
+      //   payload.taluk_no = [taluk_no];
+      // }
 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
@@ -354,7 +346,9 @@ const AnotherDataGrid = ({
       params.row;
     setSelectedWardNo(ward_no);
     setSelectedTalukNo(taluk_no);
-    const existingWardData = wardDatas.find((ward) => ward.ward_no === ward_no);
+    const existingWardData = wardDatas.find(
+      (ward) => ward.ward_no === ward_no || ward.taluk_no===taluk_no
+    );
 
     if (existingWardData) {
       const transformedData: SetWardNoo = {
