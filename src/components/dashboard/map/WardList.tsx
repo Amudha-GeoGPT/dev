@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// import { useState } from "react";
 
 // export const ward = [
 //   { label: "0001", value: "0001" },
