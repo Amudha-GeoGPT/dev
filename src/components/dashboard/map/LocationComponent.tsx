@@ -98,7 +98,7 @@ const LocationComponent = () => {
     {
       field: "col2",
       headerName: "51 to 100",
-      flex: 1.8,
+      flex: 2,
       sortable: false,
       renderHeader: () => <span style={{ color: "orange" }}>51 to 100</span>,
       renderCell: (params) => (
@@ -115,7 +115,7 @@ const LocationComponent = () => {
     {
       field: "col3",
       headerName: "101 to 200",
-      flex: 2,
+      flex: 2.2,
       sortable: false,
       renderHeader: () => <span style={{ color: "#9370db" }}>101 to 200</span>,
       renderCell: (params) => (
@@ -132,7 +132,7 @@ const LocationComponent = () => {
     {
       field: "col4",
       headerName: "201 to 300",
-      flex: 2.1,
+      flex: 2.3,
       sortable: false,
       renderHeader: () => <span style={{ color: "#20b2aa" }}>201 to 300</span>,
       renderCell: (params) => (
@@ -149,7 +149,7 @@ const LocationComponent = () => {
     {
       field: "col5",
       headerName: ">300",
-      flex: 2.4,
+      flex: 2.6,
       sortable: false,
       renderHeader: () => <span style={{ color: "green" }}>300 & above</span>,
       renderCell: (params) => (
