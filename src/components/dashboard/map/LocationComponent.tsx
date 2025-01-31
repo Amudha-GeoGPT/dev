@@ -66,7 +66,6 @@ const LocationComponent = () => {
     dynamicLabel,
     dynamicPlaceholder,
     selectedTaluk,
-    setSelectedTaluk,
     summaryData,
   } = useNewMapPages(setWardDataNo, setWardDataPoint);
 
@@ -163,13 +162,13 @@ const LocationComponent = () => {
       ),
     },
   ];
-  const handleClearSelection = () => {
-    setSelectedTaluk([]);
-  };
+  // const handleClearSelection = () => {
+  //   setSelectedTaluk([]);
+  // };
 
-  const handleConfirmSelection = () => {
-    console.log("ok kudutha varutha da", selectedTaluk);
-  };
+  // const handleConfirmSelection = () => {
+  //   console.log("ok kudutha varutha da", selectedTaluk);
+  // };
 
   useEffect(() => {
     if (wardDataNo && wardDataNo.length > 0) {
@@ -237,48 +236,48 @@ const LocationComponent = () => {
                 value={selectedTaluk}
                 onChange={handleTalukChange}
                 disableCloseOnSelect
-                ListboxComponent={(props) => (
-                  <Box sx={{ position: "relative" }}>
-                    <ul {...props} style={{ paddingBottom: "40px" }} />{" "}
-                    {/* Add some padding for space */}
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        bottom: 0,
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: "4px",
-                        backgroundColor: "white",
-                        boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
-                        zIndex: 1,
-                        borderTop: "1px solid black",
-                      }}
-                    >
-                      <Button
-                        // variant="outlined"
-                        sx={{
-                          fontSize: "10px",
-                          color: "black",
-                          textTransform: "none",
-                        }}
-                        onClick={() => handleClearSelection()}
-                      >
-                        Clear
-                      </Button>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          fontSize: "10px",
-                          backgroundColor: "black",
-                        }}
-                        onClick={() => handleConfirmSelection()}
-                      >
-                        OK
-                      </Button>
-                    </Box>
-                  </Box>
-                )}
+                // ListboxComponent={(props) => (
+                //   <Box sx={{ position: "relative" }}>
+                //     <ul {...props} style={{ paddingBottom: "40px" }} />{" "}
+                //     {/* Add some padding for space */}
+                //     <Box
+                //       sx={{
+                //         position: "absolute",
+                //         bottom: 0,
+                //         width: "100%",
+                //         display: "flex",
+                //         justifyContent: "space-between",
+                //         padding: "4px",
+                //         backgroundColor: "white",
+                //         boxShadow: "0 -2px 5px rgba(0,0,0,0.1)",
+                //         zIndex: 1,
+                //         borderTop: "1px solid black",
+                //       }}
+                //     >
+                //       <Button
+                //         // variant="outlined"
+                //         sx={{
+                //           fontSize: "10px",
+                //           color: "black",
+                //           textTransform: "none",
+                //         }}
+                //         onClick={() => handleClearSelection()}
+                //       >
+                //         Clear
+                //       </Button>
+                //       <Button
+                //         variant="contained"
+                //         sx={{
+                //           fontSize: "10px",
+                //           backgroundColor: "black",
+                //         }}
+                //         onClick={() => handleConfirmSelection()}
+                //       >
+                //         OK
+                //       </Button>
+                //     </Box>
+                //   </Box>
+                // )}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     padding: "0px",
