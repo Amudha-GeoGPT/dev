@@ -23,12 +23,6 @@ interface WardData {
   district_name: any;
   taluk_name: string;
 }
-interface Payload {
-  district_name: any;
-  outletTagged: string;
-  ward_no?: number[]; // Make ward_no optional
-  taluk_no?: number[]; // Make taluk_no optional
-}
 interface SetWardNoo {
   Universal_Outlet_Count: number;
   boundaries: Array<{ latitude: number; longitude: number }>;
@@ -218,7 +212,6 @@ const AnotherDataGrid = ({
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const { taluk_no } = params.row;
       const { district_name } = params.row;
       const color = "#0A98ED";
       const fillColor = "#0068B3";
@@ -280,7 +273,6 @@ const AnotherDataGrid = ({
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
-      const { taluk_no } = params.row;
 
       const { district_name } = params.row;
       const color = "#1FFC2B";
