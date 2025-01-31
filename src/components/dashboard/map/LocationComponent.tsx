@@ -761,7 +761,9 @@ const LocationComponent = () => {
             </Typography>
           </Typography>
 
-          <Box mt={2}>
+
+           <Box mt={2}>
+
   <Box
     p={2}
     mb={2}
@@ -778,7 +780,7 @@ const LocationComponent = () => {
       {summaryData.no_of_wards || "No Data"}
     </Typography>
   </Box>
-{/* </Box> */}
+
 
 
             <Box

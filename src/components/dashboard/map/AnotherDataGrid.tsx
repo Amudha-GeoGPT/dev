@@ -23,7 +23,7 @@ interface WardData {
   district_name: any;
   taluk_name: string;
 }
-
+ 
 interface Payload {
   district_name: any;
   outletTagged: string;
@@ -57,7 +57,7 @@ const AnotherDataGrid = ({
 }: Props) => {
   // const [mapData, setMapData] = useState<WardData[]>([]);
   // const [latLongPoints, setLatLongPoints] = useState<any[]>([]);
-
+ 
   const [searchTerm, setSearchTerm] = useState<string>("");
   // const [simplifiedWardData, setSimplifiedWardData] = useState<
   //   { color_code: string; ward_no: string; boundaries: any }[]
@@ -66,11 +66,11 @@ const AnotherDataGrid = ({
   const [selectedWardNo, setSelectedWardNo] = useState<any>(null);
   const [selectedTalukNo, setSelectedTalukNo] = useState<any>(null);
   const { fieldKey } = useNewMapPages();
-
+ 
   console.log("Ward", selectedWardNo);
   console.log("Taluk", selectedTalukNo);
   console.log("finally eeeeee", fieldKey);
-
+ 
   const [mapState, setMapState] = useState({
     wardData: [] as WardData[],
     latLongPoints: [] as any[],
@@ -82,7 +82,7 @@ const AnotherDataGrid = ({
       district_name: any;
     }[],
   });
-
+ 
   const columns = [
     {
       field: "sno",
@@ -179,7 +179,7 @@ const AnotherDataGrid = ({
     },
   ];
   // Now the variable is being used
-
+ 
   const filteredRows = wardDatas
     .filter((item) => {
       const searchValue =
@@ -195,14 +195,14 @@ const AnotherDataGrid = ({
         selectedMetroType === "Metro" ? item.ward_no || "N/A" : undefined,
       taluk_no:
         selectedMetroType === "Non_Metro" ? item.taluk_no || "N/A" : undefined,
-
+ 
       ck_outlet_count: item.ck_outlet_count || 0,
       no_of_universal_outlet: item.no_of_universal_outlet || 0,
       population_count: item.population_count || 0,
       insights: null,
       // ward_no: item.ward_no || "N/A",
       // taluk_no: item.taluk_no || "N/A",
-
+ 
       // taluk: item.taluk_no || "N/A",
       color_code: item.color_code,
       district_name: item.district_name,
@@ -215,7 +215,7 @@ const AnotherDataGrid = ({
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-
+ 
   const handleOpportunitiesCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
@@ -227,7 +227,7 @@ const AnotherDataGrid = ({
         district_name: district_name, // dynamic district name
         outletTagged: "Universal Outlet", // static outletTagged
       };
-
+ 
       if (ward_no) {
         payload.ward_no = [ward_no];
       } else if (taluk_no) {
@@ -242,7 +242,7 @@ const AnotherDataGrid = ({
         // }
         payload
       );
-
+ 
       if (response.data.message === "success") {
         const coordinates = response.data.results;
         const updatedCoordinates = coordinates.map((coordinate: any) => ({
@@ -255,13 +255,13 @@ const AnotherDataGrid = ({
           color,
           fillColor,
         }));
-
+ 
         // Get the existing coordinates (if any)
         setWardPoints((prevPoints: any) => {
           const combinedCoordinates = [...prevPoints, ...updatedCoordinates]; // Merging new and existing data
           return combinedCoordinates;
         });
-
+ 
         setMapState((prevState) => ({
           ...prevState,
           latLongPoints: prevState.latLongPoints
@@ -269,7 +269,7 @@ const AnotherDataGrid = ({
             : updatedCoordinates, // Merge new data
           wardData: prevState.wardData,
         }));
-
+ 
         // Trigger the second function after the first API call is successful
         await handleCkOutletsCellClick(params); // Pass `params` here, or modify as needed
       }
@@ -277,7 +277,7 @@ const AnotherDataGrid = ({
       console.error("Error occurred:", error);
     }
   };
-
+ 
   const handleCkOutletsCellClick = async (params: any) => {
     try {
       const { ward_no } = params.row;
@@ -288,16 +288,16 @@ const AnotherDataGrid = ({
       const payload = {
         district_name: district_name,
         outletTagged: "CK Outlet",
-        ...(selectedMetroType === "Metro" 
+        ...(selectedMetroType === "Metro"
           ? { ward_no: [ward_no] }
           : { taluk_no: [taluk_no] })
       };
-  
+ 
       const response = await axios.post(
         "https://geogptdev.ckdigital.in/api/filterByWard",
         payload
       );
-
+ 
       if (response.data.message === "success") {
         const coordinates = response.data.results;
         const updatedCoordinates = coordinates.map((coordinate: any) => ({
@@ -310,13 +310,13 @@ const AnotherDataGrid = ({
           color,
           fillColor,
         }));
-
+ 
         // Get the existing coordinates and combine with new data
         setWardPoints((prevPoints: any) => {
           const combinedCoordinates = [...prevPoints, ...updatedCoordinates];
           return combinedCoordinates;
         });
-
+ 
         setMapState((prevState) => ({
           ...prevState,
           latLongPoints: prevState.latLongPoints
@@ -329,14 +329,17 @@ const AnotherDataGrid = ({
       console.error("Error occurred:", error);
     }
   };
-
+ 
   const handleWardNoCellClick = async (params: any) => {
-    const { color_code, ward_no, boundaries, district_name, taluk_no } =
-      params.row;
+    const { color_code, ward_no, taluk_no, boundaries, district_name } = params.row;
     setSelectedWardNo(ward_no);
     setSelectedTalukNo(taluk_no);
-    const existingWardData = wardDatas.find(
-      (ward) => ward.ward_no === ward_no || ward.taluk_no===taluk_no
+
+    // Find existing data based on metro type
+    const existingWardData = wardDatas.find((ward) => 
+      selectedMetroType === "Metro" 
+        ? ward.ward_no === ward_no
+        : ward.taluk_no === taluk_no
     );
 
     if (existingWardData) {
@@ -351,41 +354,38 @@ const AnotherDataGrid = ({
         fillColor: existingWardData.fillColor || "#000000",
         ward_name: existingWardData.ward_name,
         taluk_name: existingWardData.taluk_name,
-
         population_count: existingWardData.population_count || 0,
       };
 
       setMapState({
         wardData: [existingWardData],
         latLongPoints: [],
-        simplifiedWardData: [
-          {
-            color_code,
-            ward_no,
-            taluk_no,
-            boundaries,
-            district_name,
-          },
-        ],
+        simplifiedWardData: [{
+          color_code,
+          ward_no,
+          taluk_no, 
+          boundaries,
+          district_name,
+        }],
       });
-      setWardNo([transformedData]); // Pass as an array
+
+      setWardNo([transformedData]);
     } else {
       setMapState({
         wardData: [],
         latLongPoints: [],
-        simplifiedWardData: [
-          {
-            color_code,
-            ward_no,
-            taluk_no,
-            boundaries,
-            district_name,
-          },
-        ],
+        simplifiedWardData: [{
+          color_code,
+          ward_no,
+          taluk_no,
+          boundaries,
+          district_name,
+        }],
       });
     }
-  };
+};
 
+ 
   return (
     <Box sx={{ width: "100%", height: "600px", mt: 0.5 }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -416,7 +416,7 @@ const AnotherDataGrid = ({
         sx={{
           mt: 1,
           borderRadius: "12px",
-
+ 
           "& .MuiDataGrid-columnHeaders": {
             position: "sticky",
             top: 0,
@@ -483,5 +483,6 @@ const AnotherDataGrid = ({
     </Box>
   );
 };
-
+ 
 export default AnotherDataGrid;
+ 
