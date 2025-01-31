@@ -762,20 +762,25 @@ const LocationComponent = () => {
           </Typography>
 {/* .. */}
           <Box mt={2}>
-            <Box
-              p={2}
-              mb={2}
-              borderRadius={2}
-              sx={{
-                background: "linear-gradient(to right, #11998e, #35e87e)",
-                color: "#fff",
-              }}
-            >
-              <Typography variant="subtitle2">Total No. of Wards</Typography>
-              <Typography variant="h4" fontWeight="bold">
-                {summaryData.no_of_wards || "No Data"}
-              </Typography>
-            </Box>
+          <Box mt={2}>
+  <Box
+    p={2}
+    mb={2}
+    borderRadius={2}
+    sx={{
+      background: "linear-gradient(to right, #11998e, #35e87e)",
+      color: "#fff",
+    }}
+  >
+    <Typography variant="subtitle2">
+      {selectedMetro === "Metro" ? "Total No. of Wards" : "Total No. of Taluks"}
+    </Typography>
+    <Typography variant="h4" fontWeight="bold">
+      {summaryData.no_of_wards || "No Data"}
+    </Typography>
+  </Box>
+</Box>
+
 
             <Box
               p={2}
